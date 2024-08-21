@@ -11,7 +11,7 @@ class AuthServices{
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/login'),
+      Uri.parse('$baseUrl/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(<String, String>{
         'email': email,
@@ -30,7 +30,7 @@ class AuthServices{
     final userData = await Storage.getUserData();
     String? token = userData['token'];
     final response = await http.post(
-      Uri.parse('$baseUrl/api/logout'),
+      Uri.parse('$baseUrl/logout'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
@@ -39,18 +39,4 @@ class AuthServices{
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     log('User data: $responseData');
   }
-  // static Future<http.Response> logout(String token) async{
-  //   Map data = {
-  //     'token': token
-  //   };
-  //   var body = jsonEncode(data);
-  //   var url = Uri.parse('$baseUrl/api/logout');
-  //   http.Response response = await http.post(
-  //     url,
-  //     headers: headers,
-  //     body: body
-  //   );
-  //   log(response.body);
-  //   return response;
-  // }
 }
