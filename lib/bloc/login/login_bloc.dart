@@ -17,18 +17,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState>{
 
   void _checkLoginStatus(CheckLoginStatusEvent event, Emitter<LoginState> emit) async{
     try{
-      final userData = await Storage.getUserData();
-      final token = userData['token'];
+      if(event.selectedRole == 'Student'){
+        final userData = await Storage.getUserData();
+        final token = userData['token'];
 
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+        if (token != null) {
+          await Future.delayed(const Duration(seconds: 5));
+          log('It has a token');
+          emit(LoginSuccess());
+        } else {
+          emit(LoginFailure(error: "Token is not availbale"));
+        }
+      }else if(event.selectedRole == 'Professor'){
+        final userData = await Storage.getUserData();
+        final token = userData['token'];
 
-      await Future.delayed(const Duration(seconds: 5));
-
-      if (token != null) {
-        log('It has a token');
-        emit(LoginSuccess());
-      } else {
-        emit(LoginFailure(error: "Token is not availbale"));
+        if (token != null) {
+          await Future.delayed(const Duration(seconds: 5));
+          log('It has a token');
+          emit(LoginSuccess());
+        } else {
+          emit(LoginFailure(error: "Token is not availbale"));
+        }
       }
     }catch(e){
       emit(LoginFailure(error: 'Network error'));

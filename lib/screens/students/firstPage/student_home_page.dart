@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/bloc/logout/logout_bloc.dart';
 import 'package:help_isko/bloc/logout/logout_event.dart';
 import 'package:help_isko/bloc/logout/logout_state.dart';
-import 'package:help_isko/bloc/userdata/user_bloc.dart';
-import 'package:help_isko/bloc/userdata/user_event.dart';
-import 'package:help_isko/bloc/userdata/user_state.dart';
 import 'package:help_isko/components/my_app_bar.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 import 'package:help_isko/landing_page.dart';
 
 class StudentHomePage extends StatelessWidget {
-  const StudentHomePage({super.key});
+
+  const StudentHomePage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class StudentHomePage extends StatelessWidget {
                   ]),
                 ),
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 160,),
+                  child: SizedBox(height: 160),
                 ),
                 SliverToBoxAdapter(
                   child: BlocBuilder<LogoutBloc, LogoutState>(

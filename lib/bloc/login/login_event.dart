@@ -12,4 +12,9 @@ class LoginButtonPressed extends LoginEvent{
   });
 }
 
-class CheckLoginStatusEvent extends LoginEvent{}
+class CheckLoginStatusEvent extends LoginEvent{
+  final String selectedRole;
+  CheckLoginStatusEvent({
+    required this.selectedRole
+  });
+}

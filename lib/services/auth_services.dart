@@ -39,4 +39,24 @@ class AuthServices{
     final Map<String, dynamic> responseData = jsonDecode(response.body);
     log('User data: $responseData');
   }
+
+  // static Future<List<Products>> fetchProducts() async{
+  //   String? token = await SharedPreferencesUtil.getToken();
+  //   var url = Uri.parse('$baseUrl/api/products');
+  //   final response = await http.get(
+  //     url, 
+  //     headers: {
+  //       ...headers,
+  //       'Authorization': 'Bearer $token'
+  //     }
+  //   );
+  //   List<dynamic> data = jsonDecode(response.body);
+  //   List<Products> productList = [];
+
+  //   for(var item in data){
+  //     Products products = Products.fromJson(item);
+  //     productList.add(products);
+  //   }
+  //   return productList;
+  // }
 }

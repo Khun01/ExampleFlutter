@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
 
 abstract class UserDataState extends Equatable {
   @override
