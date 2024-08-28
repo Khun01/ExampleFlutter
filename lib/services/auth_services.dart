@@ -9,9 +9,9 @@ class AuthServices{
 
   AuthServices({required this.apiUrl});
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> loginProf(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$baseUrl/login-prof'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(<String, String>{
         'email': email,
@@ -27,7 +27,7 @@ class AuthServices{
   }
 
   Future<void> logout() async{
-    final userData = await Storage.getUserData();
+    final userData = await Storage.getProfData();
     String? token = userData['token'];
     final response = await http.post(
       Uri.parse('$baseUrl/logout'),

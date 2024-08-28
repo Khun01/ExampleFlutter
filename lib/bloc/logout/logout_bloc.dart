@@ -16,7 +16,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState>{
     try{
       await Future.delayed(const Duration(seconds: 2));
       await authServices.logout();
-      await Storage.deleteUserData();
+      await Storage.deleteProfData();
       emit(LogoutSuccess());
     }catch(error){
       log('Logout Failed: ${error.toString()}');

@@ -12,8 +12,8 @@ class MyButton extends StatelessWidget{
     super.key, 
     required this.onTap, 
     required this.buttonText, 
-    this.color = const Color(0xFF3B3B3B),
-    this.textColor = const Color(0xFFF6F6F6)
+    this.color = const Color(0xFF6BB577),
+    this.textColor = const Color(0xFFFCFCFC)
   });
 
   @override

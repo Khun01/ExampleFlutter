@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/bloc/login/login_event.dart';
 import 'package:help_isko/bloc/login/login_state.dart';
@@ -10,84 +9,155 @@ import 'package:help_isko/services/storage.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState>{
   final AuthServices authServices;
 
-  LoginBloc({required this.authServices}) : super(LoginInitial()){
-    on<LoginButtonPressed>(_onLoginButtonPressed);
+  LoginBloc({required this.authServices}) : super(LoginState.initial()){
+    on<LoginEmailChanged>(_onEmailChanged);
+    on<LoginPassChanged>(_onPasswordChanged);
+    on<LoginSubmitted>(_onLoginSubmitted);
     on<CheckLoginStatusEvent>(_checkLoginStatus);
   }
 
   void _checkLoginStatus(CheckLoginStatusEvent event, Emitter<LoginState> emit) async{
     try{
-      if(event.selectedRole == 'Student'){
-        final userData = await Storage.getUserData();
-        final token = userData['token'];
+      if(event.role == 'Student'){
+        // final userData = await Storage.getProfData();
+        // final token = userData['token'];
 
-        if (token != null) {
-          await Future.delayed(const Duration(seconds: 5));
-          log('It has a token');
-          emit(LoginSuccess());
-        } else {
-          emit(LoginFailure(error: "Token is not availbale"));
-        }
-      }else if(event.selectedRole == 'Professor'){
-        final userData = await Storage.getUserData();
-        final token = userData['token'];
+        // if (token != null) {
+        //   await Future.delayed(const Duration(seconds: 5));
+        //   log('It has a token');
+        //   emit(LoginSuccess());
+        // } else {
+        //   emit(LoginFailure(error: "Token is not availbale"));
+        // }
+        emit(state.copyWith(hasFailed: true));
+        log('Student');
+      }else if(event.role == 'Professor'){
+        emit(state.copyWith(isSubmitting: true));
+        try{
+          final userData = await Storage.getProfData();
+          final token = userData['token'];
 
-        if (token != null) {
-          await Future.delayed(const Duration(seconds: 5));
-          log('It has a token');
-          emit(LoginSuccess());
-        } else {
-          emit(LoginFailure(error: "Token is not availbale"));
+
+          if(token != null){
+            await Future.delayed(const Duration(seconds: 2));
+            emit(state.copyWith(isSuccess: true, isSubmitting: false));
+          }else{
+            log('dont have a token professor');
+            emit(state.copyWith(hasFailed: true, isSubmitting: false));
+          }
+        }catch(e){
+          emit(state.copyWith(failureMessage: e.toString()));
         }
       }
     }catch(e){
-      emit(LoginFailure(error: 'Network error'));
+      emit(state.copyWith(failureMessage: 'Network Error', hasFailed: true, isSubmitting: false));
     }
   }
 
-  void _onLoginButtonPressed(LoginButtonPressed event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
-    try {
-      if(event.selectedRole == 'Student'){
-        await Future.delayed(const Duration(seconds: 2));
-        final response = await authServices.login(event.email, event.password);
 
-        final statusCode = response['statusCode'];
-        final responseData = response['data'];
+  void _onEmailChanged(LoginEmailChanged event, Emitter<LoginState> emit) {
+    emit(state.copyWith(
+      email: event.email,
+      isEmailValid: _validateEmail(event.email),
+      hasFailed: false,
+      failureMessage: null
+    ));
+  }
 
-        if (statusCode == 200) {
-          final String token = responseData['token'];
-          final int userId = responseData['user']['id'];
-          final String userName = responseData['user']['name'];
-          final String userEmail = responseData['user']['email'];
-          final String userPicture = responseData['user']['profile'] ?? '';
-          final String userNumber = responseData['user']['phone_number'] ?? '';
-          final String userAddress = responseData['user']['address'] ?? '';
-          Storage.saveUserData(
-            token: token,
-            userId: userId,
-            name: userName,
-            email: userEmail,
-            profilePicture: userPicture,
-            number: userNumber,
-            address: userAddress,
-          );
-          emit(LoginSuccess());
-        } else if (statusCode == 500) {
-          emit(LoginFailure(error: 'User not found'));
-        } else if(statusCode == 401){
-          emit(LoginFailure(error: 'Email and password does not match with our record'));
-        } else {
-          emit(LoginFailure(error: 'An unknown error occurred'));
+  void _onPasswordChanged(LoginPassChanged event, Emitter<LoginState> emit) {
+    emit(state.copyWith(
+      password: event.password,
+      isPasswordValid: _validatePassword(event.password),
+      hasFailed: false,
+      failureMessage: null
+    ));
+  }
+
+  void _onLoginSubmitted(LoginSubmitted event, Emitter<LoginState> emit) async {
+    try{
+      if(state.email.isNotEmpty && state.password.isNotEmpty){
+        if (state.isFormValid) {
+          emit(state.copyWith(isSubmitting: true, hasFailed: false, failureMessage: null));
+          try {
+            if(event.role == 'Professor'){
+              await Future.delayed(const Duration(seconds: 2));
+              final response = await authServices.loginProf(state.email, state.password);
+
+              final statusCode = response['statusCode'];
+              final responseData = response['data'];
+              // log('Our status code is $statusCode');
+              // log('Our data is $responseData');
+
+              if (statusCode == 200) {
+                if(responseData != null){
+                  final String token = responseData['token'];
+                  final String name = responseData['name'];
+
+                  final Map<String, dynamic> user = responseData['user'];
+                  final String id = user['id'].toString();
+                  final String firstName = user['first_name'];
+                  final String lastName = user['last_name'];
+                  final String birthday = user['birthday'];
+                  final String contactNumber = user['contact_number'];
+                  final String professorNumber = user['professor_number'];
+                  final String profileImg = user['profile_img'] ?? '';
+                  final String userId = user['user_id'].toString();
+
+                  await Storage.saveProfData(
+                    id: id,
+                    firstName: firstName,
+                    lastName: lastName,
+                    birthday: birthday,
+                    contactNumber: contactNumber,
+                    professorNumber: professorNumber,
+                    profileImg: profileImg,
+                    userId: userId,
+                    token: token,
+                    fullName: name,
+                  );
+
+                  log('Response data: $user');
+                  emit(state.copyWith(isSuccess: true));
+                }
+              } else {
+                String errorMessage;
+                if(statusCode == 401){
+                  errorMessage = 'Email and password do not match';
+                }else if(statusCode == 403){
+                  errorMessage = 'Not a professor';
+                }else{
+                  errorMessage = 'Network Error';
+                }
+                emit(state.copyWith(hasFailed: true, failureMessage: errorMessage));
+              } 
+
+            }
+          } catch (error) {
+            emit(state.copyWith(failureMessage: 'Network Error'));
+          } finally {
+            emit(state.copyWith(isSubmitting: false));
+          }
+        }else {
+          emit(state.copyWith(
+            isEmailValid: state.isEmailNotEmpty && state.isEmailValid,
+            isPasswordValid: state.isPasswordNotEmpty && state.isPasswordValid,
+          ));
         }
+      }else{
+        emit(state.copyWith(hasFailed: true, failureMessage: 'Please put your account first'));
       }
-
-      if(event.selectedRole == 'Professor'){
-        log('Not a professor');
-      }
-
-    } catch (error) {
-      emit(LoginFailure(error: error.toString()));
+    }catch(e){
+      emit(state.copyWith(failureMessage: 'Network Error'));
     }
+  }
+
+  bool _validateEmail(String email) {
+    // Implement your email validation logic here
+    return email.contains('@');
+  }
+
+  bool _validatePassword(String password) {
+    // Implement your password validation logic here
+    return password.length > 6;
   }
 }

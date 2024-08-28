@@ -1,20 +1,25 @@
 abstract class LoginEvent{}
 
-class LoginButtonPressed extends LoginEvent{
+class LoginEmailChanged extends LoginEvent{
   final String email;
-  final String password;
-  final String selectedRole;
 
-  LoginButtonPressed({
-    required this.email, 
-    required this.password,
-    required this.selectedRole,
-  });
+  LoginEmailChanged({required this.email});
+}
+
+class LoginPassChanged extends LoginEvent{
+  final String password;
+
+  LoginPassChanged({required this.password});
+}
+
+class LoginSubmitted extends LoginEvent{
+  final String role;
+
+  LoginSubmitted({required this.role});
 }
 
 class CheckLoginStatusEvent extends LoginEvent{
-  final String selectedRole;
-  CheckLoginStatusEvent({
-    required this.selectedRole
-  });
+  final String role;
+
+  CheckLoginStatusEvent({required this.role});
 }

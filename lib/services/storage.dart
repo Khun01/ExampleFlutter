@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart';
 
 class Storage{
   static const _storage = FlutterSecureStorage();
@@ -15,57 +19,73 @@ class Storage{
     await _storage.delete(key: key);
   }
 
-  static Future<void> saveUserData({
+  static Future<void> saveProfData({
+    required String id,
+    required String firstName,
+    required String lastName,
+    required String birthday,
+    required String contactNumber,
+    required String professorNumber,
+    required String? profileImg,
     required String token,
-    required int userId,
-    required String name,
-    required String email,
-    required String? profilePicture,
-    required String? number,
-    required String? address,
+    required String userId,
+    required String fullName,
   }) async {
     await Future.wait([
-      saveField('userToken', token),
-      saveField('userId', userId.toString()),
-      saveField('userName', name),
-      saveField('userEmail', email),
-      saveField('userProfilePicture', profilePicture ?? ''),
-      saveField('userPhoneNumber', number ?? ''),
-      saveField('userAddress', address ?? ''),
+      saveField('userId', id),
+      saveField('firstName', firstName),
+      saveField('lastName', lastName),
+      saveField('birthday', birthday),
+      saveField('contactNumber', contactNumber),
+      saveField('professorNumber', professorNumber),
+      saveField('profileImg', profileImg ?? ''),
+      saveField('token', token),
+      saveField('user_id', userId),
+      saveField('name', fullName)
     ]);
   }
 
-  static Future<Map<String, String?>> getUserData() async {
+  static Future<Map<String, String?>> getProfData() async {
     final userData = await Future.wait([
-      getField('userToken'),
-      getField('userId'),
-      getField('userName'),
-      getField('userEmail'),
-      getField('userProfilePicture'),
-      getField('userPhoneNumber'),
-      getField('userAddress')
+      getField('id'),
+      getField('firstName'),
+      getField('lastName'),
+      getField('birthday'),
+      getField('contactNumber'),
+      getField('professorNumber'),
+      getField('profileImg'),
+      getField('token'),
+      getField('user_id'),
+      getField('name')
     ]);
 
-    return {
-      'token': userData[0],
-      'userId': userData[1],
-      'name': userData[2],
-      'email': userData[3],
-      'profilePicture': userData[4] ?? '',
-      'userPhoneNumber': userData[5] ?? '',
-      'userAddress': userData[6] ?? ''
+    final data = {
+      'id': userData[0],
+      'firstName': userData[1],
+      'lastName': userData[2],
+      'birthday': userData[3],
+      'contactNumber': userData[4],
+      'professorNumber': userData[5],
+      'profileImg': userData[6] ?? '',
+      'token': userData[7],
+      'user_id': userData[8],
+      'name': userData[9]
     };
+    return data;
   }
 
-  static Future<void> deleteUserData() async {
+  static Future<void> deleteProfData() async {
     await Future.wait([
-      deleteField('userToken'),
-      deleteField('userId'),
-      deleteField('userName'),
-      deleteField('userEmail'),
-      deleteField('userProfilePicture'),
-      deleteField('userPhoneNumber'),
-      deleteField('userAddress'),
+      deleteField('id'),
+      deleteField('firstName'),
+      deleteField('lastName'),
+      deleteField('birthday'),
+      deleteField('contactNumber'),
+      deleteField('professorNumber'),
+      deleteField('profileImg'),
+      deleteField('token'),
+      deleteField('user_id'),
+      deleteField('name')
     ]);
   }  
 }

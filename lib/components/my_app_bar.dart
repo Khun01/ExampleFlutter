@@ -6,42 +6,33 @@ import 'package:help_isko/bloc/userdata/user_event.dart';
 import 'package:help_isko/bloc/userdata/user_state.dart';
 import 'package:help_isko/components/my_icon_button_app_bar.dart';
 
-class MyAppBar extends StatefulWidget {
+class MyAppBar extends StatelessWidget {
   final String selectedRole;
 
-  const MyAppBar({
-    super.key,
-    required this.selectedRole
-  });
+  const MyAppBar({super.key, required this.selectedRole});
 
-  @override
-  State<MyAppBar> createState() => _MyAppBarState();
-}
-
-class _MyAppBarState extends State<MyAppBar> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => UserDataBloc()..add(LoadUserData()),
       child: Container(
-        padding: const EdgeInsets.only(top: 15, left: 15, right: 25),
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
         child: BlocBuilder<UserDataBloc, UserDataState>(
-          builder: (context, userDataState){
-            if(userDataState is UserDataLoading){
+          builder: (context, userDataState) {
+            if (userDataState is UserDataLoading) {
               return const Center(child: CircularProgressIndicator());
-            }else if(userDataState is UserDataLoaded){
+            } else if (userDataState is UserDataLoaded) {
               return Row(
                 children: [
-                  const CircleAvatar(
-                    backgroundColor: Color(0x80A3D9A5),
-                    radius: 25,
-                    child: Icon(
-                      Icons.person
-                    ),
+                  IconButton(
+                    onPressed: (){
+                     
+                    }, 
+                    icon: Icon(Icons.menu)
                   ),
-                  const SizedBox(width: 10),
+                  const Spacer(),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -62,13 +53,15 @@ class _MyAppBarState extends State<MyAppBar> {
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  MyIconButtonAppBar(
-                    selectedRole: widget.selectedRole,
-                  )
+                  const SizedBox(width: 10),
+                  const CircleAvatar(
+                    backgroundColor: Color(0x80A3D9A5),
+                    radius: 25,
+                    child: Icon(Icons.person),
+                  ),
                 ],
               );
-            }else if (userDataState is UserDataError) {
+            } else if (userDataState is UserDataError) {
               return Center(child: Text(userDataState.message));
             } else {
               return const Center(child: Text('No data available'));

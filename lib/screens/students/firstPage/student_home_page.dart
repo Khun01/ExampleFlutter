@@ -6,7 +6,7 @@ import 'package:help_isko/bloc/logout/logout_state.dart';
 import 'package:help_isko/components/my_app_bar.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
-import 'package:help_isko/landing_page.dart';
+import 'package:help_isko/screens/landing_page.dart';
 
 class StudentHomePage extends StatelessWidget {
 
@@ -16,6 +16,7 @@ class StudentHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocProvider(
       create: (context) =>
           LogoutBloc(authServices: AuthServices(apiUrl: baseUrl)),
