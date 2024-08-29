@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/bloc/userdata/user_bloc.dart';
 import 'package:help_isko/bloc/userdata/user_event.dart';
 import 'package:help_isko/bloc/userdata/user_state.dart';
-import 'package:help_isko/components/my_icon_button_app_bar.dart';
 
 class MyAppBar extends StatelessWidget {
   final String selectedRole;
@@ -28,7 +27,7 @@ class MyAppBar extends StatelessWidget {
                     onPressed: (){
                      
                     }, 
-                    icon: Icon(Icons.menu)
+                    icon: const Icon(Icons.menu)
                   ),
                   const Spacer(),
                   Column(

@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,14 +5,10 @@ import 'package:help_isko/bloc/login/login_bloc.dart';
 import 'package:help_isko/bloc/login/login_event.dart';
 import 'package:help_isko/bloc/login/login_state.dart';
 import 'package:help_isko/components/my_button.dart';
-import 'package:help_isko/components/my_clip.dart';
 import 'package:help_isko/components/my_form.dart';
-import 'package:help_isko/screens/professors/firstPage/professor_home_page.dart';
-import 'package:help_isko/screens/students/firstPage/student_home_page.dart';
 import 'package:help_isko/screens/wrapper.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
-import 'package:ionicons/ionicons.dart';
 
 class LoginPage extends StatelessWidget {
   final String? role;
@@ -32,12 +25,10 @@ class LoginPage extends StatelessWidget {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state.isSuccess && !state.isSubmitting) {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>  Wrapper(role: role!)));
-              } else if (state.isSubmitting) {
-                log('Login loading');
               } else if (state.hasFailed) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.failureMessage!)));
@@ -138,9 +129,7 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 32),
-                        state.isSubmitting
-                            ? const Center(child: CircularProgressIndicator())
-                            : MyButton(
+                        MyButton(
                                 onTap: state.isFormValid
                                     ? () => context
                                         .read<LoginBloc>()
@@ -149,7 +138,23 @@ class LoginPage extends StatelessWidget {
                                 buttonText: 'Login')
                       ],
                     ),
-                  )
+                  ),
+                  if (state.isSubmitting) ...[
+                          const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                          ),
+                        ]
                 ],
               );
             },

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/components/my_app_bar.dart';
 import 'package:help_isko/screens/professors/firstPage/professor_duties_page.dart';
 import 'package:help_isko/screens/professors/firstPage/professor_home_page.dart';
 import 'package:help_isko/screens/professors/firstPage/professor_profile_page.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class MyForm extends StatefulWidget {
   final String labelText;
