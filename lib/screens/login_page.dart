@@ -6,6 +6,7 @@ import 'package:help_isko/bloc/login/login_event.dart';
 import 'package:help_isko/bloc/login/login_state.dart';
 import 'package:help_isko/components/my_button.dart';
 import 'package:help_isko/components/my_form.dart';
+import 'package:help_isko/screens/forgot_passsword_page.dart';
 import 'package:help_isko/screens/wrapper.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
@@ -21,6 +22,7 @@ class LoginPage extends StatelessWidget {
       create: (context) =>
           LoginBloc(authServices: AuthServices(apiUrl: baseUrl)),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
@@ -28,7 +30,7 @@ class LoginPage extends StatelessWidget {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>  Wrapper(role: role!)));
+                        builder: (context) => Wrapper(role: role!)));
               } else if (state.hasFailed) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.failureMessage!)));
@@ -38,8 +40,6 @@ class LoginPage extends StatelessWidget {
               return Stack(
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
                     child: Image.asset(
                       'assets/images/login_bg.png',
                       fit: BoxFit.cover,
@@ -59,8 +59,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin:
-                        const EdgeInsets.only(top: 24, left: 24, right: 24),
+                    margin: const EdgeInsets.only(top: 24, left: 24, right: 24),
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height,
                     child: Column(
@@ -77,7 +76,7 @@ class LoginPage extends StatelessWidget {
                         Text(
                           role!,
                           style: GoogleFonts.nunito(
-                              fontSize: 50,
+                              fontSize: 40,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF3B3B3B)),
                         ),
@@ -118,43 +117,47 @@ class LoginPage extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
-                            onTap: (){},
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgotPassswordPage()));
+                            },
                             child: Text(
                               'Forgot Password?',
                               style: GoogleFonts.nunito(
-                                fontSize: 14,
-                                color: const Color(0xFF3B3B3B)
-                              ),
+                                  fontSize: 14, color: const Color(0xFF3B3B3B)),
                             ),
                           ),
                         ),
                         const SizedBox(height: 32),
                         MyButton(
-                                onTap: state.isFormValid
-                                    ? () => context
-                                        .read<LoginBloc>()
-                                        .add(LoginSubmitted(role: role!))
-                                    : null,
-                                buttonText: 'Login')
+                            onTap: state.isFormValid
+                                ? () => context
+                                    .read<LoginBloc>()
+                                    .add(LoginSubmitted(role: role!))
+                                : null,
+                            buttonText: 'Login')
                       ],
                     ),
                   ),
                   if (state.isSubmitting) ...[
-                          const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                          ),
-                        ]
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  ]
                 ],
               );
             },

@@ -26,7 +26,7 @@ class AuthServices{
     };
   }
 
-  Future<void> logout() async{
+  Future<int> logout() async{
     final userData = await Storage.getProfData();
     String? token = userData['token'];
     final response = await http.post(
@@ -34,11 +34,30 @@ class AuthServices{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
-      }
+      } 
     ); 
-    final Map<String, dynamic> responseData = jsonDecode(response.body);
-    log('User data: $responseData');
+    // final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return response.statusCode;
   }
+
+  Future<Map<String, dynamic>> forgotPassword(String email) async{
+    final response = await http.post(
+      Uri.parse('$baseUrl/forgot'),
+      headers: {'Content-Type': 'application/json'},
+       body: jsonEncode(<String, String>{
+        'email': email,
+      }),
+    );
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    log('The response is: $response');
+    log('The response is: $responseData');
+    return {
+      'statusCode': response.statusCode,
+      'data': responseData,
+    };
+  }
+
+  
 
   // static Future<List<Products>> fetchProducts() async{
   //   String? token = await SharedPreferencesUtil.getToken();

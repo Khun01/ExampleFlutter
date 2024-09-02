@@ -12,8 +12,9 @@ class UserDataLoading extends UserDataState {}
 class UserDataLoaded extends UserDataState {
   final String? token;
   final String? name;
+  final String? firstName;
 
-  UserDataLoaded({this.token, this.name});
+  UserDataLoaded({this.token, this.name, this.firstName});
 }
 
 class UserDataError extends UserDataState {

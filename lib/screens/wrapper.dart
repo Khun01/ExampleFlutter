@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:help_isko/screens/professors/firstPage/professor_duties_page.dart';
+import 'package:help_isko/components/my_drawer.dart';
+import 'package:help_isko/screens/professors/firstPage/prof_duties_page.dart';
+import 'package:help_isko/screens/professors/firstPage/prof_profile_page.dart';
 import 'package:help_isko/screens/professors/firstPage/professor_home_page.dart';
-import 'package:help_isko/screens/professors/firstPage/professor_profile_page.dart';
 import 'package:help_isko/screens/students/firstPage/student_home_page.dart';
 
 class Wrapper extends StatefulWidget {
@@ -23,6 +24,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      drawer: const MyDrawer(),
       body: SafeArea(
         child: Stack(
           children: [
@@ -30,9 +32,9 @@ class _WrapperState extends State<Wrapper> {
                 index: selectedIndex,
                 children: widget.role == 'Professor'
                     ? const [
-                        ProfessorHomePage(),
-                        ProfessorDutiesPage(),
-                        ProfessorProfilePage(),
+                        ProfHomePage(),
+                        ProfDutiesPage(),
+                        ProfProfilePage()
                       ]
                     : const [
                         StudentHomePage(),
@@ -132,7 +134,7 @@ class _WrapperState extends State<Wrapper> {
                     ),
                   ),
                 ),
-              )
+              ),
           ],
         ),
       ),

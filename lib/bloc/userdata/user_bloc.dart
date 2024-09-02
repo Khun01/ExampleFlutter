@@ -14,7 +14,8 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
       final userData = await Storage.getProfData();
       final name = userData['name'] ?? 'N/A';
       final token = userData['token'] ?? 'N/A';
-      emit(UserDataLoaded(name: name, token: token));
+      final firstName = userData['firstName'] ?? 'N/A';
+      emit(UserDataLoaded(name: name, token: token, firstName: firstName));
     } catch (e) {
       emit(UserDataError(message: e.toString()));
     }

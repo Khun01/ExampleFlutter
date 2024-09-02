@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/bloc/logout/logout_bloc.dart';
 import 'package:help_isko/bloc/logout/logout_event.dart';
 import 'package:help_isko/bloc/logout/logout_state.dart';
-import 'package:help_isko/components/my_app_bar.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 import 'package:help_isko/screens/landing_page.dart';
@@ -37,13 +36,13 @@ class StudentHomePage extends StatelessWidget {
           child: SafeArea(
             child: CustomScrollView(
               slivers: [
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    const MyAppBar(
-                      selectedRole: 'Student',
-                    )
-                  ]),
-                ),
+                // SliverList(
+                //   delegate: SliverChildListDelegate([
+                //     const MyAppBar(
+                //       selectedRole: 'Student',
+                //     )
+                //   ]),
+                // ),
                 const SliverToBoxAdapter(
                   child: SizedBox(height: 160),
                 ),
