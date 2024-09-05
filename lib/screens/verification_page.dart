@@ -19,8 +19,15 @@ class VerificationPage extends StatelessWidget {
       child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is VerificationSuccessState) {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePasswordPage(token: state.token)));
-          } else if (state is VerificationFailedState) {}
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ChangePasswordPage(token: state.token)));
+          } else if (state is VerificationFailedState) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.error)));
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -84,44 +91,14 @@ class VerificationPage extends StatelessWidget {
                               (index) => MyVerificationTextField(
                                 onChanged: (value) {
                                   context.read<ForgotPasswordBloc>().add(
-                                    VerificationTokenChangedEvent(
-                                      index: index,
-                                      token: value,
-                                    ),
-                                  );
+                                        VerificationTokenChangedEvent(
+                                          index: index,
+                                          token: value,
+                                        ),
+                                      );
                                 },
                               ),
                             ),
-                            // children: [
-                            //   MyVerificationTextField(
-                            //     onChanged: (value) {
-                            //       context.read<ForgotPasswordBloc>().add(
-                            //           VerificationTokenChangedEvent(
-                            //               token: value));
-                            //     },
-                            //   ),
-                            //   MyVerificationTextField(
-                            //     onChanged: (value) {
-                            //       context.read<ForgotPasswordBloc>().add(
-                            //           VerificationTokenChangedEvent(
-                            //               token: value));
-                            //     },
-                            //   ),
-                            //   MyVerificationTextField(
-                            //     onChanged: (value) {
-                            //       context.read<ForgotPasswordBloc>().add(
-                            //           VerificationTokenChangedEvent(
-                            //               token: value));
-                            //     },
-                            //   ),
-                            //   MyVerificationTextField(
-                            //     onChanged: (value) {
-                            //       context.read<ForgotPasswordBloc>().add(
-                            //           VerificationTokenChangedEvent(
-                            //               token: value));
-                            //     },
-                            //   ),
-                            // ],
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -130,19 +107,27 @@ class VerificationPage extends StatelessWidget {
                               context
                                   .read<ForgotPasswordBloc>()
                                   .add(VerificationClickedButtonEvent());
-                              // log('The token is $token');
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             ChangePasswordPage(
-                              //               token: token,
-                              //             )));
                             },
                             buttonText: 'Submit')
                       ],
                     ),
                   ),
+                  if (state is VerificationLoadingState) ...[
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),

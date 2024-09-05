@@ -72,11 +72,13 @@ class ForgotPasswordBloc
 
   FutureOr<void> verificationClickedButtonEvent(
       VerificationClickedButtonEvent event, Emitter<ForgotPasswordState> emit) async {
+        log('The verification button is clicked');
     final token = tokens.join('');
     try{
       emit(VerificationLoadingState());
       if(token.isNotEmpty){
         await Future.delayed(const Duration(seconds: 2));
+        emit(VerificationSuccessState(token: token));
         // final response = await
       }else{
         emit(const VerificationFailedState(error: 'Token cannot be empty'));
