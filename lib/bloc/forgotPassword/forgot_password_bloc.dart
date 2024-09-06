@@ -17,17 +17,19 @@ class ForgotPasswordBloc
     on<ForgotPasswordEmailChangedEvent>(forgotPasswordEmailChangedEvent);
     on<VerificationClickedButtonEvent>(verificationClickedButtonEvent);
     on<VerificationTokenChangedEvent>(verificationTokenChangedEvent);
+    on<ChangePasswordClickedButtonEvent>(changePasswordClickedButtonEvent);
+    on<ChangePasswordChangedEvent>(changePasswordChangedEvent);
+    on<ChangeConfirmPasswordChangedEvent>(changeConfirmPasswordChangedEvent);
   }
 
   String email = '';
   List<String> tokens = List.filled(4, '');
+  String password = '';
+  String confrimPassword = '';
 
   FutureOr<void> forgotPasswordClickedButtonEvent(
       ForgotPasswordClickedButtonEvent event,
       Emitter<ForgotPasswordState> emit) async {
-    // emit(const ForgotPasswordFailedState(error: 'Email cannot be empty'));
-    log('Forgot password button is clicked');
-
     const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     final regex = RegExp(emailPattern);
 
@@ -40,7 +42,7 @@ class ForgotPasswordBloc
           // final statusCode = response['statusCode'];
           if (response['statusCode'] == 200) {
             emit(ForgotPasswordSuccessState(
-                success: response['data']['message']));
+                email: email, success: 'A code was sent to your email'));
           } else {
             String errorMessage = '';
             switch (response['statusCode']) {
@@ -71,19 +73,21 @@ class ForgotPasswordBloc
   }
 
   FutureOr<void> verificationClickedButtonEvent(
-      VerificationClickedButtonEvent event, Emitter<ForgotPasswordState> emit) async {
-        log('The verification button is clicked');
+      VerificationClickedButtonEvent event,
+      Emitter<ForgotPasswordState> emit) async {
+    log('The verification button is clicked');
     final token = tokens.join('');
-    try{
+    try {
       emit(VerificationLoadingState());
-      if(token.isNotEmpty){
+      if (token.isNotEmpty) {
         await Future.delayed(const Duration(seconds: 2));
+        log('The token is: $token');
         emit(VerificationSuccessState(token: token));
         // final response = await
-      }else{
+      } else {
         emit(const VerificationFailedState(error: 'Token cannot be empty'));
       }
-    }catch(e){
+    } catch (e) {
       emit(VerificationFailedState(error: e.toString()));
     }
   }
@@ -95,5 +99,59 @@ class ForgotPasswordBloc
       tokens[index] = event.token;
       log('Token at index $index updated to ${event.token}');
     }
+  }
+
+  FutureOr<void> changePasswordClickedButtonEvent(
+      ChangePasswordClickedButtonEvent event,
+      Emitter<ForgotPasswordState> emit) async {
+    try {
+      emit(ChangePasswordLoadingState());
+      if (password.isNotEmpty || confrimPassword.isNotEmpty) {
+        if (password.length >= 6 || confrimPassword.length >= 6) {
+          if (password == confrimPassword) {
+            await Future.delayed(const Duration(seconds: 2));
+
+            final response = await authServices.resetPassword(
+                event.email, password, confrimPassword, event.token);
+            if (response['statusCode'] == 200) {
+              log('The code is: ${response['statusCode']}');
+              emit(ChangePasswordSuccessState());
+            } else if (response['message'] == 'token mismatch' || response['statusCode'] == 400) {
+              emit(const ChangePasswordFailedState(
+                  error: 'Invalid token. Redirecting back . . .'));
+            }else if(response['statusCode'] == 404){
+              emit(const ChangePasswordFailedState(
+                  error: 'No record found, Incorrect email address'));
+            } else {
+              emit(ChangePasswordFailedState(
+                  error: response['message'] ?? 'Failed to reset password'));
+            }
+          } else {
+            emit(const ChangePasswordFailedState(
+                error: 'Passwords do not match'));
+          }
+        } else {
+          emit(const ChangePasswordFailedState(
+              error: 'Password and confirm password should be greater than 6'));
+        }
+      } else {
+        emit(const ChangePasswordFailedState(
+            error: 'Password and confirm password caonnt be empty'));
+      }
+    } catch (e) {
+      log('Error: ${e.toString()}');
+      emit(ChangePasswordFailedState(error: e.toString()));
+    }
+  }
+
+  FutureOr<void> changePasswordChangedEvent(
+      ChangePasswordChangedEvent event, Emitter<ForgotPasswordState> emit) {
+    password = event.password;
+  }
+
+  FutureOr<void> changeConfirmPasswordChangedEvent(
+      ChangeConfirmPasswordChangedEvent event,
+      Emitter<ForgotPasswordState> emit) {
+    confrimPassword = event.confirmPassword;
   }
 }

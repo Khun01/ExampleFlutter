@@ -57,6 +57,28 @@ class AuthServices{
     };
   }
 
+
+   Future<Map<String, dynamic>> resetPassword(String email, String password, String confrimPassword, String token) async{
+    final response = await http.put(
+      Uri.parse('$baseUrl/reset'),
+      headers: {'Content-Type': 'application/json'},
+       body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+        'password_confirmation': confrimPassword,
+        'token': token,
+      }),
+    );
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    log('The response is: $response');
+    log('The response is: $responseData');
+    log('The response is: ${response.statusCode}');
+    return {
+      'statusCode': response.statusCode,
+      'data': responseData,
+    };
+  }
+
   
 
   // static Future<List<Products>> fetchProducts() async{

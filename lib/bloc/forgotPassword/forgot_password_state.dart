@@ -11,12 +11,13 @@ sealed class ForgotPasswordState extends Equatable {
 
 final class ForgotPasswordInitial extends ForgotPasswordState {}
 
+
 class ForgotPasswordLoadingState extends ForgotPasswordState{}
 
 class ForgotPasswordSuccessState extends ForgotPasswordState{
+  final String email;
   final String success;
-
-  const ForgotPasswordSuccessState({required this.success});
+  const ForgotPasswordSuccessState({required this.email, required this.success});
 }
 
 class ForgotPasswordFailedState extends ForgotPasswordState{
@@ -29,7 +30,7 @@ class ForgotPasswordFailedState extends ForgotPasswordState{
 
 class VerificationSuccessState extends ForgotPasswordState{
   final String token;
-
+  
   const VerificationSuccessState({required this.token});
 }
 
@@ -42,3 +43,12 @@ class VerificationFailedState extends ForgotPasswordState{
 }
 
 
+class ChangePasswordLoadingState extends ForgotPasswordState{}
+
+class ChangePasswordSuccessState extends ForgotPasswordState{}
+
+class ChangePasswordFailedState extends ForgotPasswordState{
+  final String error;
+
+  const ChangePasswordFailedState({required this.error});
+}

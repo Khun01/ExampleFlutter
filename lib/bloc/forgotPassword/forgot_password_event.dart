@@ -23,3 +23,23 @@ class VerificationTokenChangedEvent extends ForgotPasswordEvent{
 
   const VerificationTokenChangedEvent({required this.token, required this.index});
 } 
+
+
+class ChangePasswordClickedButtonEvent extends ForgotPasswordEvent{
+  final String email;
+  final String token;
+  const ChangePasswordClickedButtonEvent({required this.token, required this.email});
+}
+
+class ChangePasswordChangedEvent extends ForgotPasswordEvent{
+  final String password;
+
+  const ChangePasswordChangedEvent({required this.password});
+} 
+
+
+class ChangeConfirmPasswordChangedEvent extends ForgotPasswordEvent{
+  final String confirmPassword;
+
+  const ChangeConfirmPasswordChangedEvent({required this.confirmPassword});
+} 

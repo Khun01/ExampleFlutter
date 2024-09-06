@@ -9,7 +9,8 @@ import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 
 class VerificationPage extends StatelessWidget {
-  const VerificationPage({super.key});
+  final String email;
+  const VerificationPage({super.key, required this.email});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class VerificationPage extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ChangePasswordPage(token: state.token)));
+                        ChangePasswordPage(token: state.token, email: email)));
           } else if (state is VerificationFailedState) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));

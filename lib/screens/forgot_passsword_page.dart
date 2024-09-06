@@ -18,9 +18,9 @@ class ForgotPassswordPage extends StatelessWidget {
       child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordSuccessState) {
-            ScaffoldMessenger.of(context)
+             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.success)));
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const VerificationPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VerificationPage(email: state.email)));
           } else if (state is ForgotPasswordFailedState) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));
