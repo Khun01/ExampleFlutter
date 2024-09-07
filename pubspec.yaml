@@ -43,6 +43,8 @@ dependencies:
   slide_to_act: ^2.0.2
   ionicons: ^0.2.2
   bloc: ^8.1.4
+  shimmer: ^3.0.0
+  smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:
   flutter_test:

@@ -1,47 +1,266 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/bloc/announcement/announcement_bloc.dart';
+import 'package:help_isko/bloc/postedDuty/posted_duties_bloc.dart';
+import 'package:help_isko/cards/announcement_card.dart';
+import 'package:help_isko/cards/posted_duties_home.dart';
+import 'package:help_isko/components/my_announcement_loading_indicator.dart';
 import 'package:help_isko/components/my_app_bar.dart';
+import 'package:help_isko/services/auth_services.dart';
+import 'package:help_isko/services/global.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProfHomePage extends StatelessWidget {
   const ProfHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16, left: 4),
-                child: Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        },
-                        icon: const Icon(Icons.menu_rounded,
-                            size: 30, color: Color(0xFF3B3B3B))),
-                    const Spacer(),
-                    const MyAppBar(role: 'Professor')
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16, top: 24),
-                child: Text(
-                  'Announcement',
-                  style: GoogleFonts.nunito(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF3B3B3B),
+    final PageController pageController = PageController();
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                AnnouncementBloc(authServices: AuthServices(apiUrl: baseUrl))
+                  ..add(FetchAnnouncement())),
+        BlocProvider(
+            create: (context) =>
+                PostedDutiesBloc(authServices: AuthServices(apiUrl: baseUrl))
+                  ..add(FetchDuty()))
+      ],
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 4),
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Scaffold.of(context).openDrawer();
+                          },
+                          icon: const Icon(Icons.menu_rounded,
+                              size: 30, color: Color(0xFF3B3B3B))),
+                      const Spacer(),
+                      const MyAppBar(role: 'Professor')
+                    ],
                   ),
                 ),
               ),
-            ),
-          ],
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 24),
+                  child: Text(
+                    'Announcement',
+                    style: GoogleFonts.nunito(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF3B3B3B),
+                    ),
+                  ),
+                ),
+              ),
+              BlocConsumer<AnnouncementBloc, AnnouncementState>(
+                listener: (context, state) {
+                  if (state is AnnouncementFailedState) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
+                    log('The error is: ${state.error}');
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AnnouncementLoadingState) {
+                    return const SliverToBoxAdapter(
+                      child: MyAnnouncementLoadingIndicator(),
+                    );
+                  } else if (state is AnnouncementSuccessState) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 166,
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: PageView.builder(
+                                controller: pageController,
+                                itemBuilder: (context, index) {
+                                  final actualIndex =
+                                      index % state.announcement.length;
+                                  return AnnouncementCard(
+                                      heading: state
+                                          .announcement[actualIndex].heading,
+                                      description: state
+                                          .announcement[actualIndex]
+                                          .description,
+                                      announcementImg: state
+                                          .announcement[actualIndex]
+                                          .announcementImg,
+                                      time:
+                                          state.announcement[actualIndex].time);
+                                },
+                              ),
+                            ),
+                            SmoothPageIndicator(
+                              controller: pageController,
+                              count: 5,
+                              effect: const WormEffect(
+                                activeDotColor: Color(0xFF3B3B3B),
+                                dotColor: Color(0xCCD9D9D9),
+                                dotHeight: 7,
+                                dotWidth: 7,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else if (state is AnnouncementFailedState) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 166,
+                        child: Center(
+                          child: Text(
+                            'Failed to load, try again later',
+                            style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 166,
+                        child: Center(
+                          child: Text(
+                            'Coming soon!',
+                            style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 24, right: 20),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Posted Duties',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B),
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        'See all',
+                        style: GoogleFonts.nunito(
+                          fontSize: 14,
+                          color: const Color(0xCC6BB577),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              BlocConsumer<PostedDutiesBloc, PostedDutiesState>(
+                listener: (context, state) {
+                  if (state is PostedDutiestFailedState) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
+                    log('The error is: ${state.error}');
+                  }
+                },
+                builder: (context, state) {
+                  if (state is PostedDutiesLoadingState) {
+                    return const SliverToBoxAdapter(
+                      child: SizedBox(
+                          height: 166,
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          )),
+                    );
+                  } else if (state is PostedDutiesSuccessState) {
+                    if (state.duty.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 100,
+                          child: Center(
+                            child: Text(
+                              'Coming soon!',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3B3B3B)),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return SliverToBoxAdapter(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          height: 166,
+                          child: ListView.builder(
+                            itemCount: state.duty.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final duty = state.duty[index];
+                              return PostedDutiesHome(
+                                  date: duty.date,
+                                  building: duty.building,
+                                  message: duty.message,
+                                  dutyStatus: duty.dutyStatus);
+                            },
+                          ),
+                        ),
+                      );
+                    }
+                  } else if (state is PostedDutiestFailedState) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 166,
+                        child: Center(
+                          child: Text(
+                            'Failed to load, try again later',
+                            style: GoogleFonts.nunito(
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SliverToBoxAdapter(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 166,
+                        child: Center(
+                          child: Text(
+                            'Coming soon!',
+                            style: GoogleFonts.nunito(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

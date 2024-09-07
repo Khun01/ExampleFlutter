@@ -41,7 +41,7 @@ class Storage{
     ]);
   }
 
-  static Future<Map<String, String?>> getProfData() async {
+  static Future<Map<String, String?>> getData() async {
     final userData = await Future.wait([
       getField('id'),
       getField('firstName'),

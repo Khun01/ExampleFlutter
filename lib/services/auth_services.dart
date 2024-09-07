@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:help_isko/models/announcement.dart';
+import 'package:help_isko/models/prof_duty.dart';
 import 'package:help_isko/services/global.dart';
 import 'package:help_isko/services/storage.dart';
 import 'package:http/http.dart' as http;
@@ -27,7 +29,7 @@ class AuthServices{
   }
 
   Future<int> logout() async{
-    final userData = await Storage.getProfData();
+    final userData = await Storage.getData();
     String? token = userData['token'];
     final response = await http.post(
       Uri.parse('$baseUrl/logout'),
@@ -79,25 +81,42 @@ class AuthServices{
     };
   }
 
-  
+  Future<List<Announcement>> fetchAnnouncement() async{
+    final userData = await Storage.getData();
+    String? token = userData['token'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/announcements'),
+      headers: {
+        'Content-Type': 'application/json',
+         'Authorization': 'Bearer $token'
+      },
+    );
+    if(response.statusCode == 200){
+      final Map<String, dynamic> jsonData = json.decode(response.body);
+      final List<dynamic> announcementList = jsonData['announcement'];
+      return announcementList.map((json) => Announcement.fromJson(json)).toList();
+    }else{
+      log('The status code is: ${response.statusCode}');
+      throw Exception('Failed to load announcement');
+    }
+  }
 
-  // static Future<List<Products>> fetchProducts() async{
-  //   String? token = await SharedPreferencesUtil.getToken();
-  //   var url = Uri.parse('$baseUrl/api/products');
-  //   final response = await http.get(
-  //     url, 
-  //     headers: {
-  //       ...headers,
-  //       'Authorization': 'Bearer $token'
-  //     }
-  //   );
-  //   List<dynamic> data = jsonDecode(response.body);
-  //   List<Products> productList = [];
-
-  //   for(var item in data){
-  //     Products products = Products.fromJson(item);
-  //     productList.add(products);
-  //   }
-  //   return productList;
-  // }
+  Future<List<ProfDuty>> fetchPostedDuties() async{
+    final userData = await Storage.getData();
+    String? token = userData['token'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/professors/duties'),
+      headers: {
+        'Content-Type': 'application/json',
+         'Authorization': 'Bearer $token'
+      },
+    );
+    if(response.statusCode == 200){
+      final List<dynamic> dutyList = json.decode(response.body);
+      return dutyList.map((json) => ProfDuty.fromJson(json)).toList();
+    }else{
+      log('The status code is: ${response.statusCode}');
+      throw Exception('Failed to load duties');
+    }
+  }
 }

@@ -37,7 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else if (event.role == 'Professor') {
         emit(state.copyWith(isSubmitting: true));
         try {
-          final userData = await Storage.getProfData();
+          final userData = await Storage.getData();
           final token = userData['token'];
 
           if (token != null) {

@@ -11,7 +11,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
   void _onLoadUserData(LoadUserData event, Emitter<UserDataState> emit) async {
     emit(UserDataLoading());
     try {
-      final userData = await Storage.getProfData();
+      final userData = await Storage.getData();
       final name = userData['name'] ?? 'N/A';
       final token = userData['token'] ?? 'N/A';
       final firstName = userData['firstName'] ?? 'N/A';
