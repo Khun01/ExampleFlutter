@@ -19,7 +19,7 @@ class PostedDutiesHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 128,
-      margin: const EdgeInsets.only(top: 16, bottom: 16, left: 8, right: 4),
+      margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 4),
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

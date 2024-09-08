@@ -92,12 +92,12 @@ class LandingPage extends StatelessWidget {
                               const SizedBox(height: 30),
                               MyButton(
                                 onTap: () {
-                                  selectedRole = 'Professor';
+                                  selectedRole = 'Employee';
                                   context.read<LoginBloc>().add(
                                       CheckLoginStatusEvent(
                                           role: selectedRole!));
                                 },
-                                buttonText: 'Professor',
+                                buttonText: 'Employee',
                                 color: const Color(0xFF6BB577),
                                 textColor: const Color(0xFFFCFCFC),
                               ),

@@ -23,3 +23,5 @@ class PostedDutiesSuccessState extends PostedDutiesState{
 
   const PostedDutiesSuccessState ({required this.duty});
 }
+
+class PostingDutiesSuccessState extends PostedDutiesState{}

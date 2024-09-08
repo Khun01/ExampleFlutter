@@ -15,13 +15,13 @@ class Storage{
     await _storage.delete(key: key);
   }
 
-  static Future<void> saveProfData({
+  static Future<void> saveEmployeeData({
     required String id,
     required String firstName,
     required String lastName,
     required String birthday,
     required String contactNumber,
-    required String professorNumber,
+    required String employeeNumber,
     required String? profileImg,
     required String token,
     required String userId,
@@ -33,7 +33,7 @@ class Storage{
       saveField('lastName', lastName),
       saveField('birthday', birthday),
       saveField('contactNumber', contactNumber),
-      saveField('professorNumber', professorNumber),
+      saveField('employeeNumber', employeeNumber),
       saveField('profileImg', profileImg ?? ''),
       saveField('token', token),
       saveField('user_id', userId),
@@ -48,7 +48,7 @@ class Storage{
       getField('lastName'),
       getField('birthday'),
       getField('contactNumber'),
-      getField('professorNumber'),
+      getField('employeeNumber'),
       getField('profileImg'),
       getField('token'),
       getField('user_id'),
@@ -61,7 +61,7 @@ class Storage{
       'lastName': userData[2],
       'birthday': userData[3],
       'contactNumber': userData[4],
-      'professorNumber': userData[5],
+      'employeeNumber': userData[5],
       'profileImg': userData[6] ?? '',
       'token': userData[7],
       'user_id': userData[8],
@@ -70,14 +70,14 @@ class Storage{
     return data;
   }
 
-  static Future<void> deleteProfData() async {
+  static Future<void> deleteEmployeeData() async {
     await Future.wait([
       deleteField('id'),
       deleteField('firstName'),
       deleteField('lastName'),
       deleteField('birthday'),
       deleteField('contactNumber'),
-      deleteField('professorNumber'),
+      deleteField('employeeNumber'),
       deleteField('profileImg'),
       deleteField('token'),
       deleteField('user_id'),

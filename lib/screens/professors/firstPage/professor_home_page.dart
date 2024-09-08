@@ -78,52 +78,69 @@ class ProfHomePage extends StatelessWidget {
                       child: MyAnnouncementLoadingIndicator(),
                     );
                   } else if (state is AnnouncementSuccessState) {
-                    return SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 166,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: PageView.builder(
-                                controller: pageController,
-                                itemBuilder: (context, index) {
-                                  final actualIndex =
-                                      index % state.announcement.length;
-                                  return AnnouncementCard(
-                                      heading: state
-                                          .announcement[actualIndex].heading,
-                                      description: state
-                                          .announcement[actualIndex]
-                                          .description,
-                                      announcementImg: state
-                                          .announcement[actualIndex]
-                                          .announcementImg,
-                                      time:
-                                          state.announcement[actualIndex].time);
-                                },
-                              ),
+                    if (state.announcement.isEmpty) {
+                      return SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 166,
+                          child: Center(
+                            child: Text(
+                              'Coming soon!',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3B3B3B)),
                             ),
-                            SmoothPageIndicator(
-                              controller: pageController,
-                              count: 5,
-                              effect: const WormEffect(
-                                activeDotColor: Color(0xFF3B3B3B),
-                                dotColor: Color(0xCCD9D9D9),
-                                dotHeight: 7,
-                                dotWidth: 7,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 166,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: PageView.builder(
+                                  controller: pageController,
+                                  itemBuilder: (context, index) {
+                                    final actualIndex =
+                                        index % state.announcement.length;
+                                    return AnnouncementCard(
+                                        heading: state
+                                            .announcement[actualIndex].heading,
+                                        description: state
+                                            .announcement[actualIndex]
+                                            .description,
+                                        announcementImg: state
+                                            .announcement[actualIndex]
+                                            .announcementImg,
+                                        time: state
+                                            .announcement[actualIndex].time);
+                                  },
+                                ),
+                              ),
+                              SmoothPageIndicator(
+                                controller: pageController,
+                                count: 5,
+                                effect: const WormEffect(
+                                  activeDotColor: Color(0xFF3B3B3B),
+                                  dotColor: Color(0xCCD9D9D9),
+                                  dotHeight: 7,
+                                  dotWidth: 7,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   } else if (state is AnnouncementFailedState) {
                     return SliverToBoxAdapter(
                       child: SizedBox(
                         height: 166,
                         child: Center(
                           child: Text(
-                            'Failed to load, try again later',
+                            'Failed to load, please try again later',
                             style: GoogleFonts.nunito(
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF3B3B3B)),
@@ -194,7 +211,7 @@ class ProfHomePage extends StatelessWidget {
                     if (state.duty.isEmpty) {
                       return SliverToBoxAdapter(
                         child: SizedBox(
-                          height: 100,
+                          height: 166,
                           child: Center(
                             child: Text(
                               'Coming soon!',
@@ -232,7 +249,7 @@ class ProfHomePage extends StatelessWidget {
                         height: 166,
                         child: Center(
                           child: Text(
-                            'Failed to load, try again later',
+                            'Failed to load, please try again later',
                             style: GoogleFonts.nunito(
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF3B3B3B)),
@@ -258,6 +275,48 @@ class ProfHomePage extends StatelessWidget {
                     );
                   }
                 },
+              ),
+              SliverLayoutBuilder(
+                builder: (context, constraints) {
+                  final scrolled = constraints.scrollOffset > 0;
+                  return SliverAppBar(
+                    pinned: true,
+                    automaticallyImplyLeading: false,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    flexibleSpace: Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 300),
+                          style: GoogleFonts.nunito(
+                            fontSize: scrolled ? 20 : 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF3B3B3B),
+                          ),
+                          child: const Text(
+                            'Recent Activities',
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 1200,
+                  decoration: BoxDecoration(color: Colors.black),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 1200,
+                  decoration: BoxDecoration(color: Colors.blue),
+                ),
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 120),
               )
             ],
           ),

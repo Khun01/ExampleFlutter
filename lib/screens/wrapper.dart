@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:help_isko/components/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/components/my_drawer.dart';
 import 'package:help_isko/screens/professors/firstPage/prof_duties_page.dart';
 import 'package:help_isko/screens/professors/firstPage/prof_profile_page.dart';
@@ -30,7 +31,7 @@ class _WrapperState extends State<Wrapper> {
           children: [
             IndexedStack(
                 index: selectedIndex,
-                children: widget.role == 'Professor'
+                children: widget.role == 'Employee'
                     ? const [
                         ProfHomePage(),
                         ProfDutiesPage(),
@@ -105,7 +106,7 @@ class _WrapperState extends State<Wrapper> {
                 ),
               ),
             ),
-            if (widget.role == 'Professor')
+            if (widget.role == 'Employee')
               Positioned(
                 bottom: 125,
                 right: 15,
@@ -125,7 +126,18 @@ class _WrapperState extends State<Wrapper> {
                       ]),
                   child: GestureDetector(
                     onTap: () {
-                      // log('Icon add is clikced');
+                      showModalBottomSheet(
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(50))),
+                          context: context,
+                          builder: (context) {
+                            return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.85,
+                                child: const MyAddDutyBottomDialog());
+                          });
                     },
                     child: const Icon(
                       Icons.add_rounded,

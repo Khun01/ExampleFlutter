@@ -34,7 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // }
         emit(state.copyWith(hasFailed: true, isSubmitting: false));
         log('Student');
-      } else if (event.role == 'Professor') {
+      } else if (event.role == 'Employee') {
         emit(state.copyWith(isSubmitting: true));
         try {
           final userData = await Storage.getData();
@@ -44,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             await Future.delayed(const Duration(seconds: 2));
             emit(state.copyWith(isSuccess: true, isSubmitting: false));
           } else {
-            log('dont have a token professor');
+            log('dont have a token Employee');
             emit(state.copyWith(hasFailed: true, isSubmitting: false));
           }
         } catch (e) {
@@ -80,10 +80,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (state.isFormValid) {
         emit(state.copyWith(isSubmitting: true));
         try {
-          if (event.role == 'Professor') {
+          if (event.role == 'Employee') {
             await Future.delayed(const Duration(seconds: 2));
             final response =
-                await authServices.loginProf(state.email, state.password);
+                await authServices.loginEmployee(state.email, state.password);
             final statusCode = response['statusCode'];
             final responseData = response['data'];
             if (statusCode == 200) {
@@ -97,17 +97,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 final String lastName = user['last_name'];
                 final String birthday = user['birthday'];
                 final String contactNumber = user['contact_number'];
-                final String professorNumber = user['professor_number'];
+                final String employeeNumber = user['employee_number'];
                 final String profileImg = user['profile_img'] ?? '';
                 final String userId = user['user_id'].toString();
 
-                await Storage.saveProfData(
+                await Storage.saveEmployeeData(
                   id: id,
                   firstName: firstName,
                   lastName: lastName,
                   birthday: birthday,
                   contactNumber: contactNumber,
-                  professorNumber: professorNumber,
+                  employeeNumber: employeeNumber,
                   profileImg: profileImg,
                   userId: userId,
                   token: token,
@@ -124,7 +124,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   errorMessage = 'Email and password do not match our records';
                   break;
                 case 403:
-                  errorMessage = 'You are not a professor';
+                  errorMessage = 'You are not a Employee';
                   break;
                 default:
                   log('The status Code is $statusCode');
@@ -137,6 +137,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             }
           }
         } catch (e) {
+          log('The response is: ');
           emit(state.copyWith(
               isSubmitting: false,
               hasFailed: true,

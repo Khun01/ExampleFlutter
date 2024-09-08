@@ -11,9 +11,9 @@ class AuthServices{
 
   AuthServices({required this.apiUrl});
 
-  Future<Map<String, dynamic>> loginProf(String email, String password) async {
+  Future<Map<String, dynamic>> loginEmployee(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/login-prof'),
+      Uri.parse('$baseUrl/login-employee'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(<String, String>{
         'email': email,
@@ -21,7 +21,6 @@ class AuthServices{
       }),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
-    log('User data: $responseData');
     return {
       'statusCode': response.statusCode,
       'data': responseData,

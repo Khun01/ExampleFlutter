@@ -19,7 +19,7 @@ class AnnouncementCard extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(12),
-      margin: const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 16),
+      margin: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: const Color(0xFFA3D9A5),
