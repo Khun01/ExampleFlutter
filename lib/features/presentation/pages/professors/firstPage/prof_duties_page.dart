@@ -20,7 +20,8 @@ class ProfDutiesPage extends StatelessWidget {
                 return SliverAppBar(
                   pinned: true,
                   automaticallyImplyLeading: false,
-                  flexibleSpace: Container(
+                  flexibleSpace: AnimatedContainer(
+                    duration: const Duration(milliseconds: 309),
                     padding: const EdgeInsets.only(left: 20),
                     decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,

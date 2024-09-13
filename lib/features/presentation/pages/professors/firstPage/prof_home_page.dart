@@ -106,7 +106,7 @@ class ProfHomePage extends StatelessWidget {
                               ),
                               SmoothPageIndicator(
                                 controller: pageController,
-                                count: 5,
+                                count: state.announcement.length > 5 ? 5 : state.announcement.length,
                                 effect: const WormEffect(
                                   activeDotColor: Color(0xFF3B3B3B),
                                   dotColor: Color(0xCCD9D9D9),
@@ -267,7 +267,8 @@ class ProfHomePage extends StatelessWidget {
                   return SliverAppBar(
                     pinned: true,
                     automaticallyImplyLeading: false,
-                    flexibleSpace: Container(
+                    flexibleSpace: AnimatedContainer(
+                      duration: const Duration(milliseconds: 309),
                       padding: const EdgeInsets.only(left: 20),
                       decoration: BoxDecoration( 
                         color: Theme.of(context).scaffoldBackgroundColor,
