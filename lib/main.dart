@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:help_isko/features/presentation/pages/shared/splash_screen.dart';
+import 'package:help_isko/presentation/pages/shared/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
