@@ -6,7 +6,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/pages/auth/login_page.dart';
-import 'package:help_isko/presentation/pages/shared/wrapper.dart';
+import 'package:help_isko/presentation/pages/wrapper.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 

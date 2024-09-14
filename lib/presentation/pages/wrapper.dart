@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:help_isko/presentation/pages/shared/messenger_page.dart';
+import 'package:help_isko/presentation/pages/messenger_page.dart';
 import 'package:help_isko/presentation/widgets/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/presentation/pages/professors/firstPage/prof_duties_page.dart';
 import 'package:help_isko/presentation/pages/professors/firstPage/prof_profile_page.dart';

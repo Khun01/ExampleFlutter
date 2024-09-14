@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
-import 'package:help_isko/presentation/pages/shared/landing_page.dart';
+import 'package:help_isko/presentation/pages/landing_page.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 

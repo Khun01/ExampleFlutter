@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/auth/forgotPassword/forgot_password_bloc.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
-import 'package:help_isko/presentation/pages/shared/landing_page.dart';
+import 'package:help_isko/presentation/pages/landing_page.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 

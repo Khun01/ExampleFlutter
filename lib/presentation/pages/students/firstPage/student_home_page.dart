@@ -5,7 +5,7 @@ import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
-import 'package:help_isko/presentation/pages/shared/landing_page.dart';
+import 'package:help_isko/presentation/pages/landing_page.dart';
 
 class StudentHomePage extends StatelessWidget {
 

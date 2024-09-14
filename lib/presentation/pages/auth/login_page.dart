@@ -7,7 +7,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
 import 'package:help_isko/presentation/pages/auth/forgot_passsword_page.dart';
-import 'package:help_isko/presentation/pages/shared/wrapper.dart';
+import 'package:help_isko/presentation/pages/wrapper.dart';
 import 'package:help_isko/services/auth_services.dart';
 import 'package:help_isko/services/global.dart';
 
