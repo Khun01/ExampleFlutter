@@ -237,7 +237,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   errorMessage = 'Email and password do not match our records';
                   break;
                 case 403:
-                  errorMessage = 'You are not a employee';
+                  errorMessage = 'You are not a student';
                   break;
                 default:
                   log('The status Code is $statusCode');

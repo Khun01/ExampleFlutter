@@ -32,7 +32,7 @@ class LoginPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => Wrapper(role: role!)));
-              } else if (state.hasFailed) {
+              } else if (state.hasFailed && !state.isSubmitting) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.failureMessage!)));
               } else if (state.isSubmitting){
