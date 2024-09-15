@@ -62,7 +62,7 @@ class MessengerPage extends StatelessWidget {
           SliverToBoxAdapter(
             child: Container(
               height: 1200,
-              decoration: BoxDecoration(color: Colors.white),
+              decoration: const BoxDecoration(color: Colors.white),
             ),
           ),
         ],

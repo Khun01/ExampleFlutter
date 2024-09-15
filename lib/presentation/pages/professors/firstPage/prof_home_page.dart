@@ -300,17 +300,17 @@ class ProfHomePage extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Container(
                   height: 1200,
-                  decoration: BoxDecoration(color: Colors.black),
+                  decoration: const BoxDecoration(color: Colors.black),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Container(
                   height: 1200,
-                  decoration: BoxDecoration(color: Colors.blue),
+                  decoration: const BoxDecoration(color: Colors.blue),
                 ),
               ),
               const SliverToBoxAdapter(
-                child: SizedBox(height: 120),
+                child: SizedBox(height: 70),
               )
             ],
           ),

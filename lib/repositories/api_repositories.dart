@@ -27,6 +27,22 @@ class ApiRepositories{
     };
   }
 
+  Future<Map<String, dynamic>> loginStud(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/login-stud'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(<String, String>{
+        'email': email,
+        'password': password,
+      }),
+    );
+    final Map<String, dynamic> responseData = jsonDecode(response.body);
+    return {
+      'statusCode': response.statusCode,
+      'data': responseData,
+    };
+  }
+
   Future<int> logout() async{
     final userData = await Storage.getData();
     String? token = userData['token'];

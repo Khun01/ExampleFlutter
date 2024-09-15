@@ -17,7 +17,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState>{
       await Future.delayed(const Duration(seconds: 2));
       final statusCode = await apiRepositories.logout();
       if(statusCode == 200){
-        await Storage.deleteEmployeeData();
+        await Storage.deleteData();
         emit(LogoutSuccess());
       }else {
         emit(LogoutFailure(error: 'Logout failed with status code: $statusCode'));
