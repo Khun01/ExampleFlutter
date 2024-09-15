@@ -7,8 +7,8 @@ import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/pages/auth/login_page.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -19,7 +19,7 @@ class LandingPage extends StatelessWidget {
 
     return BlocProvider(
       create: (context) =>
-          LoginBloc(authServices: AuthServices(apiUrl: baseUrl)),
+          LoginBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: Scaffold(
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(

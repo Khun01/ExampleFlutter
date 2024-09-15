@@ -8,8 +8,8 @@ import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/widgets/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProfHomePage extends StatelessWidget {
@@ -22,11 +22,11 @@ class ProfHomePage extends StatelessWidget {
       providers: [
         BlocProvider(
             create: (context) =>
-                AnnouncementBloc(authServices: AuthServices(apiUrl: baseUrl))
+                AnnouncementBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
                   ..add(FetchAnnouncement())),
         BlocProvider(
             create: (context) =>
-                PostedDutiesBloc(authServices: AuthServices(apiUrl: baseUrl))
+                PostedDutiesBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
                   ..add(FetchDuty()))
       ],
       child: Scaffold(

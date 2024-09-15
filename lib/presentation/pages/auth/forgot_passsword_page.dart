@@ -5,8 +5,8 @@ import 'package:help_isko/presentation/bloc/auth/forgotPassword/forgot_password_
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
 import 'package:help_isko/presentation/pages/auth/verification_page.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class ForgotPassswordPage extends StatelessWidget {
   const ForgotPassswordPage({super.key});
@@ -14,7 +14,7 @@ class ForgotPassswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ForgotPasswordBloc(authServices: AuthServices(apiUrl: baseUrl)),
+      create: (context) => ForgotPasswordBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordSuccessState) {

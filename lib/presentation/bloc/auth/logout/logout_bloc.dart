@@ -2,12 +2,12 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/storage.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/storage.dart';
 
 class LogoutBloc extends Bloc<LogoutEvent, LogoutState>{
-  final AuthServices authServices; 
-  LogoutBloc({required this.authServices}) : super(LogoutInitial()){
+  final ApiRepositories apiRepositories; 
+  LogoutBloc({required this.apiRepositories}) : super(LogoutInitial()){
     on<LogoutButtonPressed>(_onLogoutButtonPressed);
   }
 
@@ -15,7 +15,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState>{
     emit(LogoutLoading());
     try{
       await Future.delayed(const Duration(seconds: 2));
-      final statusCode = await authServices.logout();
+      final statusCode = await apiRepositories.logout();
       if(statusCode == 200){
         await Storage.deleteEmployeeData();
         emit(LogoutSuccess());

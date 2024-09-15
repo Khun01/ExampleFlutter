@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:help_isko/models/data/announcement.dart';
 import 'package:help_isko/models/data/prof_duty.dart';
-import 'package:help_isko/services/global.dart';
-import 'package:help_isko/services/storage.dart';
+import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/repositories/storage.dart';
 import 'package:http/http.dart' as http;
 
-class AuthServices{
+class ApiRepositories{
   final String apiUrl;
 
-  AuthServices({required this.apiUrl});
+  ApiRepositories({required this.apiUrl});
 
   Future<Map<String, dynamic>> loginEmployee(String email, String password) async {
     final response = await http.post(

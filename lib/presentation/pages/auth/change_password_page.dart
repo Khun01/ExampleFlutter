@@ -5,8 +5,8 @@ import 'package:help_isko/presentation/bloc/auth/forgotPassword/forgot_password_
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
 import 'package:help_isko/presentation/pages/landing_page.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class ChangePasswordPage extends StatelessWidget {
   final String token;
@@ -19,7 +19,7 @@ class ChangePasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          ForgotPasswordBloc(authServices: AuthServices(apiUrl: baseUrl)),
+          ForgotPasswordBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ChangePasswordSuccessState) {

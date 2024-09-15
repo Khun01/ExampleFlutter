@@ -3,15 +3,15 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/services/auth_services.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';
 
 class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
-  final AuthServices authServices;
-  ForgotPasswordBloc({required this.authServices})
+  final ApiRepositories apiRepositories;
+  ForgotPasswordBloc({required this.apiRepositories})
       : super(ForgotPasswordInitial()) {
     on<ForgotPasswordClickedButtonEvent>(forgotPasswordClickedButtonEvent);
     on<ForgotPasswordEmailChangedEvent>(forgotPasswordEmailChangedEvent);
@@ -38,7 +38,7 @@ class ForgotPasswordBloc
       if (email.isNotEmpty) {
         if (regex.hasMatch(email)) {
           await Future.delayed(const Duration(seconds: 2));
-          final response = await authServices.forgotPassword(email);
+          final response = await apiRepositories.forgotPassword(email);
           // final statusCode = response['statusCode'];
           if (response['statusCode'] == 200) {
             emit(ForgotPasswordSuccessState(
@@ -111,7 +111,7 @@ class ForgotPasswordBloc
           if (password == confrimPassword) {
             await Future.delayed(const Duration(seconds: 2));
 
-            final response = await authServices.resetPassword(
+            final response = await apiRepositories.resetPassword(
                 event.email, password, confrimPassword, event.token);
             if (response['statusCode'] == 200) {
               log('The code is: ${response['statusCode']}');

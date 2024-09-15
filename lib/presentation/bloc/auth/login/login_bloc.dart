@@ -3,13 +3,13 @@ import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/storage.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/storage.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthServices authServices;
+  final ApiRepositories apiRepositories;
 
-  LoginBloc({required this.authServices}) : super(LoginState.initial()) {
+  LoginBloc({required this.apiRepositories}) : super(LoginState.initial()) {
     on<LoginEmailChanged>(_onEmailChanged);
     on<LoginPassChanged>(_onPasswordChanged);
     on<LoginSubmitted>(_onLoginSubmitted);
@@ -83,7 +83,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (event.role == 'Employee') {
             await Future.delayed(const Duration(seconds: 2));
             final response =
-                await authServices.loginEmployee(state.email, state.password);
+                await apiRepositories.loginEmployee(state.email, state.password);
             final statusCode = response['statusCode'];
             final responseData = response['data'];
             if (statusCode == 200) {

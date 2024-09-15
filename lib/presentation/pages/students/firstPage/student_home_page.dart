@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/presentation/pages/landing_page.dart';
 
 class StudentHomePage extends StatelessWidget {
@@ -18,7 +18,7 @@ class StudentHomePage extends StatelessWidget {
     
     return BlocProvider(
       create: (context) =>
-          LogoutBloc(authServices: AuthServices(apiUrl: baseUrl)),
+          LogoutBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: Scaffold(
         body: BlocListener<LogoutBloc, LogoutState>(
           listener: (context, state) {

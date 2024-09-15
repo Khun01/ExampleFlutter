@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
-import 'package:help_isko/services/storage.dart';
+import 'package:help_isko/repositories/storage.dart';
 
 class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
   UserDataBloc() : super(UserDataInitial()){

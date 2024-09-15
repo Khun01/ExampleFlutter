@@ -5,8 +5,8 @@ import 'package:help_isko/presentation/bloc/auth/logout/logout_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
 import 'package:help_isko/presentation/pages/landing_page.dart';
-import 'package:help_isko/services/auth_services.dart';
-import 'package:help_isko/services/global.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class MyDialog extends StatelessWidget {
   const MyDialog({super.key});
@@ -15,7 +15,7 @@ class MyDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) =>
-          LogoutBloc(authServices: AuthServices(apiUrl: baseUrl)),
+          LogoutBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: BlocConsumer<LogoutBloc, LogoutState>(
         listener: (context, state) {
           if (state is LogoutFailure) {
