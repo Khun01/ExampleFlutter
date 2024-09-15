@@ -114,8 +114,8 @@ class _WrapperState extends State<Wrapper> {
             ),
             if (widget.role == 'Employee')
               Positioned(
-                bottom: 125,
-                right: 15,
+                bottom: 86,
+                right: 16,
                 child: Container(
                   height: 60,
                   width: 60,
