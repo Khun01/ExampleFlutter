@@ -7,6 +7,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/pages/auth/login_page.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';
+import 'package:help_isko/presentation/widgets/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 
@@ -117,9 +118,6 @@ class LandingPage extends StatelessWidget {
                           ),
                         ),
                         if (state.isSubmitting) ...[
-                          const Center(
-                            child: CircularProgressIndicator(),
-                          ),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -131,6 +129,10 @@ class LandingPage extends StatelessWidget {
                               color: Colors.black.withOpacity(0.5),
                             ),
                           ),
+                          const Center(
+                            child: MyCircularProgressIndicator(),
+                          ),
+                          
                         ]
                       ],
                     ),

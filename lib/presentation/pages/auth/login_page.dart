@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
+import 'package:help_isko/presentation/widgets/my_circular_progress_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
 import 'package:help_isko/presentation/pages/auth/forgot_passsword_page.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';
@@ -145,9 +146,6 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   if (state.isSubmitting) ...[
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
                     Positioned(
                       top: 0,
                       left: 0,
@@ -158,6 +156,9 @@ class LoginPage extends StatelessWidget {
                         height: double.infinity,
                         color: Colors.black.withOpacity(0.5),
                       ),
+                    ),
+                    const Center(
+                      child: MyCircularProgressIndicator(),
                     ),
                   ]
                 ],

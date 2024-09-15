@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/auth/logout/logout_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_event.dart';
 import 'package:help_isko/presentation/bloc/auth/logout/logout_state.dart';
 import 'package:help_isko/presentation/pages/landing_page.dart';
+import 'package:help_isko/presentation/widgets/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 
@@ -110,13 +111,11 @@ class MyDialog extends StatelessWidget {
                     ),
                   ),
                   const Positioned(
-                      top: 120,
-                      bottom: 120,
-                      left: 130,
-                      right: 130,
-                      child: CircularProgressIndicator(
-                        color: Color(0xFF3B3B3B),
-                      )),
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    child: MyCircularProgressIndicator())
                 ]
               ],
             ),
