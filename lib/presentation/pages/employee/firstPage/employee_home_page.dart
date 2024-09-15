@@ -23,7 +23,7 @@ class EmployeeHomePage extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 AnnouncementBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
-                  ..add(FetchAnnouncement())),
+                  ..add(const FetchAnnouncement(role: 'Employee'))),
         BlocProvider(
             create: (context) =>
                 PostedDutiesBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))

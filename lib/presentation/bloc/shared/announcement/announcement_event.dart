@@ -7,4 +7,8 @@ sealed class AnnouncementEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchAnnouncement extends AnnouncementEvent{}
+class FetchAnnouncement extends AnnouncementEvent{
+  final String role;
+
+  const FetchAnnouncement({required this.role});
+}

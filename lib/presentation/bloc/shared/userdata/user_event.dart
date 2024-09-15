@@ -5,4 +5,8 @@ abstract class UserDataEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadUserData extends UserDataEvent {}
+class LoadUserData extends UserDataEvent {
+  final String role;
+
+  LoadUserData({required this.role});
+}

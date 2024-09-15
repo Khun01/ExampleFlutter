@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
-import 'package:help_isko/repositories/storage.dart';
+import 'package:help_isko/repositories/storage/employee_storage.dart';
+import 'package:help_isko/repositories/storage/student_storage.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ApiRepositories apiRepositories;
@@ -24,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.role == 'Student') {
         emit(state.copyWith(isSubmitting: true));
         try {
-          final userData = await Storage.getData();
+          final userData = await StudentStorage.getData();
           final token = userData['studToken'];
           log('The student token: $token');
           if (token != null && token.isNotEmpty) {
@@ -41,7 +42,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (event.role == 'Employee') {
         emit(state.copyWith(isSubmitting: true));
         try {
-          final userData = await Storage.getData();
+          final userData = await EmployeeStorage.getData();
           final token = userData['employeeToken'];
           log('The Employee token: $token');
 
@@ -106,7 +107,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 final String profileImg = user['profile_img'] ?? '';
                 final String userId = user['user_id'].toString();
 
-                await Storage.saveData(
+                await EmployeeStorage.saveData(
                   id: id,
                   firstName: firstName,
                   lastName: lastName,
@@ -117,7 +118,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   userId: userId,
                   employeeToken: token,
                   fullName: name,
-                  studToken: ''
                 );
 
                 log('Response data: $user');
@@ -142,7 +142,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   failureMessage: errorMessage));
             }
           }
-
           if (event.role == 'Student') {
             await Future.delayed(const Duration(seconds: 2));
             final response =
@@ -194,39 +193,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 final String emergencyContactNumber =
                     user['emergency_contact_number'];
 
-                await Storage.saveData(
-                    id: id,
-                    firstName: firstName,
-                    lastName: lastName,
-                    birthday: birthday,
-                    contactNumber: contactNumber,
-                    idNumber: idNumber,
-                    profileImg: profileImg,
-                    userId: userId,
-                    fullName: name,
-                    college: college,
-                    course: course,
-                    department: department,
-                    semester: semester,
-                    learningModality: learningModality,
-                    fatherName: fatherName,
-                    fatherContactNumber: fatherContactNumber,
-                    motherName: motherName,
-                    motherContactNumber: motherContactNumber,
-                    currentAddress: currentAddress,
-                    currentProvince: currentProvince,
-                    currentCountry: currentCountry,
-                    currentCity: currentCity,
-                    permanentAddress: permanentAddress,
-                    permanentProvince: permanentProvince,
-                    permanentCountry: permanentCountry,
-                    permanentCity: permanentCity,
-                    emergencyPersonName: emergencyPersonName,
-                    emergencyAddress: emergencyAddress,
-                    relation: relation,
-                    emergencyContactNumber: emergencyContactNumber,
-                    studToken: token,
-                    employeeToken: '');
+                await StudentStorage.saveData(
+                  id: id,
+                  firstName: firstName,
+                  lastName: lastName,
+                  birthday: birthday,
+                  contactNumber: contactNumber,
+                  idNumber: idNumber,
+                  profileImg: profileImg,
+                  userId: userId,
+                  studToken: token,
+                  fullName: name,
+                  college: college,
+                  course: course,
+                  department: department,
+                  semester: semester,
+                  learningModality: learningModality,
+                  fatherName: fatherName,
+                  fatherContactNumber: fatherContactNumber,
+                  motherName: motherName,
+                  motherContactNumber: motherContactNumber,
+                  currentAddress: currentAddress,
+                  currentProvince: currentProvince,
+                  currentCountry: currentCountry,
+                  currentCity: currentCity,
+                  permanentAddress: permanentAddress,
+                  permanentProvince: permanentProvince,
+                  permanentCountry: permanentCountry,
+                  permanentCity: permanentCity,
+                  emergencyPersonName: emergencyPersonName,
+                  emergencyAddress: emergencyAddress,
+                  relation: relation,
+                  emergencyContactNumber: emergencyContactNumber,
+                );
 
                 log('Response data: $user');
                 emit(state.copyWith(isSuccess: true, isSubmitting: false));

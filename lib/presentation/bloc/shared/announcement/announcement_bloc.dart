@@ -18,7 +18,7 @@ class AnnouncementBloc extends Bloc<AnnouncementEvent, AnnouncementState> {
     emit(AnnouncementLoadingState());
     try{
       await Future.delayed(const Duration(seconds: 2));
-      final announcement = await apiRepositories.fetchAnnouncement();
+      final announcement = await apiRepositories.fetchAnnouncement(event.role);
       emit(AnnouncementSuccessState(announcement: announcement));
     }catch(e){
       emit(AnnouncementFailedState(error: e.toString()));

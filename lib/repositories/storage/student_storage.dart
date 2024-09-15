@@ -1,18 +1,19 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class Storage {
+class StudentStorage {
   static const _storage = FlutterSecureStorage();
+  static const _prefix = 'student_';
 
   static Future<void> saveField(String key, String value) async {
-    await _storage.write(key: key, value: value);
+    await _storage.write(key: '$_prefix$key', value: value);
   }
 
   static Future<String?> getField(String key) async {
-    return await _storage.read(key: key);
+    return await _storage.read(key: '$_prefix$key');
   }
 
   static Future<void> deleteField(String key) async {
-    await _storage.delete(key: key);
+    await _storage.delete(key: '$_prefix$key');
   }
 
   static Future<void> saveData({
@@ -23,7 +24,7 @@ class Storage {
     String? contactNumber,
     String? idNumber,
     String? profileImg,
-    String? employeeToken,
+    String? studToken,
     String? userId,
     String? fullName,
 
@@ -53,8 +54,6 @@ class Storage {
     String? relation,
     String? emergencyContactNumber,
 
-    String? studToken
-
   }) async {
     await Future.wait([
       saveField('userId', id ?? ""),
@@ -63,8 +62,8 @@ class Storage {
       saveField('birthday', birthday ?? ""),
       saveField('contactNumber', contactNumber ?? ""),
       saveField('idNumber', idNumber ?? ""),
-      saveField('profileImg', profileImg ?? ''),
-      saveField('employeeToken', employeeToken ?? ""),
+      saveField('profileImg', profileImg ?? ''),      
+      saveField('studToken', studToken ?? ''),
       saveField('user_id', userId ?? ""),
       saveField('name', fullName ?? ""),
 
@@ -94,7 +93,6 @@ class Storage {
       saveField('relation', relation ?? ''),
       saveField('emergencyContactNumber', emergencyContactNumber ?? ''),
 
-      saveField('studToken', studToken ?? '')
     ]);
   }
 
@@ -107,7 +105,7 @@ class Storage {
       getField('contactNumber'),
       getField('idNumber'),
       getField('profileImg'),
-      getField('employeeToken'),
+      getField('studToken'),
       getField('user_id'),
       getField('name'),
 
@@ -136,8 +134,6 @@ class Storage {
       getField('emergencyAddress'),
       getField('relation'),
       getField('emergencyContactNumber'),
-
-      getField('studToken')
     ]);
 
     final data = {
@@ -148,12 +144,12 @@ class Storage {
       'contactNumber': userData[4],
       'idNumber': userData[5],
       'profileImg': userData[6] ?? '',
-      'employeeToken': userData[7],
+      'studToken': userData[7],
       'user_id': userData[8],
       'name': userData[9],
 
       'college': userData[10],
-      'fircoursestName': userData[11],
+      'course': userData[11],
       'department': userData[12],
       'semester': userData[13],
       'learningModality': userData[14],
@@ -178,8 +174,6 @@ class Storage {
       'relation': userData[29],
       'emergencyContactNumber': userData[30],
 
-      'studToken': userData[31]
-
     };
     return data;
   }
@@ -193,7 +187,7 @@ class Storage {
       deleteField('contactNumber'),
       deleteField('idNumber'),
       deleteField('profileImg'),
-      deleteField('employeeToken'),
+      deleteField('studToken'),
       deleteField('user_id'),
       deleteField('name'),
 
@@ -222,8 +216,6 @@ class Storage {
       deleteField('emergencyAddress'),
       deleteField('relation'),
       deleteField('emergencyContactNumber'),
-
-      deleteField('studToken')
     ]);
   }
 }

@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
-import 'package:help_isko/presentation/widgets/my_dialog.dart';
 import 'package:ionicons/ionicons.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -26,7 +25,7 @@ class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserDataBloc()..add(LoadUserData()),
+      create: (context) => UserDataBloc()..add(LoadUserData(role: 'Employee')),
       child: BlocBuilder<UserDataBloc, UserDataState>(
         builder: (context, state) {
           if (state is UserDataLoading) {

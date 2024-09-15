@@ -13,15 +13,38 @@ class UserDataLoaded extends UserDataState {
   final String? token;
   final String? name;
   final String? firstName;
-  final String? employeeNumber;
+  final String? lastName;
+  final String? idNumber;
+  final String? college;
+  final String? course;
+  final String? department;
+  final String? semester;
+  final String? learningModality;
+  final String? fatherName;
+  final String? fatherContactNumber;
+  final String? motherName;
+  final String? motherContactNumber;
 
-  UserDataLoaded({this.token, this.name, this.firstName, required this.employeeNumber});
+  UserDataLoaded(
+      {this.token,
+      this.name,
+      this.firstName,
+      this.lastName,
+      this.idNumber,
+      this.college,
+      this.course,
+      this.department,
+      this.semester,
+      this.learningModality,
+      this.fatherName,
+      this.fatherContactNumber,
+      this.motherName,
+      this.motherContactNumber,
+      });
 }
 
 class UserDataError extends UserDataState {
   final String message;
 
-  UserDataError({
-    required this.message
-  });
+  UserDataError({required this.message});
 }

@@ -13,7 +13,7 @@ class EmployeeProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserDataBloc()..add(LoadUserData()),
+      create: (context) => UserDataBloc()..add(LoadUserData(role: 'Employee')),
       child: BlocConsumer<UserDataBloc, UserDataState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -118,7 +118,7 @@ class EmployeeProfilePage extends StatelessWidget {
                                             color: scrolled
                                                 ? const Color(0xCC3B3B3B)
                                                 : const Color(0xCCFCFCFC)),
-                                        child: Text(state.employeeNumber ?? ''),
+                                        child: Text(state.idNumber ?? ''),
                                       )
                                     ],
                                   ),

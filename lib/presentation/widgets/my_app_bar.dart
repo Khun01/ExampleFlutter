@@ -15,7 +15,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserDataBloc()..add(LoadUserData()),
+      create: (context) => UserDataBloc()..add(LoadUserData(role: role)),
       child: BlocBuilder<UserDataBloc, UserDataState>(
         builder: (context, state) {
           if (state is UserDataLoading) {
