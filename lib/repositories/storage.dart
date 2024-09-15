@@ -23,7 +23,7 @@ class Storage {
     String? contactNumber,
     String? idNumber,
     String? profileImg,
-    String? token,
+    String? employeeToken,
     String? userId,
     String? fullName,
 
@@ -51,7 +51,9 @@ class Storage {
     String? emergencyPersonName,
     String? emergencyAddress,
     String? relation,
-    String? emrgencyContactNumber,
+    String? emergencyContactNumber,
+
+    String? studToken
 
   }) async {
     await Future.wait([
@@ -62,7 +64,7 @@ class Storage {
       saveField('contactNumber', contactNumber ?? ""),
       saveField('idNumber', idNumber ?? ""),
       saveField('profileImg', profileImg ?? ''),
-      saveField('token', token ?? ""),
+      saveField('employeeToken', employeeToken ?? ""),
       saveField('user_id', userId ?? ""),
       saveField('name', fullName ?? ""),
 
@@ -90,7 +92,9 @@ class Storage {
       saveField('emergencyPersonName', emergencyPersonName ?? ''),
       saveField('emergencyAddress', emergencyAddress ?? ''),
       saveField('relation', relation ?? ''),
-      saveField('emrgencyContactNumber', emrgencyContactNumber ?? ''),
+      saveField('emergencyContactNumber', emergencyContactNumber ?? ''),
+
+      saveField('studToken', studToken ?? '')
     ]);
   }
 
@@ -103,7 +107,7 @@ class Storage {
       getField('contactNumber'),
       getField('idNumber'),
       getField('profileImg'),
-      getField('token'),
+      getField('employeeToken'),
       getField('user_id'),
       getField('name'),
 
@@ -131,7 +135,9 @@ class Storage {
       getField('emergencyPersonName'),
       getField('emergencyAddress'),
       getField('relation'),
-      getField('emrgencyContactNumber'),
+      getField('emergencyContactNumber'),
+
+      getField('studToken')
     ]);
 
     final data = {
@@ -142,7 +148,7 @@ class Storage {
       'contactNumber': userData[4],
       'idNumber': userData[5],
       'profileImg': userData[6] ?? '',
-      'token': userData[7],
+      'employeeToken': userData[7],
       'user_id': userData[8],
       'name': userData[9],
 
@@ -170,7 +176,9 @@ class Storage {
       'emergencyPersonName': userData[27],
       'emergencyAddress': userData[28],
       'relation': userData[29],
-      'emrgencyContactNumber': userData[20],
+      'emergencyContactNumber': userData[30],
+
+      'studToken': userData[31]
 
     };
     return data;
@@ -185,7 +193,7 @@ class Storage {
       deleteField('contactNumber'),
       deleteField('idNumber'),
       deleteField('profileImg'),
-      deleteField('token'),
+      deleteField('employeeToken'),
       deleteField('user_id'),
       deleteField('name'),
 
@@ -213,7 +221,9 @@ class Storage {
       deleteField('emergencyPersonName'),
       deleteField('emergencyAddress'),
       deleteField('relation'),
-      deleteField('emrgencyContactNumber'),
+      deleteField('emergencyContactNumber'),
+
+      deleteField('studToken')
     ]);
   }
 }

@@ -180,10 +180,10 @@ class _MyDrawerState extends State<MyDrawer> {
                                 const SizedBox(width: 8),
                                 IconButton(
                                     onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) =>
-                                              const MyDialog());
+                                      // showDialog(
+                                      //     context: context,
+                                      //     builder: (context) =>
+                                      //         const MyDialog());
                                     },
                                     icon: const Icon(Ionicons.log_out,
                                         color: Color(0xFF6BB577)))

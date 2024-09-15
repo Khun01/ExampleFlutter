@@ -20,32 +20,32 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       CheckLoginStatusEvent event, Emitter<LoginState> emit) async {
     try {
       emit(state.copyWith(
-          isSuccess: false, hasFailed: false, isSubmitting: false));
+          isSuccess: false, hasFailed: false, isSubmitting: true));
       if (event.role == 'Student') {
         emit(state.copyWith(isSubmitting: true));
         try {
           final userData = await Storage.getData();
-          final token = userData['token'];
-
-          if (token != null) {
+          final token = userData['studToken'];
+          log('The student token: $token');
+          if (token != null && token.isNotEmpty) {
             await Future.delayed(const Duration(seconds: 2));
             emit(state.copyWith(isSuccess: true, isSubmitting: false));
           } else {
-            log('dont have a token student');
+            log('dont have a token Employee');
             emit(state.copyWith(hasFailed: true, isSubmitting: false));
           }
         } catch (e) {
           emit(state.copyWith(failureMessage: e.toString()));
         }
-        emit(state.copyWith(hasFailed: true, isSubmitting: false));
-        log('Student');
-      } else if (event.role == 'Employee') {
+      }
+      if (event.role == 'Employee') {
         emit(state.copyWith(isSubmitting: true));
         try {
           final userData = await Storage.getData();
-          final token = userData['token'];
+          final token = userData['employeeToken'];
+          log('The Employee token: $token');
 
-          if (token != null) {
+          if (token != null && token.isNotEmpty) {
             await Future.delayed(const Duration(seconds: 2));
             emit(state.copyWith(isSuccess: true, isSubmitting: false));
           } else {
@@ -115,8 +115,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                   idNumber: idNumber,
                   profileImg: profileImg,
                   userId: userId,
-                  token: token,
+                  employeeToken: token,
                   fullName: name,
+                  studToken: ''
                 );
 
                 log('Response data: $user');
@@ -190,7 +191,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                     user['emergency_person_name'];
                 final String emergencyAddress = user['emergency_address'];
                 final String relation = user['relation'];
-                final String emrgencyContactNumber =
+                final String emergencyContactNumber =
                     user['emergency_contact_number'];
 
                 await Storage.saveData(
@@ -202,7 +203,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                     idNumber: idNumber,
                     profileImg: profileImg,
                     userId: userId,
-                    token: token,
                     fullName: name,
                     college: college,
                     course: course,
@@ -224,7 +224,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                     emergencyPersonName: emergencyPersonName,
                     emergencyAddress: emergencyAddress,
                     relation: relation,
-                    emrgencyContactNumber: emrgencyContactNumber);
+                    emergencyContactNumber: emergencyContactNumber,
+                    studToken: token,
+                    employeeToken: '');
 
                 log('Response data: $user');
                 emit(state.copyWith(isSuccess: true, isSubmitting: false));
@@ -249,7 +251,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             }
           }
         } catch (e) {
-          log('The response is: ');
+          log('The response is: $e');
           emit(state.copyWith(
               isSubmitting: false,
               hasFailed: true,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
+import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
+import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile_page.dart';
 import 'package:help_isko/presentation/pages/messenger_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_duties_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_profile_page.dart';
 import 'package:help_isko/presentation/widgets/my_add_duty_bottom_dialog.dart';
-import 'package:help_isko/presentation/pages/professors/firstPage/prof_duties_page.dart';
-import 'package:help_isko/presentation/pages/professors/firstPage/prof_profile_page.dart';
-import 'package:help_isko/presentation/pages/professors/firstPage/prof_home_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -35,10 +35,10 @@ class _WrapperState extends State<Wrapper> {
                 index: selectedIndex,
                 children: widget.role == 'Employee'
                     ? const [
-                        ProfHomePage(),
-                        ProfDutiesPage(),
+                        EmployeeHomePage(),
+                        EmployeeDutiesPage(),
                         MessengerPage(),
-                        ProfProfilePage()
+                        EmployeeProfilePage()
                       ]
                     : const [
                         StudentHomePage(),

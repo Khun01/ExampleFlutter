@@ -43,17 +43,17 @@ class ApiRepositories{
     };
   }
 
-  Future<int> logout() async{
+  Future<int> logout(String role) async{
     final userData = await Storage.getData();
-    String? token = userData['token'];
+    String? studToken = userData['studToken'];
+    String? employeeToken = userData['employeeToken'];
     final response = await http.post(
       Uri.parse('$baseUrl/logout'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer ${role == 'Employee' ? employeeToken : studToken}'
       } 
     ); 
-    // final Map<String, dynamic> responseData = jsonDecode(response.body);
     return response.statusCode;
   }
 
@@ -98,7 +98,7 @@ class ApiRepositories{
 
   Future<List<Announcement>> fetchAnnouncement() async{
     final userData = await Storage.getData();
-    String? token = userData['token'];
+    String? token = userData['employeeToken'];
     final response = await http.get(
       Uri.parse('$baseUrl/announcements'),
       headers: {
@@ -118,7 +118,7 @@ class ApiRepositories{
 
   Future<List<ProfDuty>> fetchPostedDuties() async{
     final userData = await Storage.getData();
-    String? token = userData['token'];
+    String? token = userData['employeeToken'];
     final response = await http.get(
       Uri.parse('$baseUrl/professors/duties'),
       headers: {

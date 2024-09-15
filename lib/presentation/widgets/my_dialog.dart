@@ -10,7 +10,8 @@ import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 
 class MyDialog extends StatelessWidget {
-  const MyDialog({super.key});
+  final String role;
+  const MyDialog({super.key, required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +74,7 @@ class MyDialog extends StatelessWidget {
                               ),
                               onPressed: () {
                                 BlocProvider.of<LogoutBloc>(context)
-                                    .add(LogoutButtonPressed());
+                                    .add(LogoutButtonPressed(role: role));
                               },
                               child: Text(
                                 'Yes',
@@ -111,11 +112,11 @@ class MyDialog extends StatelessWidget {
                     ),
                   ),
                   const Positioned(
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    child: MyCircularProgressIndicator())
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      child: MyCircularProgressIndicator())
                 ]
               ],
             ),

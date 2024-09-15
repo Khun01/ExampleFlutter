@@ -55,7 +55,7 @@ class StudentHomePage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             BlocProvider.of<LogoutBloc>(context).add(
-                              LogoutButtonPressed()
+                              LogoutButtonPressed(role: 'Student')
                             );
                           },
                           style: ElevatedButton.styleFrom(
