@@ -37,13 +37,17 @@ class _WrapperState extends State<Wrapper> {
                     ? const [
                         EmployeeHomePage(),
                         EmployeeDutiesPage(),
-                        MessengerPage(),
+                        MessengerPage(
+                          role: 'Employee',
+                        ),
                         EmployeeProfilePage()
                       ]
                     : const [
                         StudentHomePage(),
                         StudentDutiesPage(),
-                        MessengerPage(),
+                        MessengerPage(
+                          role: 'Student',
+                        ),
                         StudentProfilePage()
                       ]),
             Positioned(
@@ -52,14 +56,13 @@ class _WrapperState extends State<Wrapper> {
               bottom: 0,
               child: Container(
                 height: 70,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                          offset: const Offset(0, -6))
-                    ]),
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: const Offset(0, -6))
+                ]),
                 child: BottomNavigationBar(
                   selectedItemColor: const Color(0xFF8CC9A6),
                   unselectedItemColor: const Color(0xFF3B3B3B),
@@ -77,12 +80,10 @@ class _WrapperState extends State<Wrapper> {
                             : const ImageIcon(
                                 AssetImage('assets/images/home.png'))),
                     BottomNavigationBarItem(
-                        label:
-                            widget.role == 'Employee' ? 'Request' : 'Duties',
+                        label: widget.role == 'Employee' ? 'Request' : 'Duties',
                         icon: selectedIndex == 1
                             ? const ImageIcon(
-                                AssetImage(
-                                    'assets/images/duties_clicked.png'),
+                                AssetImage('assets/images/duties_clicked.png'),
                                 color: Color(0xFF6BB577))
                             : const ImageIcon(
                                 AssetImage('assets/images/duties.png'))),
@@ -91,14 +92,12 @@ class _WrapperState extends State<Wrapper> {
                         icon: selectedIndex == 2
                             ? const Icon(Ionicons.chatbubble_ellipses,
                                 color: Color(0xFF6BB577))
-                            : const Icon(
-                                Ionicons.chatbubble_ellipses_outline)),
+                            : const Icon(Ionicons.chatbubble_ellipses_outline)),
                     BottomNavigationBarItem(
                         label: 'Profile',
                         icon: selectedIndex == 3
                             ? const ImageIcon(
-                                AssetImage(
-                                    'assets/images/profile_clicked.png'),
+                                AssetImage('assets/images/profile_clicked.png'),
                                 color: Color(0xFF6BB577))
                             : const ImageIcon(
                                 AssetImage('assets/images/profile.png')))
