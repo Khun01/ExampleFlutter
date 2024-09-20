@@ -45,7 +45,24 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 4), () {
       // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const LandingPage()));
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 500),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const LandingPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0, -1);
+            const end = Offset.zero;
+            const curve = Curves.easeInOut;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          })
+        // MaterialPageRoute(builder: (context) => const LandingPage())
+          );
     });
   }
 
@@ -61,38 +78,44 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScaleTransition(
-        scale: _scaleAnimationBg,
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: RadialGradient(
-              center: Alignment.center,
-              colors: [
-                Color(0xFFA3D9A5),
-                Color(0xFF6BB577),
-              ],
-            ),
-          ),
-          child: ScaleTransition(
-            scale: _scaleAnimationImage,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'PHINMA EDUCATION',
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 30,
-                    color: const Color(0xFF3B3B3B),
+      body: AnimatedBuilder(
+          animation: _controllerBg,
+          builder: (context, child) {
+            return ScaleTransition(
+              scale: _scaleAnimationBg,
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                    gradient: const RadialGradient(
+                      center: Alignment.center,
+                      colors: [
+                        Color(0xFFA3D9A5),
+                        Color(0xFF6BB577),
+                      ],
+                    ),
+                    borderRadius: _scaleAnimationBg.value < 1
+                        ? BorderRadius.circular(5000)
+                        : BorderRadius.zero),
+                child: ScaleTransition(
+                  scale: _scaleAnimationImage,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'PHINMA EDUCATION',
+                        style: GoogleFonts.abhayaLibre(
+                          fontSize: 30,
+                          color: const Color(0xFF3B3B3B),
+                        ),
+                      ),
+                      Image.asset('assets/images/phinma_logo.png'),
+                    ],
                   ),
                 ),
-                Image.asset('assets/images/phinma_logo.png'),
-              ],
-            ),
-          ),
-        ),
-      ),
+              ),
+            );
+          }),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
-import 'package:help_isko/presentation/bloc/employee/postedDuty/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/fetchDuty/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/widgets/my_announcement_loading_indicator.dart';

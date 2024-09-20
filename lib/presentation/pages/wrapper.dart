@@ -121,8 +121,7 @@ class _WrapperState extends State<Wrapper> {
                   width: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: const Color(0x303B3B3B)),
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: const Color(0xFF6BB577),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -148,7 +147,7 @@ class _WrapperState extends State<Wrapper> {
                     child: const Icon(
                       Icons.add_rounded,
                       size: 40,
-                      color: Color(0xFF6BB577),
+                      color: Color(0xFFFCFCFC),
                     ),
                   ),
                 ),
