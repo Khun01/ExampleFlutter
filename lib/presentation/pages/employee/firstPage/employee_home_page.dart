@@ -7,6 +7,7 @@ import 'package:help_isko/presentation/bloc/employee/duty/fetchDuty/posted_dutie
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/widgets/my_announcement_loading_indicator.dart';
+import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -21,13 +22,13 @@ class EmployeeHomePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) =>
-                AnnouncementBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
-                  ..add(const FetchAnnouncement(role: 'Employee'))),
+            create: (context) => AnnouncementBloc(
+                apiRepositories: ApiRepositories(apiUrl: baseUrl))
+              ..add(const FetchAnnouncement(role: 'Employee'))),
         BlocProvider(
-            create: (context) =>
-                PostedDutiesBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
-                  ..add(FetchDuty()))
+            create: (context) => PostedDutiesBloc(
+                apiRepositories: ApiRepositories(apiUrl: baseUrl))
+              ..add(FetchDuty()))
       ],
       child: Scaffold(
         body: SafeArea(
@@ -54,7 +55,7 @@ class EmployeeHomePage extends StatelessWidget {
                   if (state is AnnouncementFailedState) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(content: Text(state.error)));
-                    log('The error is: ${state.error}');
+                    log('The error on announcement is: ${state.error}');
                   }
                 },
                 builder: (context, state) {
@@ -90,23 +91,38 @@ class EmployeeHomePage extends StatelessWidget {
                                   itemBuilder: (context, index) {
                                     final actualIndex =
                                         index % state.announcement.length;
-                                    return AnnouncementCard(
-                                        heading: state
-                                            .announcement[actualIndex].heading,
-                                        description: state
-                                            .announcement[actualIndex]
-                                            .description,
-                                        announcementImg: state
-                                            .announcement[actualIndex]
-                                            .announcementImg,
-                                        time: state
-                                            .announcement[actualIndex].time);
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return MyAnnouncemetDialog(
+                                                  announcement:
+                                                      state.announcement[
+                                                          actualIndex]);
+                                            });
+                                      },
+                                      child: AnnouncementCard(
+                                          heading: state
+                                              .announcement[actualIndex]
+                                              .heading,
+                                          description: state
+                                              .announcement[actualIndex]
+                                              .description,
+                                          announcementImg: state
+                                              .announcement[actualIndex]
+                                              .announcementImg,
+                                          time: state
+                                              .announcement[actualIndex].time),
+                                    );
                                   },
                                 ),
                               ),
                               SmoothPageIndicator(
                                 controller: pageController,
-                                count: state.announcement.length > 5 ? 5 : state.announcement.length,
+                                count: state.announcement.length > 5
+                                    ? 5
+                                    : state.announcement.length,
                                 effect: const WormEffect(
                                   activeDotColor: Color(0xFF3B3B3B),
                                   dotColor: Color(0xCCD9D9D9),
@@ -270,15 +286,17 @@ class EmployeeHomePage extends StatelessWidget {
                     flexibleSpace: AnimatedContainer(
                       duration: const Duration(milliseconds: 309),
                       padding: const EdgeInsets.only(left: 20),
-                      decoration: BoxDecoration( 
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                        boxShadow: scrolled ? [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              offset: const Offset(0.0, 10.0),
-                              blurRadius: 10.0,
-                              spreadRadius: -6.0)
-                      ] : []),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          boxShadow: scrolled
+                              ? [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      offset: const Offset(0.0, 10.0),
+                                      blurRadius: 10.0,
+                                      spreadRadius: -6.0)
+                                ]
+                              : []),
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: AnimatedDefaultTextStyle(
@@ -310,7 +328,7 @@ class EmployeeHomePage extends StatelessWidget {
                 ),
               ),
               const SliverToBoxAdapter(
-                child: SizedBox(height: 70),
+                child: SizedBox(height: 270),
               )
             ],
           ),

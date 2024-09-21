@@ -99,17 +99,30 @@ class _SplashScreenState extends State<SplashScreen>
                         : BorderRadius.zero),
                 child: ScaleTransition(
                   scale: _scaleAnimationImage,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Stack(
                     children: [
-                      Text(
-                        'PHINMA EDUCATION',
-                        style: GoogleFonts.abhayaLibre(
-                          fontSize: 30,
-                          color: const Color(0xFF3B3B3B),
+                      Positioned(
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Image.asset('assets/images/phinma_logo.png',)),
+                      Positioned(
+                        bottom: 80,
+                        right: 0,
+                        left: 0,
+                        child: Center(
+                          child: Text(
+                            'PHINMA EDUCATION',
+                            style: GoogleFonts.abhayaLibre(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 2,
+                              color: const Color(0xFF3B3B3B),
+                            ),
+                          ),
                         ),
                       ),
-                      Image.asset('assets/images/phinma_logo.png'),
                     ],
                   ),
                 ),
