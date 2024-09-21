@@ -1,23 +1,27 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/message/existing_chat.dart';
-import 'package:help_isko/models/message/user.dart';
-import 'package:help_isko/repositories/message_repositories.dart';
+import 'package:help_isko/models/message/message.dart';
+import 'package:help_isko/repositories/messenger_repositories.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:help_isko/repositories/storage/student_storage.dart';
-import 'package:help_isko/services/message_service.dart';
 
 part 'message_event.dart';
 part 'message_state.dart';
 
 class MessageBloc extends Bloc<MessageEvent, MessageState> {
-  final MessageRepository messageRepository;
-  MessageBloc({required this.messageRepository}) : super(MessageInitial()) {
+  final MessengerRepository messengerRepository;
+  MessageBloc({required this.messengerRepository}) : super(MessageInitial()) {
     on<MessageEvent>(messageEvent);
     on<MessageFetchEvent>(messageFetchEvent);
     on<MessagePusherExistingChatsEvent>(messagePusherExistingChatsEvent);
+    on<MessageNavigateToChatEvent>(messageNavigateToChatEvent);
+    on<MessagePusherChatEvent>(messagePusherChatEvent);
+    on<MessagePusherEventData>(messagePusherEventData);
+    on<MessageSendEvent>(messageSendEvent);
   }
 
   FutureOr<void> messageEvent(MessageEvent event, Emitter<MessageState> emit) {}
@@ -27,9 +31,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     emit(MessageExisitingChatsFetchLoadingState());
     try {
       final int id;
-      final String token = await messageRepository.getToken();
+      final String token = await messengerRepository.getToken();
       final List<ExistingChat> existingChats =
-          await messageRepository.getExistingChats(token);
+          await messengerRepository.getExistingChats(token);
       if (event.role == 'Employee') {
         final data = await EmployeeStorage.getData();
         id = int.parse(data['user_id']!);
@@ -48,11 +52,94 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
   FutureOr<void> messagePusherExistingChatsEvent(
       MessagePusherExistingChatsEvent event, Emitter<MessageState> emit) async {
+    await getExistingChats(event, emit);
+  }
+
+  FutureOr<void> messageNavigateToChatEvent(
+      MessageNavigateToChatEvent event, Emitter<MessageState> emit) async {
+    emit(MessageNavigatetoChatState(targetUserId: event.targetUserId));
+    emit(MessageFetchLoadingChatState());
+    try {
+      final int currentUserId;
+      final String token = await messengerRepository.getToken();
+
+      if (event.role == 'Employee') {
+        final data = await EmployeeStorage.getData();
+        currentUserId = int.parse(data['user_id']!);
+      } else {
+        final data = await StudentStorage.getData();
+        currentUserId = int.parse(data['user_id']!);
+      }
+
+      final List<Message> chats =
+          await messengerRepository.getChats(token, event.targetUserId);
+
+      emit(MessageFetchSuccessChatState(chats, currentUserId));
+
+      print('success');
+    } catch (e) {
+      print('failed');
+      emit(MessageFetchFailedChatState(errorMessage: '$e'));
+    }
+  }
+
+  FutureOr<void> messagePusherChatEvent(
+      MessagePusherChatEvent event, Emitter<MessageState> emit) async {
+    try {
+      print('loop');
+      final int currentUserId;
+      final String token = await messengerRepository.getToken();
+
+      if (event.role == 'Employee') {
+        final data = await EmployeeStorage.getData();
+        currentUserId = int.parse(data['user_id']!);
+      } else {
+        final data = await StudentStorage.getData();
+        currentUserId = int.parse(data['user_id']!);
+      }
+
+      final List<Message> chats =
+          await messengerRepository.getChats(token, event.targetUserId);
+
+      emit(MessageFetchSuccessChatState(chats, currentUserId));
+
+      print('success');
+    } catch (e) {
+      print('failed');
+      emit(MessageFetchFailedChatState(errorMessage: '$e'));
+    }
+  }
+
+  FutureOr<void> messagePusherEventData(
+      MessagePusherEventData event, Emitter<MessageState> emit) async {
+    var currentState = state;
+    if (currentState.runtimeType == MessageFetchSuccessChatState) {
+      currentState as MessageFetchSuccessChatState;
+      print('pumasok uli');
+      print('ako si  ${event.data?.data}');
+      final Map<String, dynamic> jsonMessage = jsonDecode(event.data?.data);
+      print(jsonMessage['message']);
+      final Message message = Message.fromMap(jsonMessage);
+
+      final List<Message> updatedChats = [...currentState.chats];
+
+      updatedChats.add(message);
+
+      // emit the existing chats state
+      await getExistingChats(event, emit);
+
+      emit(MessageFetchSuccessChatState(
+          updatedChats, currentState.currentUserId));
+    }
+  }
+
+  Future<void> getExistingChats(
+      dynamic event, Emitter<MessageState> emit) async {
     try {
       final int id;
-      final String token = await messageRepository.getToken();
+      final String token = await messengerRepository.getToken();
       final List<ExistingChat> existingChats =
-          await messageRepository.getExistingChats(token);
+          await messengerRepository.getExistingChats(token);
       if (event.role == 'Employee') {
         final data = await EmployeeStorage.getData();
         id = int.parse(data['user_id']!);
@@ -65,6 +152,30 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     } catch (e) {
       emit(MessageExisitingChatsFetchFailedState(
           errorMessage: 'Message state: $e'));
+    }
+  }
+
+  FutureOr<void> messageSendEvent(
+      MessageSendEvent event, Emitter<MessageState> emit) async {
+    try {
+      final String token = await messengerRepository.getToken();
+      final message = await messengerRepository.sendMessage(
+          token, event.targetUserId, event.message);
+      print('pasok');
+      var currentState = state;
+
+      if (currentState is MessageFetchSuccessChatState) {
+        final List<Message> updatedChats = [...currentState.chats];
+        updatedChats.add(message);
+
+        // emit the existing chats state
+        await getExistingChats(event, emit);
+
+        emit(MessageFetchSuccessChatState(
+            updatedChats, currentState.currentUserId));
+      }
+    } catch (e) {
+      print('error');
     }
   }
 }

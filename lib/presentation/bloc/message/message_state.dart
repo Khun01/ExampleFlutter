@@ -24,10 +24,47 @@ class MessageExisitingChatsFetchSuccessState extends MessageState {
 
 class MessageExisitingChatsFetchFailedState extends MessageState {
   final String errorMessage;
-  MessageExisitingChatsFetchFailedState({
+  const MessageExisitingChatsFetchFailedState({
+    required this.errorMessage,
+  });
+}
+
+class MessageNavigatetoChatState extends MessageState {
+  final int targetUserId;
+
+  const MessageNavigatetoChatState({required this.targetUserId});
+
+  @override
+  List<Object> get props => [targetUserId];
+}
+
+class MessageDisposeState extends MessageState {}
+
+class MessageFetchLoadingChatState extends MessageState {}
+
+class MessageFetchSuccessChatState extends MessageState {
+  List<Message> chats;
+  final int currentUserId;
+
+  MessageFetchSuccessChatState(this.chats, this.currentUserId);
+
+  @override
+  List<Object> get props => [chats, currentUserId];
+}
+
+class MessageFetchFailedChatState extends MessageState {
+  final String errorMessage;
+  const MessageFetchFailedChatState({
     required this.errorMessage,
   });
 
   @override
   List<Object> get props => [errorMessage];
+}
+
+class MessageSendFailedState extends MessageState {
+  String errorMessage;
+  MessageSendFailedState({
+    required this.errorMessage,
+  });
 }

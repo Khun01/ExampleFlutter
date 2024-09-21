@@ -46,6 +46,7 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   pusher_client:
     path: D:/Downloads/pusher_client-master/pusher_client-master
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

@@ -4,21 +4,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/message/message_bloc.dart';
-import 'package:help_isko/repositories/message_repositories.dart';
+import 'package:help_isko/presentation/pages/chat_page.dart';
+import 'package:help_isko/repositories/messenger_repositories.dart';
 import 'package:help_isko/repositories/pusher_repository.dart';
-import 'package:help_isko/services/message_service.dart';
+import 'package:help_isko/services/messenger_service.dart';
 import 'package:ionicons/ionicons.dart';
 
-class MessengerPage extends StatelessWidget {
+class MessengerPage extends StatefulWidget {
   final String role;
+  static bool listen = false;
+  static int targetUserId = 0;
+
   const MessengerPage({super.key, required this.role});
 
   @override
+  State<MessengerPage> createState() => _MessengerPageState();
+}
+
+class _MessengerPageState extends State<MessengerPage> {
+  late PusherRepository pusherRepository;
+
+  @override
+  void initState() {
+    print('initialize');
+    pusherRepository = PusherRepository();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => MessageBloc(
-          messageRepository: MessageRepository(MessageService(role: role)))
-        ..add(MessageFetchEvent(role: role)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => MessageBloc(
+              messengerRepository:
+                  MessengerRepository(MessengerService(role: widget.role)))
+            ..add(MessageFetchEvent(role: widget.role)),
+        ),
+      ],
       child: Scaffold(
         body: SafeArea(
             child: CustomScrollView(
@@ -71,19 +95,44 @@ class MessengerPage extends StatelessWidget {
                 listenWhen: (previous, current) =>
                     current is MessageExisitingChatsFetchFailedState ||
                     current is MessageExisitingChatsFetchSuccessState ||
-                    current is MessageExisitingChatsFetchLoadingState,
+                    current is MessageExisitingChatsFetchLoadingState ||
+                    current is MessageNavigatetoChatState ||
+                    current is MessageDisposeState,
                 listener: (context, state) {
-                  PusherRepository()
-                    ..listenEvents((e) {
-                      context
-                          .read<MessageBloc>()
-                          .add(MessagePusherExistingChatsEvent(role: role));
-                    });
+                  pusherRepository.listenEvents((e) {
+                    if (mounted) {
+                      if (state is MessageExisitingChatsFetchSuccessState) {
+                        context.read<MessageBloc>().add(
+                            MessagePusherExistingChatsEvent(role: widget.role));
+                      }
+
+                      if (MessengerPage.listen) {
+                        context.read<MessageBloc>().add(
+                            MessagePusherEventData(data: e, role: widget.role));
+                      }
+                    }
+                  });
+
                   if (state is MessageExisitingChatsFetchFailedState) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(state.errorMessage),
                       duration: Duration(seconds: 2),
                     ));
+                  }
+
+                  if (state is MessageNavigatetoChatState) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: context.read<MessageBloc>(),
+                          child: ChatPage(
+                            role: widget.role,
+                            targetUserId: state.targetUserId,
+                          ),
+                        ),
+                      ),
+                    );
                   }
                 },
                 buildWhen: (previous, current) =>
@@ -91,11 +140,10 @@ class MessengerPage extends StatelessWidget {
                     current is MessageExisitingChatsFetchSuccessState ||
                     current is MessageExisitingChatsFetchFailedState,
                 builder: (context, state) {
-                  print('Message page');
-                  switch (state.runtimeType) {
+                  switch  (state.runtimeType) {
                     case MessageExisitingChatsFetchLoadingState:
                       return Center(
-                        child: CircularProgressIndicator(),
+                        child:  CircularProgressIndicator(),
                       );
                     case MessageExisitingChatsFetchSuccessState:
                       state as MessageExisitingChatsFetchSuccessState;
@@ -103,92 +151,110 @@ class MessengerPage extends StatelessWidget {
                       return ListView.builder(
                         itemCount: state.existingChats.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 10),
-                            child: Container(
-                              height: 70,
-                              child: Row(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: state.existingChats[index].user
-                                                .profileImage !=
-                                            ''
-                                        ? Image.network(
-                                            '${state.existingChats[index].user.profileImage}',
-                                            height: 70,
-                                            errorBuilder:
-                                                (context, error, stackTrace) =>
-                                                    Icon(Icons.error_rounded),
-                                          )
-                                        : Image.asset(
-                                            'assets/images/luffy.jpeg',
-                                            height: 70,
-                                          ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          child: Row(
-                                            children: [
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      state.existingChats[index]
-                                                          .user.name,
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize: 24,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      state
-                                                                  .existingChats[
-                                                                      index]
-                                                                  .message
-                                                                  .sender_id ==
-                                                              state
-                                                                  .currentUserId
-                                                          ? 'You: ${state.existingChats[index].message.message}'
-                                                          : '${state.existingChats[index].user.name}: ${state.existingChats[index].message.message}',
-                                                      style: TextStyle(
-                                                          color:
-                                                              Colors.grey[700]!,
-                                                          fontSize: 13),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          decoration: BoxDecoration(
-                                              // color: Colors.red,
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color:
-                                                          Colors.grey[300]!))),
-                                        ),
-                                        Positioned(
-                                            right: -10,
-                                            top: 26,
-                                            child: Icon(Icons.more_vert)),
-                                      ],
+                          return GestureDetector(
+                            onTap: () {
+                              print('tap');
+                              context.read<MessageBloc>().add(
+                                  MessageNavigateToChatEvent(
+                                      role: widget.role,
+                                      targetUserId:
+                                          state.existingChats[index].user.id));
+                              MessengerPage.listen = true;
+                              MessengerPage.targetUserId =
+                                  state.existingChats[index].user.id;
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              child: Container(
+                                height: 70,
+                                child: Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(50),
+                                      child: state.existingChats[index].user
+                                                  .profileImage !=
+                                              ''
+                                          ? Image.network(
+                                              '//${state.existingChats[index].user.profileImage}',
+                                              height: 70,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Icon(Icons.error_rounded),
+                                            )
+                                          : Image.asset(
+                                              'assets/images/luffy.jpeg',
+                                              height: 70,
+                                            ),
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                // color: Colors.red,
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                                        color: Colors
+                                                            .grey[300]!))),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        state
+                                                            .existingChats[
+                                                                index]
+                                                            .user
+                                                            .name,
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 24,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        state
+                                                                    .existingChats[
+                                                                        index]
+                                                                    .message
+                                                                    .sender_id ==
+                                                                state
+                                                                    .currentUserId
+                                                            ? 'You: ${state.existingChats[index].message.message}'
+                                                            : '${state.existingChats[index].user.name}: ${state.existingChats[index].message.message}',
+                                                        style: TextStyle(
+                                                            color: Colors
+                                                                .grey[700]!,
+                                                            fontSize: 13),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const Positioned(
+                                              right: -10,
+                                              top: 26,
+                                              child: Icon(Icons.more_vert)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // decoration: BoxDecoration(color: Colors.red),
                               ),
-                              // decoration: BoxDecoration(color: Colors.red),
                             ),
                           );
                         },

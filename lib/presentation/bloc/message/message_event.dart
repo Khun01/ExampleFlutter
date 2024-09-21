@@ -9,15 +9,52 @@ sealed class MessageEvent extends Equatable {
 }
 
 class MessageFetchEvent extends MessageEvent {
-  String role;
-  MessageFetchEvent({
+  final String role;
+  const MessageFetchEvent({
     required this.role,
   });
 }
 
 class MessagePusherExistingChatsEvent extends MessageEvent {
-  String role;
-  MessagePusherExistingChatsEvent({
+  final String role;
+  const MessagePusherExistingChatsEvent({
     required this.role,
   });
 }
+
+class MessageNavigateToChatEvent extends MessageEvent {
+  final String role;
+  final int targetUserId;
+  const MessageNavigateToChatEvent({
+    required this.role,
+    required this.targetUserId,
+  });
+}
+
+class MessagePusherChatEvent extends MessageEvent {
+  final String role;
+  final int targetUserId;
+  MessagePusherChatEvent({
+    required this.role,
+    required this.targetUserId,
+  });
+}
+
+class MessagePusherEventData extends MessageEvent {
+  dynamic data;
+  String role;
+  MessagePusherEventData({required this.data, required this.role});
+}
+
+class MessageSendEvent extends MessageEvent {
+  String role;
+  String message;
+  int targetUserId;
+  MessageSendEvent({
+    required this.role,
+    required this.message,
+    required this.targetUserId,
+  });
+}
+
+class MessageDisposeEvent extends MessageEvent {}
