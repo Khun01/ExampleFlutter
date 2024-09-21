@@ -156,10 +156,11 @@ class EmployeeProfilePage extends StatelessWidget {
                                         child: IconButton(
                                           onPressed: () {
                                             showDialog(
-                                              barrierDismissible: false,
+                                                barrierDismissible: false,
                                                 context: context,
                                                 builder: (context) =>
-                                                    const MyDialog(role: 'Employee'));
+                                                    const MyDialog(
+                                                        role: 'Employee'));
                                           },
                                           icon: Icon(Ionicons.log_out,
                                               color: scrolled

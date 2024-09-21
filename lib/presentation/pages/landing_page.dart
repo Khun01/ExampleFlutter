@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +23,7 @@ class LandingPage extends StatelessWidget {
       create: (context) =>
           LoginBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl)),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
@@ -41,102 +43,122 @@ class LandingPage extends StatelessWidget {
               return Container(
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height,
-                  color: const Color(0x33A3D9A5),
-                  child: Stack(children: [
-                    Positioned(
-                      bottom: 0,
-                      child: Image.asset(
-                        'assets/images/background.png',
-                        width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(color: Color(0x33A3D9A5)),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        bottom: 0,
+                        child: FadeIn(
+                          duration: const Duration(seconds: 3),
+                          child: Image.asset(
+                            'assets/images/background.png',
+                          ),
+                        ),
                       ),
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 50, bottom: 16, left: 16, right: 16),
                           child: Column(
                             children: [
-                              Image.asset(
-                                'assets/images/upang_logo.png',
-                                width: 200,
-                                height: 200,
+                              FadeIn(
+                                duration: const Duration(seconds: 3),
+                                child: Image.asset(
+                                  'assets/images/upang_logo.png',
+                                  fit: BoxFit.cover,
+                                  width: 200,
+                                ),
                               ),
-                              Text(
-                                textAlign: TextAlign.center,
-                                'University\nof\nPangasinan',
-                                style: GoogleFonts.abhayaLibre(
-                                    fontSize: 30,
-                                    color: const Color(0xFF3B3B3B)),
+                              FadeIn(
+                                duration: const Duration(seconds: 3),
+                                child: Text(
+                                  'University\nof\nPangasinan',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.abhayaLibre(
+                                      fontSize: 30,
+                                      color: const Color(0xFF3B3B3B)),
+                                ),
                               ),
                               const Spacer(),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5),
+                              FadeIn(
+                                duration: const Duration(seconds: 3),
                                 child: Text(
                                   'Welcome to Help, isKo',
                                   style: GoogleFonts.nunito(
-                                      fontSize: 32.7,
+                                      fontSize: 33,
                                       fontWeight: FontWeight.bold,
                                       color: const Color(0xFF3B3B3B)),
                                 ),
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 7),
-                                child: Text(
-                                  'Track duties, grab opportunities, and stay organized. Simplify your journey with the Help, isKo App. Join the Help, isKo App today!',
-                                  style: GoogleFonts.nunito(
-                                      fontSize: 15,
-                                      color: const Color(0xCC3B3B3B)),
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: FadeIn(
+                                  duration: const Duration(seconds: 3),
+                                  child: Text(
+                                    'Track duties, grab opportunities, and stay organized. Simplify your journey with the Help, isKo App. Join the Help, isKo App today!',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 15,
+                                        color: const Color(0xCC3B3B3B)),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 30),
-                              MyButton(
-                                onTap: () {
-                                  selectedRole = 'Employee';
-                                  context.read<LoginBloc>().add(
-                                      CheckLoginStatusEvent(
-                                          role: selectedRole!));
-                                },
-                                buttonText: 'Employee',
-                                color: const Color(0xFF6BB577),
-                                textColor: const Color(0xFFFCFCFC),
+                              FadeIn(
+                                duration: const Duration(seconds: 3),
+                                child: MyButton(
+                                  onTap: () {
+                                    selectedRole = 'Employee';
+                                    context.read<LoginBloc>().add(
+                                        CheckLoginStatusEvent(
+                                            role: selectedRole!));
+                                  },
+                                  buttonText: 'Employee',
+                                  color: const Color(0xFF6BB577),
+                                  textColor: const Color(0xFFFCFCFC),
+                                ),
                               ),
                               const SizedBox(height: 15),
-                              MyButton(
-                                onTap: () {
-                                  selectedRole = 'Student';
-                                  context.read<LoginBloc>().add(
-                                      CheckLoginStatusEvent(
-                                          role: selectedRole!));
-                                },
-                                buttonText: 'Student',
-                                color: const Color(0xFFFCFCFC),
-                                textColor: const Color(0xFF3B3B3B),
+                              FadeIn(
+                                duration: const Duration(seconds: 3),
+                                child: MyButton(
+                                  onTap: () {
+                                    selectedRole = 'Student';
+                                    context.read<LoginBloc>().add(
+                                        CheckLoginStatusEvent(
+                                            role: selectedRole!));
+                                  },
+                                  buttonText: 'Student',
+                                  color: const Color(0xFFFCFCFC),
+                                  textColor: const Color(0xFF3B3B3B),
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        if (state.isSubmitting) ...[
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
+                      ),
+                      if (state.isSubmitting) ...[
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.black.withOpacity(0.5),
                           ),
-                          const Center(
-                            child: MyCircularProgressIndicator(),
-                          ),
-                          
-                        ]
-                      ],
-                    ),
-                  ]));
+                        ),
+                        const Center(
+                          child: MyCircularProgressIndicator(),
+                        ),
+                      ]
+                    ],
+                  ));
             },
           ),
         ),

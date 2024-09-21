@@ -42,8 +42,10 @@ class PostedDutiesHome extends StatelessWidget {
                 backgroundColor: Color(0x808CC9A6),
                 radius: 25,
                 child: ImageIcon(
-                    AssetImage('assets/images/profile_clicked.png'),
-                    size: 30),
+                  AssetImage('assets/images/profile_clicked.png'),
+                  size: 20,
+                  color: Color(0xFF3B3B3B),
+                ),
               ),
               const Spacer(),
               Column(
@@ -96,21 +98,20 @@ class PostedDutiesHome extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.nunito(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF3B3B3B)
-              ),
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF3B3B3B)),
             ),
           ),
           const SizedBox(height: 4),
           Padding(
-            padding: const EdgeInsets.only(left:3, right: 3),
+            padding: const EdgeInsets.only(left: 3, right: 3),
             child: Text(
               message,
-              maxLines: 5,
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style:
-                  GoogleFonts.nunito(fontSize: 10, color: const Color(0xCC3B3B3B)),
+              style: GoogleFonts.nunito(
+                  fontSize: 10, color: const Color(0xCC3B3B3B)),
             ),
           )
         ],

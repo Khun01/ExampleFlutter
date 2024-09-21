@@ -6,6 +6,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:uicons/uicons.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String role;
@@ -26,9 +27,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Row(
                   children: [
                     const CircleAvatar(
-                      backgroundColor: Color(0x80A3D9A5),
+                      backgroundColor: Color(0x808CC9A6),
                       radius: 25,
-                      child: Icon(Icons.person),
+                      child: ImageIcon(
+                        AssetImage('assets/images/profile_clicked.png'),
+                        size: 20,
+                        color: Color(0xFF3B3B3B),
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Column(
@@ -55,11 +60,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     const Spacer(),
                     role == 'Employee'
-                        ? const Icon(Ionicons.people, color: Color(0xFF3B3B3B))
-                        : const Icon(Ionicons.document_text, color: Color(0xFF3B3B3B)),
-                    const SizedBox(width: 10),
-                    const Icon(Ionicons.notifications,
-                        color: Color(0xFF3B3B3B)),
+                        ? Icon(UIcons.regularRounded.users)
+                        : const Icon(Ionicons.document_text,
+                            color: Color(0xFF3B3B3B)),
+                    const SizedBox(width: 16),
+                    Icon(UIcons.regularRounded.bell,
+                        color: const Color(0xFF3B3B3B)),
                   ],
                 ));
           } else if (state is UserDataError) {

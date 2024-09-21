@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile_page.dart';
@@ -52,19 +53,18 @@ class _WrapperState extends State<Wrapper> {
               bottom: 0,
               child: Container(
                 height: 70,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                            color: Colors.black.withOpacity(0.03),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                          offset: const Offset(0, -6))
-                    ]),
+                decoration: BoxDecoration(boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      spreadRadius: 1,
+                      blurRadius: 6,
+                      offset: const Offset(0, -6))
+                ]),
                 child: BottomNavigationBar(
-                  selectedItemColor: const Color(0xFF8CC9A6),
+                  selectedItemColor: const Color(0xFF6BB577),
                   unselectedItemColor: const Color(0xFF3B3B3B),
-                  selectedLabelStyle: const TextStyle(
-                    fontSize: 12,
+                  selectedLabelStyle: GoogleFonts.nunito(
+                    fontSize: 11,
                     fontWeight: FontWeight.bold,
                   ),
                   items: [
@@ -77,12 +77,10 @@ class _WrapperState extends State<Wrapper> {
                             : const ImageIcon(
                                 AssetImage('assets/images/home.png'))),
                     BottomNavigationBarItem(
-                        label:
-                            widget.role == 'Employee' ? 'Request' : 'Duties',
+                        label: widget.role == 'Employee' ? 'Request' : 'Duties',
                         icon: selectedIndex == 1
                             ? const ImageIcon(
-                                AssetImage(
-                                    'assets/images/duties_clicked.png'),
+                                AssetImage('assets/images/duties_clicked.png'),
                                 color: Color(0xFF6BB577))
                             : const ImageIcon(
                                 AssetImage('assets/images/duties.png'))),
@@ -91,17 +89,15 @@ class _WrapperState extends State<Wrapper> {
                         icon: selectedIndex == 2
                             ? const Icon(Ionicons.chatbubble_ellipses,
                                 color: Color(0xFF6BB577))
-                            : const Icon(
-                                Ionicons.chatbubble_ellipses_outline)),
+                            : const Icon(Ionicons.chatbubble_ellipses_outline)),
                     BottomNavigationBarItem(
                         label: 'Profile',
                         icon: selectedIndex == 3
                             ? const ImageIcon(
-                                AssetImage(
-                                    'assets/images/profile_clicked.png'),
+                                AssetImage('assets/images/circle-user-clicked.png'),
                                 color: Color(0xFF6BB577))
                             : const ImageIcon(
-                                AssetImage('assets/images/profile.png')))
+                                AssetImage('assets/images/circle-user.png')))
                   ],
                   currentIndex: selectedIndex,
                   onTap: (int index) {
@@ -112,7 +108,7 @@ class _WrapperState extends State<Wrapper> {
                 ),
               ),
             ),
-            if (widget.role == 'Employee')
+            if (widget.role == 'Employee' && selectedIndex == 0)
               Positioned(
                 bottom: 86,
                 right: 16,
@@ -121,8 +117,7 @@ class _WrapperState extends State<Wrapper> {
                   width: 60,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: const Color(0x303B3B3B)),
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: const Color(0xFF6BB577),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.black.withOpacity(0.1),
@@ -148,7 +143,7 @@ class _WrapperState extends State<Wrapper> {
                     child: const Icon(
                       Icons.add_rounded,
                       size: 40,
-                      color: Color(0xFF6BB577),
+                      color: Color(0xFFFCFCFC),
                     ),
                   ),
                 ),
