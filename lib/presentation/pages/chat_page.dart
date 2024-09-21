@@ -17,6 +17,10 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  final ScrollController scrollController = ScrollController();
+  final TextEditingController textEditingController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -29,12 +33,6 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ScrollController scrollController = ScrollController();
-    final TextEditingController textEditingController = TextEditingController();
-    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-    bool isDisabled = false;
-
     return Scaffold(
         appBar: AppBar(),
         body: BlocConsumer<MessageBloc, MessageState>(
@@ -45,11 +43,11 @@ class _ChatPageState extends State<ChatPage> {
               if (state is MessageFetchSuccessChatState) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (scrollController.hasClients) {
-                    scrollController.animateTo(
-                        scrollController.position.maxScrollExtent,
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.fastOutSlowIn);
+                    scrollController.jumpTo(
+                      scrollController.position.maxScrollExtent,
+                    );
                   }
+                  print('hiii po');
                 });
               }
               if (state is MessageFetchFailedChatState) {
@@ -98,9 +96,6 @@ class _ChatPageState extends State<ChatPage> {
                               child: Form(
                                 key: _formKey,
                                 child: TextFormField(
-                                  onChanged: (value) {
-                                    if (value.isNotEmpty) {}
-                                  },
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter your message';
