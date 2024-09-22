@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:help_isko/models/data/announcement.dart';
 import 'package:help_isko/models/data/prof_duty.dart';
+import 'package:help_isko/repositories/pusher_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/repositories/storage/student_storage.dart';
@@ -9,6 +10,7 @@ import 'package:http/http.dart' as http;
 
 class ApiRepositories {
   final String apiUrl;
+  final PusherRepository _pusher = PusherRepository();
 
   ApiRepositories({required this.apiUrl});
 
@@ -23,6 +25,9 @@ class ApiRepositories {
       }),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
+    _pusher.pusherConnect();
+    _pusher.subscribeChannel(responseData['user']['user_id']);
+
     return {
       'statusCode': response.statusCode,
       'data': responseData,
@@ -39,6 +44,8 @@ class ApiRepositories {
       }),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
+    _pusher.pusherConnect();
+    _pusher.subscribeChannel(responseData['user']['user_id']);
     return {
       'statusCode': response.statusCode,
       'data': responseData,
@@ -48,13 +55,18 @@ class ApiRepositories {
   Future<int> logout(String role) async {
     try {
       String? token;
+      String? id;
 
       if (role == 'Employee') {
         final userDataEmployee = await EmployeeStorage.getData();
         token = userDataEmployee['employeeToken'];
+        id = userDataEmployee['user_id'];
+        _pusher.disconnect(int.parse(id!));
       } else if (role == 'Student') {
         final userDataStudent = await StudentStorage.getData();
         token = userDataStudent['studToken'];
+        id = userDataStudent['user_id'];
+        _pusher.disconnect(int.parse(id!));
       }
 
       if (token == null) {

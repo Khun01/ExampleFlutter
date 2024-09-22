@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/pusher_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:help_isko/repositories/storage/student_storage.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final ApiRepositories apiRepositories;
+  final PusherRepository _pusher = PusherRepository();
 
   LoginBloc({required this.apiRepositories}) : super(LoginState.initial()) {
     on<LoginEmailChanged>(_onEmailChanged);
@@ -19,6 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   void _checkLoginStatus(
       CheckLoginStatusEvent event, Emitter<LoginState> emit) async {
+    _pusher.pusherConnect();
     try {
       emit(state.copyWith(
           isSuccess: false, hasFailed: false, isSubmitting: true));
@@ -27,10 +30,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         try {
           final userData = await StudentStorage.getData();
           final token = userData['studToken'];
+          final id = userData['user_id'];
           log('The student token: $token');
           if (token != null && token.isNotEmpty) {
             await Future.delayed(const Duration(seconds: 2));
             emit(state.copyWith(isSuccess: true, isSubmitting: false));
+            _pusher.subscribeChannel(int.parse(id!));
           } else {
             log('dont have a token Employee');
             emit(state.copyWith(hasFailed: true, isSubmitting: false));
@@ -44,11 +49,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         try {
           final userData = await EmployeeStorage.getData();
           final token = userData['employeeToken'];
+          final id = userData['user_id'];
           log('The Employee token: $token');
 
           if (token != null && token.isNotEmpty) {
             await Future.delayed(const Duration(seconds: 2));
             emit(state.copyWith(isSuccess: true, isSubmitting: false));
+            _pusher.subscribeChannel(int.parse(id!));
           } else {
             log('dont have a token Employee');
             emit(state.copyWith(hasFailed: true, isSubmitting: false));

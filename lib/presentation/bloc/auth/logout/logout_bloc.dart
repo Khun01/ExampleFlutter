@@ -14,6 +14,7 @@ class LogoutBloc extends Bloc<LogoutEvent, LogoutState> {
 
   void _onLogoutButtonPressed(
       LogoutButtonPressed event, Emitter<LogoutState> emit) async {
+        
     emit(LogoutLoading());
     try {
       await Future.delayed(const Duration(seconds: 2));

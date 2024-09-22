@@ -38,13 +38,17 @@ class _WrapperState extends State<Wrapper> {
                     ? const [
                         EmployeeHomePage(),
                         EmployeeDutiesPage(),
-                        MessengerPage(),
+                        MessengerPage(
+                          role: 'Employee',
+                        ),
                         EmployeeProfilePage()
                       ]
                     : const [
                         StudentHomePage(),
                         StudentDutiesPage(),
-                        MessengerPage(),
+                        MessengerPage(
+                          role: 'Student',
+                        ),
                         StudentProfilePage()
                       ]),
             Positioned(
@@ -94,8 +98,7 @@ class _WrapperState extends State<Wrapper> {
                         label: 'Profile',
                         icon: selectedIndex == 3
                             ? const ImageIcon(
-                                AssetImage('assets/images/circle-user-clicked.png'),
-                                color: Color(0xFF6BB577))
+                                AssetImage('assets/images/circle-user-clicked.png'))
                             : const ImageIcon(
                                 AssetImage('assets/images/circle-user.png')))
                   ],

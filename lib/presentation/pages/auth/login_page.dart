@@ -35,7 +35,7 @@ class LoginPage extends StatelessWidget {
               } else if (state.hasFailed && !state.isSubmitting) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(state.failureMessage!)));
-              } else if (state.isSubmitting){
+              } else if (state.isSubmitting) {
                 FocusScope.of(context).unfocus();
               }
             },
