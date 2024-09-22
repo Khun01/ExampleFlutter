@@ -43,10 +43,10 @@ class MessageDisposeState extends MessageState {}
 class MessageFetchLoadingChatState extends MessageState {}
 
 class MessageFetchSuccessChatState extends MessageState {
-  List<Message> chats;
+  final List<Message> chats;
   final int currentUserId;
 
-  MessageFetchSuccessChatState(this.chats, this.currentUserId);
+  const MessageFetchSuccessChatState(this.chats, this.currentUserId);
 
   @override
   List<Object> get props => [chats, currentUserId];
@@ -63,8 +63,8 @@ class MessageFetchFailedChatState extends MessageState {
 }
 
 class MessageSendFailedState extends MessageState {
-  String errorMessage;
-  MessageSendFailedState({
+  final String errorMessage;
+  const MessageSendFailedState({
     required this.errorMessage,
   });
 }

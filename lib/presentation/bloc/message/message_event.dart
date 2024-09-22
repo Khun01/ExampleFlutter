@@ -34,23 +34,23 @@ class MessageNavigateToChatEvent extends MessageEvent {
 class MessagePusherChatEvent extends MessageEvent {
   final String role;
   final int targetUserId;
-  MessagePusherChatEvent({
+  const MessagePusherChatEvent({
     required this.role,
     required this.targetUserId,
   });
 }
 
 class MessagePusherEventData extends MessageEvent {
-  dynamic data;
-  String role;
-  MessagePusherEventData({required this.data, required this.role});
+  final dynamic data;
+  final String role;
+  const MessagePusherEventData({required this.data, required this.role});
 }
 
 class MessageSendEvent extends MessageEvent {
-  String role;
-  String message;
-  int targetUserId;
-  MessageSendEvent({
+  final String role;
+  final String message;
+  final int targetUserId;
+  const MessageSendEvent({
     required this.role,
     required this.message,
     required this.targetUserId,
