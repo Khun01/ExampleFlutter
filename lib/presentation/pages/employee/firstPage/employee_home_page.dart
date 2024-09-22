@@ -6,6 +6,7 @@ import 'package:help_isko/presentation/bloc/shared/announcement/announcement_blo
 import 'package:help_isko/presentation/bloc/employee/duty/fetchDuty/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
@@ -180,11 +181,20 @@ class EmployeeHomePage extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Text(
-                        'See all',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC6BB577),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const PostedDutiesSeeAllPage()));
+                        },
+                        child: Text(
+                          'See all',
+                          style: GoogleFonts.nunito(
+                            fontSize: 14,
+                            color: const Color(0xCC6BB577),
+                          ),
                         ),
                       ),
                     ],
@@ -225,15 +235,16 @@ class EmployeeHomePage extends StatelessWidget {
                         ),
                       );
                     } else {
+                      final reversedList = state.duty.reversed.toList();
                       return SliverToBoxAdapter(
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           height: 166,
                           child: ListView.builder(
-                            itemCount: state.duty.length,
+                            itemCount: reversedList.length,
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
-                              final duty = state.duty[index];
+                              final duty = reversedList[index];
                               return PostedDutiesHome(
                                   date: duty.date,
                                   building: duty.building,

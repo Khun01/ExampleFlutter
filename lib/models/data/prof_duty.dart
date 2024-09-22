@@ -13,37 +13,42 @@ class ProfDuty {
   final int isCompleted;
   final int profId;
 
-  ProfDuty({
-    required this.id,
-    required this.building,
-    required this.date,
-    required this.startTime,
-    required this.endTime,
-    required this.duration,
-    required this.message,
-    required this.maxScholars,
-    required this.currentScholars,
-    required this.isLocked,
-    required this.dutyStatus,
-    required this.isCompleted,
-    required this.profId
-  });
+  ProfDuty(
+      {required this.id,
+      required this.building,
+      required this.date,
+      required this.startTime,
+      required this.endTime,
+      required this.duration,
+      required this.message,
+      required this.maxScholars,
+      required this.currentScholars,
+      required this.isLocked,
+      required this.dutyStatus,
+      required this.isCompleted,
+      required this.profId});
 
-   factory ProfDuty.fromJson(Map<String, dynamic> json){
+  factory ProfDuty.fromJson(Map<String, dynamic> json) {
     return ProfDuty(
-      id: json['id'],
-      building: json['building'],
-      date: json['date'],
-      startTime: json['start_time'],
-      endTime: json['end_time'],
-      duration: json['duration'],
-      message: json['message'],
-      maxScholars: json['max_scholars'],
-      currentScholars: json['current_scholars'],
-      isLocked: json['is_locked'],
-      dutyStatus: json['duty_status'],
-      isCompleted: json['is_completed'], 
-      profId: json['prof_id']
-    );
-   }
+        id: json['id'],
+        building: json['building'],
+        date: json['date'],
+        startTime: json['start_time'],
+        endTime: json['end_time'],
+        duration: json['duration'],
+        message: json['message'],
+        maxScholars: json['max_scholars'],
+        currentScholars: json['current_scholars'],
+        isLocked: json['is_locked'],
+        dutyStatus: json['duty_status'],
+        isCompleted: json['is_completed'],
+        profId: json['prof_id']);
+  }
+
+  String get formattedStartTime => _formatTime(startTime);
+  String get formattedEndTime => _formatTime(endTime);
+
+  String _formatTime(String time) {
+    return time.substring(0, 5);
+  }
 }
