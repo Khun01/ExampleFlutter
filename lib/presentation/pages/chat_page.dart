@@ -28,6 +28,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
+    textEditingController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -47,7 +49,6 @@ class _ChatPageState extends State<ChatPage> {
                       scrollController.position.maxScrollExtent,
                     );
                   }
-                  print('hiii po');
                 });
               }
               if (state is MessageFetchFailedChatState) {
