@@ -31,8 +31,10 @@ class MessageExisitingChatsFetchFailedState extends MessageState {
 
 class MessageNavigatetoChatState extends MessageState {
   final int targetUserId;
-
-  const MessageNavigatetoChatState({required this.targetUserId});
+  final String name;
+  final String profile;
+  const MessageNavigatetoChatState(
+      {required this.targetUserId, required this.name, required this.profile});
 
   @override
   List<Object> get props => [targetUserId];

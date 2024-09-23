@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -46,7 +47,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     } catch (e) {
       emit(MessageExisitingChatsFetchFailedState(
           errorMessage: 'Message state: $e'));
-      print('Message state: $e');
     }
   }
 
@@ -57,10 +57,14 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
   FutureOr<void> messageNavigateToChatEvent(
       MessageNavigateToChatEvent event, Emitter<MessageState> emit) async {
-    emit(MessageNavigatetoChatState(targetUserId: event.targetUserId));
+    emit(MessageNavigatetoChatState(
+        targetUserId: event.targetUserId,
+        name: event.name,
+        profile: event.profile));
     emit(MessageFetchLoadingChatState());
     try {
       final int currentUserId;
+      await Future.delayed(const Duration(seconds: 3));
       final String token = await messengerRepository.getToken();
 
       if (event.role == 'Employee') {
@@ -76,9 +80,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
       emit(MessageFetchSuccessChatState(chats, currentUserId));
 
-      print('success');
+      log('success');
     } catch (e) {
-      print('failed');
+      log('failed');
       emit(MessageFetchFailedChatState(errorMessage: '$e'));
     }
   }
@@ -86,7 +90,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
   FutureOr<void> messagePusherChatEvent(
       MessagePusherChatEvent event, Emitter<MessageState> emit) async {
     try {
-      print('loop');
+      log('loop');
       final int currentUserId;
       final String token = await messengerRepository.getToken();
 
@@ -103,9 +107,9 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
 
       emit(MessageFetchSuccessChatState(chats, currentUserId));
 
-      print('success');
+      log('success');
     } catch (e) {
-      print('failed');
+      log('failed');
       emit(MessageFetchFailedChatState(errorMessage: '$e'));
     }
   }
@@ -115,10 +119,10 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     var currentState = state;
     if (currentState.runtimeType == MessageFetchSuccessChatState) {
       currentState as MessageFetchSuccessChatState;
-      print('pumasok uli');
-      print('ako si  ${event.data?.data}');
+      log('pumasok uli');
+      log('ako si  ${event.data?.data}');
       final Map<String, dynamic> jsonMessage = jsonDecode(event.data?.data);
-      print(jsonMessage['message']);
+      log(jsonMessage['message']);
       final Message message = Message.fromMap(jsonMessage);
 
       final List<Message> updatedChats = [...currentState.chats];
@@ -161,7 +165,6 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
       final String token = await messengerRepository.getToken();
       final message = await messengerRepository.sendMessage(
           token, event.targetUserId, event.message);
-      print('pasok');
       var currentState = state;
 
       if (currentState is MessageFetchSuccessChatState) {
@@ -175,7 +178,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
             updatedChats, currentState.currentUserId));
       }
     } catch (e) {
-      print('error');
+      log('error');
     }
   }
 }

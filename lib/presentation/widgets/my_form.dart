@@ -6,6 +6,8 @@ class MyForm extends StatefulWidget {
   final Icon icon;
   final bool obscureText;
   final ValueChanged<String> onChanged;
+  final Color bgColor;
+  final Color borderColor;
 
   const MyForm({
     super.key,
@@ -14,6 +16,8 @@ class MyForm extends StatefulWidget {
     this.errorText,
     this.obscureText = false,
     required this.onChanged,
+    this.bgColor = Colors.transparent,
+    this.borderColor = const Color(0xFF6BB577),
   });
 
   @override
@@ -67,10 +71,12 @@ class MyFormState extends State<MyForm> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
           ),
+          fillColor: widget.bgColor,
+          filled: true,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50),
-            borderSide: const BorderSide(color: Color(0xFF6BB577), width: 1.0)
-          ),
+              borderRadius: BorderRadius.circular(50),
+              borderSide:
+                  BorderSide(color: widget.borderColor, width: 1.0)),
           prefixIcon: widget.icon,
           suffixIcon: widget.obscureText
               ? IconButton(
