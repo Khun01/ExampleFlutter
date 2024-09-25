@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/data/prof_duty.dart';
 import 'package:help_isko/repositories/duty_repository.dart';
-import 'package:help_isko/services/duty_services.dart';
 
 part 'posted_duties_event.dart';
 part 'posted_duties_state.dart';
