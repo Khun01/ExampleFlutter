@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:help_isko/models/data/announcement.dart';
-import 'package:help_isko/models/data/prof_duty.dart';
 import 'package:help_isko/repositories/pusher_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -149,25 +148,6 @@ class ApiRepositories {
     } else {
       log('The status code when fetching announcement is: ${response.statusCode}');
       throw Exception('Failed to load announcement');
-    }
-  }
-
-  Future<List<ProfDuty>> fetchPostedDuties() async {
-    final userData = await EmployeeStorage.getData();
-    String? token = userData['employeeToken'];
-    final response = await http.get(
-      Uri.parse('$baseUrl/professors/duties'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> dutyList = json.decode(response.body);
-      return dutyList.map((json) => ProfDuty.fromJson(json)).toList();
-    } else {
-      log('The status code is: ${response.statusCode}');
-      throw Exception('Failed to load duties');
     }
   }
 }

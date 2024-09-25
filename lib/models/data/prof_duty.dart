@@ -1,32 +1,32 @@
 class ProfDuty {
-  final int id;
-  final String building;
-  final String date;
-  final String startTime;
-  final String endTime;
-  final int duration;
-  final String message;
-  final int maxScholars;
-  final int currentScholars;
-  final int isLocked;
-  final String dutyStatus;
-  final int isCompleted;
-  final int profId;
+  final int? id;
+  final String? building;
+  final String? date;
+  final String? startTime;
+  final String? endTime;
+  final int? duration;
+  final String? message;
+  final int? maxScholars;
+  final int? currentScholars;
+  final int? isLocked;
+  final String? dutyStatus;
+  final int? isCompleted;
+  final int? profId;
 
   ProfDuty(
-      {required this.id,
-      required this.building,
-      required this.date,
-      required this.startTime,
-      required this.endTime,
-      required this.duration,
-      required this.message,
-      required this.maxScholars,
-      required this.currentScholars,
-      required this.isLocked,
-      required this.dutyStatus,
-      required this.isCompleted,
-      required this.profId});
+      {this.id,
+       this.building,
+       this.date,
+       this.startTime,
+       this.endTime,
+       this.duration,
+       this.message,
+       this.maxScholars,
+       this.currentScholars,
+       this.isLocked,
+       this.dutyStatus,
+       this.isCompleted,
+       this.profId});
 
   factory ProfDuty.fromJson(Map<String, dynamic> json) {
     return ProfDuty(
@@ -45,8 +45,8 @@ class ProfDuty {
         profId: json['prof_id']);
   }
 
-  String get formattedStartTime => _formatTime(startTime);
-  String get formattedEndTime => _formatTime(endTime);
+  String get formattedStartTime => _formatTime(startTime!);
+  String get formattedEndTime => _formatTime(endTime!);
 
   String _formatTime(String time) {
     return time.substring(0, 5);

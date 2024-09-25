@@ -8,7 +8,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/pages/auth/login_page.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';
-import 'package:help_isko/presentation/widgets/my_circular_progress_indicator.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 

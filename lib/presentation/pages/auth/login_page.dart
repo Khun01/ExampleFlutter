@@ -5,7 +5,7 @@ import 'package:help_isko/presentation/bloc/auth/login/login_bloc.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_event.dart';
 import 'package:help_isko/presentation/bloc/auth/login/login_state.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
-import 'package:help_isko/presentation/widgets/my_circular_progress_indicator.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_form.dart';
 import 'package:help_isko/presentation/pages/auth/forgot_passsword_page.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';

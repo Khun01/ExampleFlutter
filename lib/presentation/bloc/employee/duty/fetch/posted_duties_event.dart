@@ -8,5 +8,3 @@ sealed class PostedDutiesEvent extends Equatable {
 }
 
 class FetchDuty extends PostedDutiesEvent{}
-
-class PostDutiesClickedButtonEvent extends PostedDutiesEvent{}

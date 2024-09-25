@@ -2,16 +2,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
-import 'package:help_isko/presentation/bloc/employee/duty/fetchDuty/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/fetch/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
-import 'package:help_isko/presentation/widgets/my_announcement_loading_indicator.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/services/duty_services.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class EmployeeHomePage extends StatelessWidget {
@@ -26,10 +28,13 @@ class EmployeeHomePage extends StatelessWidget {
             create: (context) => AnnouncementBloc(
                 apiRepositories: ApiRepositories(apiUrl: baseUrl))
               ..add(const FetchAnnouncement(role: 'Employee'))),
+        // BlocProvider(
+        //     create: (context) =>
+        //         PostedDutiesBloc(dutyServices: DutyServices(baseUrl: baseUrl))
+        //           ..add(FetchDuty())),
         BlocProvider(
-            create: (context) => PostedDutiesBloc(
-                apiRepositories: ApiRepositories(apiUrl: baseUrl))
-              ..add(FetchDuty()))
+            create: (context) =>
+                AddDutyBloc(dutyServices: DutyServices(baseUrl: baseUrl)))
       ],
       child: Scaffold(
         body: SafeArea(
@@ -246,10 +251,10 @@ class EmployeeHomePage extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final duty = reversedList[index];
                               return PostedDutiesHome(
-                                  date: duty.date,
-                                  building: duty.building,
-                                  message: duty.message,
-                                  dutyStatus: duty.dutyStatus);
+                                  date: duty.date!,
+                                  building: duty.building!,
+                                  message: duty.message!,
+                                  dutyStatus: duty.dutyStatus!);
                             },
                           ),
                         ),

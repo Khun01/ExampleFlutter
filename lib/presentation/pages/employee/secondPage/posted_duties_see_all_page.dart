@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/employee/duty/fetchDuty/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/fetch/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/posted_duties_see_all_card.dart';
-import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/services/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
 class PostedDutiesSeeAllPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PostedDutiesBloc postedDutiesBloc =
-        PostedDutiesBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
+        PostedDutiesBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
           ..add(FetchDuty());
     return BlocConsumer<PostedDutiesBloc, PostedDutiesState>(
       bloc: postedDutiesBloc,
@@ -21,9 +22,12 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
       builder: (context, state) {
         Widget body;
         if (state is PostedDutiesLoadingState) {
-          body = const SliverToBoxAdapter(
-            child: Center(
-              child: CircularProgressIndicator(),
+          body = SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const MyPostedDutiesSeeAllLoadingIndicator();
+              },
+              childCount: 15,
             ),
           );
         } else if (state is PostedDutiesSuccessState) {
@@ -48,10 +52,10 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {},
                   child: PostedDutiesSeeAllCard(
-                    date: duty.date,
-                    building: duty.building,
-                    message: duty.message,
-                    dutyStatus: duty.dutyStatus,
+                    date: duty.date!,
+                    building: duty.building!,
+                    message: duty.message!,
+                    dutyStatus: duty.dutyStatus!,
                     startTime: duty.formattedStartTime,
                     endTime: duty.formattedEndTime,
                   ),
@@ -132,6 +136,9 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
                   },
                 ),
                 body,
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 12),
+                )
               ],
             ),
           ),
