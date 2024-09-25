@@ -106,17 +106,15 @@ class ConversationListCard extends StatelessWidget {
                               blurRadius: 10.0,
                               spreadRadius: -6.0)
                         ]),
-                    child: Flexible(
-                      child: Text(
-                        message,
-                        maxLines: null,
-                        style: GoogleFonts.nunito(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: isCurrentUser
-                                ? const Color(0xFFFCFCFC)
-                                : const Color(0xFF3B3B3B)),
-                      ),
+                    child: Text(
+                      message,
+                      maxLines: null,
+                      style: GoogleFonts.nunito(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: isCurrentUser
+                              ? const Color(0xFFFCFCFC)
+                              : const Color(0xFF3B3B3B)),
                     ),
                   ),
                   Text(

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
@@ -26,7 +27,7 @@ class ConversationPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ConversationPage> {
-  ScrollController scrollController = ScrollController();
+  late ScrollController _scrollController;
   final TextEditingController textEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -34,17 +35,12 @@ class _ChatPageState extends State<ConversationPage> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         log('The keyboard is open');
         Future.delayed(const Duration(milliseconds: 700), () {
-          if (scrollController.hasClients) {
-            scrollController.animateTo(
-              scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
+          _scrollToBottom();
         });
       } else {
         log('The keyboard is remove');
@@ -52,11 +48,39 @@ class _ChatPageState extends State<ConversationPage> {
     });
   }
 
+  void _scrollToBottom() {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (_scrollController.hasClients) {
+        await _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+        );
+        if (_scrollController.offset <
+            _scrollController.position.maxScrollExtent) {
+          await _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeIn,
+          );
+        }
+      }
+    });
+  }
+
+  Future<bool> _onBackPressed() async {
+    if (focusNode.hasFocus) {
+      focusNode.unfocus();
+      return false;
+    }
+    return true;
+  }
+
   @override
   void dispose() {
     focusNode.dispose();
     textEditingController.dispose();
-    scrollController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -68,15 +92,7 @@ class _ChatPageState extends State<ConversationPage> {
           current is MessageFetchFailedChatState,
       listener: (context, state) {
         if (state is MessageFetchSuccessChatState) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (scrollController.hasClients) {
-              scrollController.animateTo(
-                scrollController.position.maxScrollExtent,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
-            }
-          });
+          _scrollToBottom();
         }
         if (state is MessageFetchFailedChatState) {}
       },
@@ -161,192 +177,200 @@ class _ChatPageState extends State<ConversationPage> {
             break;
         }
 
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          body: SafeArea(
-            child: Stack(
-              children: [
-                CustomScrollView(
-                  controller: scrollController,
-                  physics: const BouncingScrollPhysics(),
-                  slivers: [
-                    SliverLayoutBuilder(
-                      builder: (context, constraints) {
-                        final scrolled = constraints.scrollOffset > 0;
-                        return SliverAppBar(
-                          pinned: true,
-                          automaticallyImplyLeading: false,
-                          collapsedHeight: 70,
-                          flexibleSpace: AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              boxShadow: scrolled
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        offset: const Offset(0.0, 10.0),
-                                        blurRadius: 10.0,
-                                        spreadRadius: -6.0,
-                                      )
-                                    ]
-                                  : [],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0x1AA3D9A5),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Icon(
-                                        Ionicons.chevron_back_outline),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                CircleAvatar(
-                                    backgroundColor: const Color(0xFFA3D9A5),
-                                    child: widget.profile != ''
-                                        ? Image.network(
-                                            '//${widget.profile}',
-                                            errorBuilder: (context, error,
-                                                    stackTrace) =>
-                                                const Icon(Icons.error_rounded),
-                                          )
-                                        : const Icon(
-                                            Icons.person_rounded,
-                                            color: Color(0xFF3B3B3B),
-                                            size: 25,
-                                          )),
-                                const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      widget.name,
-                                      style: GoogleFonts.nunito(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF3B3B3B),
-                                      ),
-                                    ),
-                                    Text(
-                                      widget.name,
-                                      style: GoogleFonts.nunito(
-                                        fontSize: 12,
-                                        color: const Color(0xFF3B3B3B),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    body,
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 90),
-                    )
-                  ],
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFCFCFC),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          spreadRadius: 1,
-                          blurRadius: 6,
-                          offset: const Offset(0, -6),
-                        ),
-                      ],
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Form(
-                              key: _formKey,
-                              child: TextFormField(
-                                focusNode: focusNode,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter your message';
-                                  }
-                                  return null;
-                                },
-                                controller: textEditingController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  fillColor: const Color(0x1A3B3B3B),
-                                  filled: true,
-                                  hintText: 'Send Message',
-                                  hintStyle: GoogleFonts.nunito(
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0x803B3B3B),
-                                  ),
-                                  prefixIcon: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                        Icons.emoji_emotions_outlined),
-                                  ),
-                                ),
+        // ignore: deprecated_member_use
+        return WillPopScope(
+          onWillPop: () => _onBackPressed(),
+          child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            body: SafeArea(
+              child: Stack(
+                children: [
+                  CustomScrollView(
+                    controller: _scrollController,
+                    physics: const BouncingScrollPhysics(),
+                    slivers: [
+                      SliverLayoutBuilder(
+                        builder: (context, constraints) {
+                          final scrolled = constraints.scrollOffset > 0;
+                          return SliverAppBar(
+                            pinned: true,
+                            automaticallyImplyLeading: false,
+                            collapsedHeight: 70,
+                            flexibleSpace: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              padding:
+                                  const EdgeInsets.only(left: 16, right: 16),
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                boxShadow: scrolled
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          offset: const Offset(0.0, 10.0),
+                                          blurRadius: 10.0,
+                                          spreadRadius: -6.0,
+                                        )
+                                      ]
+                                    : [],
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: const Color(0x1A3B3B3B),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: GestureDetector(
-                              onTap: () {
-                                final validated =
-                                    _formKey.currentState!.validate();
-                                if (validated) {
-                                  context.read<MessageBloc>().add(
-                                        MessageSendEvent(
-                                          role: widget.role,
-                                          message: textEditingController.text,
-                                          targetUserId: widget.targetUserId,
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0x1AA3D9A5),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Icon(
+                                          Ionicons.chevron_back_outline),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  CircleAvatar(
+                                      backgroundColor: const Color(0xFFA3D9A5),
+                                      child: widget.profile != ''
+                                          ? Image.network(
+                                              '//${widget.profile}',
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  const Icon(
+                                                      Icons.error_rounded),
+                                            )
+                                          : const Icon(
+                                              Icons.person_rounded,
+                                              color: Color(0xFF3B3B3B),
+                                              size: 25,
+                                            )),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.name,
+                                        style: GoogleFonts.nunito(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xFF3B3B3B),
                                         ),
-                                      );
-
-                                  textEditingController.clear();
-                                }
-                              },
-                              child: const Icon(
-                                Ionicons.send,
-                                color: Color(0xFF3B3B3B),
+                                      ),
+                                      Text(
+                                        widget.name,
+                                        style: GoogleFonts.nunito(
+                                          fontSize: 12,
+                                          color: const Color(0xFF3B3B3B),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
+                          );
+                        },
+                      ),
+                      body,
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: 90),
+                      )
+                    ],
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFCFCFC),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(0, -6),
                           ),
                         ],
                       ),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Form(
+                                key: _formKey,
+                                child: TextFormField(
+                                  focusNode: focusNode,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your message';
+                                    }
+                                    return null;
+                                  },
+                                  controller: textEditingController,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    fillColor: const Color(0x1A3B3B3B),
+                                    filled: true,
+                                    hintText: 'Send Message',
+                                    hintStyle: GoogleFonts.nunito(
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0x803B3B3B),
+                                    ),
+                                    prefixIcon: IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                          Icons.emoji_emotions_outlined),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: const Color(0x1A3B3B3B),
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  final validated =
+                                      _formKey.currentState!.validate();
+                                  if (validated) {
+                                    context.read<MessageBloc>().add(
+                                          MessageSendEvent(
+                                            role: widget.role,
+                                            message: textEditingController.text,
+                                            targetUserId: widget.targetUserId,
+                                          ),
+                                        );
+
+                                    textEditingController.clear();
+                                  }
+                                },
+                                child: const Icon(
+                                  Ionicons.send,
+                                  color: Color(0xFF3B3B3B),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
