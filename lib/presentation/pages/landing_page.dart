@@ -86,12 +86,14 @@ class LandingPage extends StatelessWidget {
                               const Spacer(),
                               FadeIn(
                                 duration: const Duration(seconds: 3),
-                                child: Text(
-                                  'Welcome to Help, isKo',
-                                  style: GoogleFonts.nunito(
-                                      fontSize: 33,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF3B3B3B)),
+                                child: FittedBox(
+                                  child: Text(
+                                    'Welcome to Help, isKo',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 33,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF3B3B3B)),
+                                  ),
                                 ),
                               ),
                               Padding(
