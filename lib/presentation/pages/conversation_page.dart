@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/message_card/conversation_list_card.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:uicons/uicons.dart';
 
 class ConversationPage extends StatefulWidget {
   final String role;
@@ -241,10 +242,10 @@ class _ChatPageState extends State<ConversationPage> {
                                                   const Icon(
                                                       Icons.error_rounded),
                                             )
-                                          : const Icon(
-                                              Icons.person_rounded,
-                                              color: Color(0xFF3B3B3B),
-                                              size: 25,
+                                          : Image.asset(
+                                              'assets/images/profile_clicked.png',
+                                              fit: BoxFit.cover,
+                                              width: 18,
                                             )),
                                   const SizedBox(width: 12),
                                   Column(
@@ -358,9 +359,9 @@ class _ChatPageState extends State<ConversationPage> {
                                     textEditingController.clear();
                                   }
                                 },
-                                child: const Icon(
-                                  Ionicons.send,
-                                  color: Color(0xFF3B3B3B),
+                                child: Icon(
+                                  UIcons.solidRounded.paper_plane,
+                                  color: const Color(0xFF3B3B3B),
                                 ),
                               ),
                             ),

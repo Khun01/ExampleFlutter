@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/employee/duty/fetch/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/posted_duties_see_all_card.dart';
-import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
-class PostedDutiesSeeAllPage extends StatelessWidget {
+class PostedDutiesSeeAllPage extends StatefulWidget {
   const PostedDutiesSeeAllPage({super.key});
 
   @override
+  State<PostedDutiesSeeAllPage> createState() => _PostedDutiesSeeAllPageState();
+}
+
+class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
+  double width = 0;
+  bool myAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        myAnimation = true;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     final PostedDutiesBloc postedDutiesBloc =
         PostedDutiesBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
           ..add(FetchDuty());
@@ -22,12 +40,18 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
       builder: (context, state) {
         Widget body;
         if (state is PostedDutiesLoadingState) {
-          body = SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return const MyPostedDutiesSeeAllLoadingIndicator();
-              },
-              childCount: 15,
+          // body = SliverList(
+          //   delegate: SliverChildBuilderDelegate(
+          //     (context, index) {
+          //       return const MyPostedDutiesSeeAllLoadingIndicator();
+          //     },
+          //     childCount: 15,
+          //   ),
+          // );
+          body = const SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
           );
         } else if (state is PostedDutiesSuccessState) {
@@ -49,8 +73,11 @@ class PostedDutiesSeeAllPage extends StatelessWidget {
             body = SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final duty = reversedList[index];
-                return GestureDetector(
-                  onTap: () {},
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 400 + (index * 250)),
+                  curve: Curves.easeIn,
+                  transform:
+                      Matrix4.translationValues(myAnimation ? 0 : width, 0, 0),
                   child: PostedDutiesSeeAllCard(
                     date: duty.date!,
                     building: duty.building!,

@@ -1,14 +1,16 @@
 import 'dart:developer';
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
-import 'package:help_isko/presentation/bloc/employee/duty/fetch/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
@@ -28,10 +30,6 @@ class EmployeeHomePage extends StatelessWidget {
             create: (context) => AnnouncementBloc(
                 apiRepositories: ApiRepositories(apiUrl: baseUrl))
               ..add(const FetchAnnouncement(role: 'Employee'))),
-        // BlocProvider(
-        //     create: (context) =>
-        //         PostedDutiesBloc(dutyServices: DutyServices(baseUrl: baseUrl))
-        //           ..add(FetchDuty())),
         BlocProvider(
             create: (context) =>
                 AddDutyBloc(dutyServices: DutyServices(baseUrl: baseUrl)))
@@ -46,12 +44,15 @@ class EmployeeHomePage extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, top: 24),
-                  child: Text(
-                    'Announcement',
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B),
+                  child: FadeInLeft(
+                    duration: const Duration(milliseconds: 700),
+                    child: Text(
+                      'Announcement',
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B),
+                      ),
                     ),
                   ),
                 ),
@@ -108,18 +109,23 @@ class EmployeeHomePage extends StatelessWidget {
                                                           actualIndex]);
                                             });
                                       },
-                                      child: AnnouncementCard(
-                                          heading: state
-                                              .announcement[actualIndex]
-                                              .heading,
-                                          description: state
-                                              .announcement[actualIndex]
-                                              .description,
-                                          announcementImg: state
-                                              .announcement[actualIndex]
-                                              .announcementImg,
-                                          time: state
-                                              .announcement[actualIndex].time),
+                                      child: FadeInRight(
+                                        duration:
+                                            const Duration(milliseconds: 700),
+                                        child: AnnouncementCard(
+                                            heading: state
+                                                .announcement[actualIndex]
+                                                .heading,
+                                            description: state
+                                                .announcement[actualIndex]
+                                                .description,
+                                            announcementImg: state
+                                                .announcement[actualIndex]
+                                                .announcementImg,
+                                            time: state
+                                                .announcement[actualIndex]
+                                                .time),
+                                      ),
                                     );
                                   },
                                 ),
@@ -177,12 +183,15 @@ class EmployeeHomePage extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 20, top: 24, right: 20),
                   child: Row(
                     children: [
-                      Text(
-                        'Posted Duties',
-                        style: GoogleFonts.nunito(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF3B3B3B),
+                      FadeInLeft(
+                        duration: const Duration(milliseconds: 700),
+                        child: Text(
+                          'Posted Duties',
+                          style: GoogleFonts.nunito(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF3B3B3B),
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -194,11 +203,14 @@ class EmployeeHomePage extends StatelessWidget {
                                   builder: (context) =>
                                       const PostedDutiesSeeAllPage()));
                         },
-                        child: Text(
-                          'See all',
-                          style: GoogleFonts.nunito(
-                            fontSize: 14,
-                            color: const Color(0xCC6BB577),
+                        child: FadeInRight(
+                          duration: const Duration(milliseconds: 700),
+                          child: Text(
+                            'See all',
+                            style: GoogleFonts.nunito(
+                              fontSize: 14,
+                              color: const Color(0xCC6BB577),
+                            ),
                           ),
                         ),
                       ),
@@ -216,12 +228,24 @@ class EmployeeHomePage extends StatelessWidget {
                 },
                 builder: (context, state) {
                   if (state is PostedDutiesLoadingState) {
-                    return const SliverToBoxAdapter(
+                    // return const SliverToBoxAdapter(
+                    //   child: SizedBox(
+                    //       height: 166,
+                    //       child: Center(
+                    //         child: CircularProgressIndicator(),
+                    //       )),
+                    // );
+                    return SliverToBoxAdapter(
                       child: SizedBox(
-                          height: 166,
-                          child: Center(
-                            child: CircularProgressIndicator(),
-                          )),
+                        height: 166,
+                        child: ListView.builder(
+                          itemCount: 15,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index){
+                            return MyPostedDutiesHomePageLoading();
+                          },
+                        ),
+                      ),
                     );
                   } else if (state is PostedDutiesSuccessState) {
                     if (state.duty.isEmpty) {
@@ -250,11 +274,14 @@ class EmployeeHomePage extends StatelessWidget {
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               final duty = reversedList[index];
-                              return PostedDutiesHome(
-                                  date: duty.date!,
-                                  building: duty.building!,
-                                  message: duty.message!,
-                                  dutyStatus: duty.dutyStatus!);
+                              return FadeInRight(
+                                duration: const Duration(milliseconds: 700),
+                                child: PostedDutiesHome(
+                                    date: duty.date!,
+                                    building: duty.building!,
+                                    message: duty.message!,
+                                    dutyStatus: duty.dutyStatus!),
+                              );
                             },
                           ),
                         ),
@@ -322,8 +349,11 @@ class EmployeeHomePage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF3B3B3B),
                           ),
-                          child: const Text(
-                            'Recent Activities',
+                          child: FadeInLeft(
+                            duration: const Duration(milliseconds: 700),
+                            child: const Text(
+                              'Recent Activities',
+                            ),
                           ),
                         ),
                       ),

@@ -1,4 +1,5 @@
 // lib/components/custom_app_bar.dart
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,46 +27,60 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: const EdgeInsets.only(left: 16, top: 16, right: 16),
                 child: Row(
                   children: [
-                    const CircleAvatar(
-                      backgroundColor: Color(0x808CC9A6),
-                      radius: 25,
-                      child: ImageIcon(
-                        AssetImage('assets/images/profile_clicked.png'),
-                        size: 20,
-                        color: Color(0xFF3B3B3B),
+                    FadeInLeft(
+                      duration: const Duration(milliseconds: 700),
+                      child: const CircleAvatar(
+                        backgroundColor: Color(0x808CC9A6),
+                        radius: 25,
+                        child: ImageIcon(
+                          AssetImage('assets/images/profile_clicked.png'),
+                          size: 20,
+                          color: Color(0xFF3B3B3B),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Welcome',
-                          style: GoogleFonts.nunito(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0x803B3B3B),
+                    FadeInLeft(
+                      duration: const Duration(milliseconds: 700),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Welcome',
+                            style: GoogleFonts.nunito(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0x803B3B3B),
+                            ),
                           ),
-                        ),
-                        Text(
-                          state.firstName ?? 'N/A',
-                          style: GoogleFonts.nunito(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF3B3B3B),
+                          Text(
+                            state.firstName ?? 'N/A',
+                            style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const Spacer(),
                     role == 'Employee'
-                        ? Icon(UIcons.regularRounded.users)
-                        : const Icon(Ionicons.document_text,
-                            color: Color(0xFF3B3B3B)),
+                        ? FadeInRight(
+                            duration: const Duration(milliseconds: 700),
+                            child: Icon(UIcons.regularRounded.users))
+                        : FadeInRight(
+                            duration: const Duration(milliseconds: 700),
+                            child: const Icon(Ionicons.document_text,
+                                color: Color(0xFF3B3B3B)),
+                          ),
                     const SizedBox(width: 16),
-                    Icon(UIcons.regularRounded.bell,
-                        color: const Color(0xFF3B3B3B)),
+                    FadeInRight(
+                      duration: const Duration(milliseconds: 700),
+                      child: Icon(UIcons.regularRounded.bell,
+                          color: const Color(0xFF3B3B3B)),
+                    ),
                   ],
                 ));
           } else if (state is UserDataError) {

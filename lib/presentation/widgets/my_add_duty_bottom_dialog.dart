@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
-import 'package:help_isko/presentation/bloc/employee/duty/fetch/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/widgets/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';

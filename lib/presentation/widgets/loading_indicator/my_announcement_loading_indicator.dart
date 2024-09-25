@@ -7,6 +7,7 @@ class MyAnnouncementLoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 128,
       margin: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

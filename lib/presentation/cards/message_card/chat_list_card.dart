@@ -109,9 +109,11 @@ class _ChatListCardState extends State<ChatListCard> {
                         role: widget.role,
                         targetUserId: state.existingChats[index].user.id,
                         name: state.existingChats[index].user.name,
-                        profile: state.existingChats[index].user.profileImage!));
+                        profile:
+                            state.existingChats[index].user.profileImage!));
                     MessengerPage.listen = true;
-                    MessengerPage.targetUserId = state.existingChats[index].user.id;
+                    MessengerPage.targetUserId =
+                        state.existingChats[index].user.id;
                   },
                   child: Container(
                     padding:
@@ -132,10 +134,10 @@ class _ChatListCardState extends State<ChatListCard> {
                                             (context, error, stackTrace) =>
                                                 const Icon(Icons.error_rounded),
                                       )
-                                    : const Icon(
-                                        Icons.person_rounded,
-                                        color: Color(0xFF3B3B3B),
-                                        size: 40,
+                                    : Image.asset(
+                                        'assets/images/profile_clicked.png',
+                                        fit: BoxFit.cover,
+                                        width: 30,
                                       )),
                             const SizedBox(width: 12),
                             Expanded(

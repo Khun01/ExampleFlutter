@@ -38,14 +38,14 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 30,
-                  backgroundColor: Color(0xFFA3D9A5),
-                  child: Icon(
-                    Icons.person_rounded,
-                    color: Color(0xFF3B3B3B),
-                    size: 40,
-                  ),
+                  backgroundColor: const Color(0xFFA3D9A5),
+                  child: Image.asset(
+                    width: 30,
+                    'assets/images/profile_clicked.png',
+                    fit: BoxFit.cover,
+                  )
                 ),
                 const SizedBox(width: 16),
                 Expanded(

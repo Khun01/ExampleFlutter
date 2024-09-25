@@ -49,10 +49,10 @@ class ConversationListCard extends StatelessWidget {
                             errorBuilder: (context, error, stackTrace) =>
                                 const Icon(Icons.error_rounded),
                           )
-                        : const Icon(
-                            Icons.person_rounded,
-                            color: Color(0xFF3B3B3B),
-                            size: 25,
+                        : Image.asset(
+                            'assets/images/profile_clicked.png',
+                            fit: BoxFit.cover,
+                            width: 25,
                           )),
           ),
           Column(
