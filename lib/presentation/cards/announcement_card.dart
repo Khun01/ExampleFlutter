@@ -67,16 +67,11 @@ class AnnouncementCard extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    SizedBox(
-                      width: 60,
-                      child: Text(
-                        time,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                        style: GoogleFonts.nunito(
-                          fontSize: 10,
-                          color: const Color(0xCC3B3B3B),
-                        ),
+                    Text(
+                      time,
+                      style: GoogleFonts.nunito(
+                        fontSize: 10,
+                        color: const Color(0xCC3B3B3B),
                       ),
                     )
                   ],

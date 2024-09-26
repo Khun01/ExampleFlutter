@@ -8,3 +8,5 @@ sealed class PostedDutiesEvent extends Equatable {
 }
 
 class FetchDuty extends PostedDutiesEvent{}
+
+class RefetchDuty extends PostedDutiesEvent{}

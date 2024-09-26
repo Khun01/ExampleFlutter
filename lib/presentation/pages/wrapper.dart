@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile_page.dart';
@@ -12,6 +13,7 @@ import 'package:help_isko/presentation/pages/students/firstPage/student_duties_p
 import 'package:help_isko/presentation/pages/students/firstPage/student_profile_page.dart';
 import 'package:help_isko/presentation/widgets/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
@@ -33,6 +35,9 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
+    final AnnouncementBloc announcementBloc =
+        AnnouncementBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
+          ..add(FetchAnnouncement(role: widget.role));
     final AddDutyBloc addDutyBloc =
         AddDutyBloc(dutyServices: DutyServices(baseUrl: baseUrl));
     final PostedDutiesBloc postedDutiesBloc =
@@ -49,8 +54,15 @@ class _WrapperState extends State<Wrapper> {
                   index: selectedIndex,
                   children: widget.role == 'Employee'
                       ? [
-                          BlocProvider.value(
-                            value: postedDutiesBloc,
+                          MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: postedDutiesBloc,
+                              ),
+                              BlocProvider.value(
+                                value: announcementBloc,
+                              ),
+                            ],
                             child: const EmployeeHomePage(),
                           ),
                           const EmployeeDutiesPage(),
@@ -94,13 +106,15 @@ class _WrapperState extends State<Wrapper> {
                             label: 'Home',
                             icon: selectedIndex == 0
                                 ? const ImageIcon(
-                                    AssetImage('assets/images/home_clicked.png'),
+                                    AssetImage(
+                                        'assets/images/home_clicked.png'),
                                     color: Color(0xFF6BB577))
                                 : const ImageIcon(
                                     AssetImage('assets/images/home.png'))),
                         BottomNavigationBarItem(
-                            label:
-                                widget.role == 'Employee' ? 'Request' : 'Duties',
+                            label: widget.role == 'Employee'
+                                ? 'Request'
+                                : 'Duties',
                             icon: selectedIndex == 1
                                 ? const ImageIcon(
                                     AssetImage(
@@ -120,8 +134,8 @@ class _WrapperState extends State<Wrapper> {
                             icon: selectedIndex == 3
                                 ? const ImageIcon(AssetImage(
                                     'assets/images/circle-user-clicked.png'))
-                                : const ImageIcon(
-                                    AssetImage('assets/images/circle-user.png')))
+                                : const ImageIcon(AssetImage(
+                                    'assets/images/circle-user.png')))
                       ],
                       currentIndex: selectedIndex,
                       onTap: (int index) {
@@ -162,8 +176,8 @@ class _WrapperState extends State<Wrapper> {
                               context: context,
                               builder: (context) {
                                 return SizedBox(
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.85,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.85,
                                     child: MultiBlocProvider(
                                       providers: [
                                         BlocProvider.value(

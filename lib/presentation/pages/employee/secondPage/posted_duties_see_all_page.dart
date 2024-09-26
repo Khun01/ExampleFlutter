@@ -1,8 +1,10 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/posted_duties_see_all_card.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
@@ -15,45 +17,35 @@ class PostedDutiesSeeAllPage extends StatefulWidget {
 }
 
 class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
-  double width = 0;
-  bool myAnimation = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      setState(() {
-        myAnimation = true;
-      });
-    });
-  }
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
     final PostedDutiesBloc postedDutiesBloc =
         PostedDutiesBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
           ..add(FetchDuty());
     return BlocConsumer<PostedDutiesBloc, PostedDutiesState>(
       bloc: postedDutiesBloc,
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is PostedDutiesSuccessState) {}
+      },
       builder: (context, state) {
         Widget body;
         if (state is PostedDutiesLoadingState) {
-          // body = SliverList(
-          //   delegate: SliverChildBuilderDelegate(
-          //     (context, index) {
-          //       return const MyPostedDutiesSeeAllLoadingIndicator();
-          //     },
-          //     childCount: 15,
-          //   ),
-          // );
-          body = const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: CircularProgressIndicator(),
+          body = SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const MyPostedDutiesSeeAllLoadingIndicator();
+              },
+              childCount: 15,
             ),
           );
+          // body = const SliverFillRemaining(
+          //   hasScrollBody: false,
+          //   child: Center(
+          //     child: CircularProgressIndicator(),
+          //   ),
+          // );
         } else if (state is PostedDutiesSuccessState) {
           if (state.duty.isEmpty) {
             body = SliverFillRemaining(
@@ -70,24 +62,31 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
             );
           } else {
             final reversedList = state.duty.reversed.toList();
-            body = SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
+            body = LiveSliverList(
+              controller: scrollController,
+              showItemDuration: const Duration(milliseconds: 300),
+              itemCount: 15,
+              itemBuilder: (context, index, animation) {
                 final duty = reversedList[index];
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 400 + (index * 250)),
-                  curve: Curves.easeIn,
-                  transform:
-                      Matrix4.translationValues(myAnimation ? 0 : width, 0, 0),
-                  child: PostedDutiesSeeAllCard(
-                    date: duty.date!,
-                    building: duty.building!,
-                    message: duty.message!,
-                    dutyStatus: duty.dutyStatus!,
-                    startTime: duty.formattedStartTime,
-                    endTime: duty.formattedEndTime,
-                  ),
+                return FadeTransition(
+                  opacity: Tween<double>(
+                    begin: 0,
+                    end: 1,
+                  ).animate(animation),
+                  child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, -0.1),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: PostedDutiesSeeAllCard(
+                          date: duty.date!,
+                          building: duty.building!,
+                          message: duty.message!,
+                          dutyStatus: duty.dutyStatus!,
+                          startTime: duty.formattedStartTime,
+                          endTime: duty.formattedEndTime)),
                 );
-              }, childCount: reversedList.length),
+              },
             );
           }
         } else {
@@ -106,6 +105,7 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
         return Scaffold(
           body: SafeArea(
             child: CustomScrollView(
+              controller: scrollController,
               slivers: [
                 SliverLayoutBuilder(
                   builder: (context, constraints) {

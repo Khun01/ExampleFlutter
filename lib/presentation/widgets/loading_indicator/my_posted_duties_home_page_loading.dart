@@ -9,7 +9,7 @@ class MyPostedDutiesHomePageLoading extends StatelessWidget {
     return Container(
       width: 128,
       padding: const EdgeInsets.all(2),
-      margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 4),
+      margin: const EdgeInsets.only(bottom: 16, left: 8),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.04),
         borderRadius: BorderRadius.circular(20),
@@ -66,6 +66,7 @@ class MyPostedDutiesHomePageLoading extends StatelessWidget {
             baseColor: const Color(0x4C3B3B3B),
             highlightColor: Colors.white.withOpacity(0.3),
             child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               width: MediaQuery.of(context).size.width,
               height: 16,
               decoration: BoxDecoration(
@@ -79,37 +80,12 @@ class MyPostedDutiesHomePageLoading extends StatelessWidget {
             baseColor: const Color(0x4C3B3B3B),
             highlightColor: Colors.white.withOpacity(0.3),
             child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
               width: MediaQuery.of(context).size.width * 0.25,
-              height: 16,
+              height: 56,
               decoration: BoxDecoration(
                 color: const Color(0x4C3B3B3B),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Shimmer.fromColors(
-            baseColor: const Color(0x4C3B3B3B),
-            highlightColor: Colors.white.withOpacity(0.3),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.25,
-              height: 16,
-              decoration: BoxDecoration(
-                color: const Color(0x4C3B3B3B),
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-          ),
-          const SizedBox(height: 4),
-          Shimmer.fromColors(
-            baseColor: const Color(0x4C3B3B3B),
-            highlightColor: Colors.white.withOpacity(0.3),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.25,
-              height: 16,
-              decoration: BoxDecoration(
-                color: const Color(0x4C3B3B3B),
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),

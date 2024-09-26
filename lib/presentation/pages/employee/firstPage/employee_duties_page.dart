@@ -22,7 +22,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                   automaticallyImplyLeading: false,
                   flexibleSpace: AnimatedContainer(
                     duration: const Duration(milliseconds: 309),
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: EdgeInsets.only(left: 20, bottom: scrolled ? 0 : 8),
                     decoration: BoxDecoration(
                         color: Theme.of(context).scaffoldBackgroundColor,
                         boxShadow: scrolled
@@ -34,8 +34,9 @@ class EmployeeDutiesPage extends StatelessWidget {
                                     spreadRadius: -6.0)
                               ]
                             : []),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
+                    child: AnimatedAlign(
+                      duration: const Duration(milliseconds: 300),
+                      alignment: scrolled ? Alignment.centerLeft : Alignment.bottomLeft,
                       child: AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 300),
                         style: GoogleFonts.nunito(

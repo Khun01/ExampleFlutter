@@ -19,7 +19,7 @@ class PostedDutiesHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 128,
-      margin: const EdgeInsets.only(top: 8, bottom: 16, left: 8, right: 4),
+      margin: const EdgeInsets.only(bottom: 16, left: 8),
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -109,7 +109,7 @@ class PostedDutiesHome extends StatelessWidget {
             padding: const EdgeInsets.only(left: 3, right: 3),
             child: Text(
               message,
-              maxLines: 3,
+              maxLines: 4,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.nunito(
                   fontSize: 10, color: const Color(0xCC3B3B3B)),

@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/hk_student_list_page.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
 
@@ -69,7 +70,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     role == 'Employee'
                         ? FadeInRight(
                             duration: const Duration(milliseconds: 700),
-                            child: Icon(UIcons.regularRounded.users))
+                            child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HkStudentListPage()));
+                                },
+                                child: Icon(UIcons.regularRounded.users)))
                         : FadeInRight(
                             duration: const Duration(milliseconds: 700),
                             child: const Icon(Ionicons.document_text,

@@ -22,4 +22,10 @@ class Announcement {
       time: json['created_at']
     );
   }
+
+  String get formattedTime => _formatTime(time);
+
+  String _formatTime(String time) {
+    return time.substring(0, 10);
+  }
 }
