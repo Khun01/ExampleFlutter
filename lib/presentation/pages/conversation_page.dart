@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
@@ -40,7 +38,7 @@ class _ChatPageState extends State<ConversationPage> {
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         log('The keyboard is open');
-        Future.delayed(const Duration(milliseconds: 700), () {
+        Future.delayed(const Duration(milliseconds: 700), (){
           _scrollToBottom();
         });
       } else {
@@ -50,21 +48,11 @@ class _ChatPageState extends State<ConversationPage> {
   }
 
   void _scrollToBottom() {
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        await _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
-        );
-        if (_scrollController.offset <
-            _scrollController.position.maxScrollExtent) {
-          await _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeIn,
-          );
-        }
+        final position = _scrollController.position.maxScrollExtent * 2;
+        _scrollController.animateTo(position,
+            duration: const Duration(seconds: 1), curve: Curves.easeInOut);
       }
     });
   }
@@ -188,7 +176,7 @@ class _ChatPageState extends State<ConversationPage> {
                 children: [
                   CustomScrollView(
                     controller: _scrollController,
-                    physics: const BouncingScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     slivers: [
                       SliverLayoutBuilder(
                         builder: (context, constraints) {
