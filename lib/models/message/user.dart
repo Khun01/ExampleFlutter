@@ -6,10 +6,10 @@ class User {
   String email;
   String role;
   String? profileImage;
-  String? school_id;
+  String? schoolId;
   User(
     this.profileImage,
-    this.school_id, {
+    this.schoolId, {
     required this.id,
     required this.name,
     required this.email,

@@ -128,7 +128,7 @@ class _ChatPageState extends State<ConversationPage> {
                         message: convo.message,
                         createdAt: convo.created_at,
                         isCurrentUser:
-                            convo.sender_id == successState.currentUserId);
+                            convo.sender_id == successState.currentUserId,);
                   },
                   childCount: successState.chats.length,
                 ),

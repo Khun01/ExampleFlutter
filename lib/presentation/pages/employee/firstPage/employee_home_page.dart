@@ -62,7 +62,7 @@ class EmployeeHomePage extends StatelessWidget {
                   if (state.announcement.isEmpty) {
                     return SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 156,
+                        height: 163,
                         child: Center(
                           child: Text(
                             'Coming soon!',
@@ -132,7 +132,7 @@ class EmployeeHomePage extends StatelessWidget {
                 } else if (state is AnnouncementFailedState) {
                   return SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 156,
+                      height: 163,
                       child: Center(
                         child: Text(
                           'Failed to load, please try again later',
@@ -146,7 +146,7 @@ class EmployeeHomePage extends StatelessWidget {
                 } else {
                   return SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 156,
+                      height: 163,
                       child: Center(
                         child: Text(
                           'Network Error!',
@@ -227,7 +227,7 @@ class EmployeeHomePage extends StatelessWidget {
                   if (state.duty.isEmpty) {
                     return SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 166,
+                        height: 174,
                         child: Center(
                           child: Text(
                             'Coming soon!',
@@ -275,11 +275,12 @@ class EmployeeHomePage extends StatelessWidget {
                 } else if (state is PostedDutiestFailedState) {
                   return SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 166,
+                      height: 174,
                       child: Center(
                         child: Text(
                           'Failed to load, please try again later',
                           style: GoogleFonts.nunito(
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF3B3B3B)),
                         ),
@@ -290,7 +291,7 @@ class EmployeeHomePage extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      height: 166,
+                      height: 174,
                       child: Center(
                         child: Text(
                           'Network Error!',

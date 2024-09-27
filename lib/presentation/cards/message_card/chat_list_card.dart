@@ -111,7 +111,7 @@ class _ChatListCardState extends State<ChatListCard> {
                         targetUserId: state.existingChats[index].user.id,
                         name: state.existingChats[index].user.name,
                         schoolId:
-                            state.existingChats[index].user.school_id ?? '',
+                            state.existingChats[index].user.schoolId ?? '',
                         profile:
                             state.existingChats[index].user.profileImage!));
                     MessengerPage.listen = true;
