@@ -8,3 +8,13 @@ sealed class DeleteDutyState extends Equatable {
 }
 
 final class DeleteDutyInitial extends DeleteDutyState {}
+
+class DeleteDutySuccessState extends DeleteDutyState {}
+
+class DeleteDutyLoadingState extends DeleteDutyState {}
+
+class DeleteDutyFailedState extends DeleteDutyState {
+  final String error;
+
+  const DeleteDutyFailedState({required this.error});
+}

@@ -11,7 +11,7 @@ import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile
 import 'package:help_isko/presentation/pages/messenger_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_duties_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_profile_page.dart';
-import 'package:help_isko/presentation/widgets/duty_dialog/add_duty_success_dialog.dart';
+import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_success_dialog.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
@@ -53,7 +53,7 @@ class _WrapperState extends State<Wrapper> {
           if (state is AddDutySuccessState) {
             showDialog(
                 context: context,
-                builder: (context) => const AddDutySuccessDialog());
+                builder: (context) => const AddDeleteDutySuccessDialog(blocUse: 'AddDuty'));
           } else if (state is AddDutyFailedState) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));

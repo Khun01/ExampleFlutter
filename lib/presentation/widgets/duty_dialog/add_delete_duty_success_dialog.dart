@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/pages/wrapper.dart';
 import 'package:ionicons/ionicons.dart';
 
-class AddDutySuccessDialog extends StatelessWidget {
-  const AddDutySuccessDialog({super.key});
+class AddDeleteDutySuccessDialog extends StatelessWidget {
+  final String blocUse;
+  const AddDeleteDutySuccessDialog({super.key, required this.blocUse});
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,11 @@ class AddDutySuccessDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Your new duty has been successfully created and saved.',
+                    blocUse == 'AddDuty'
+                        ? 'Your new duty has been successfully created and saved.'
+                        : blocUse == 'updateDuty'
+                            ? 'Your duty has been successfully edited and saved.'
+                            : 'Your duty has been successfully deleted.',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.nunito(
                         fontSize: 14, color: const Color(0xFF3B3B3B)),
@@ -54,12 +60,19 @@ class AddDutySuccessDialog extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        blocUse == 'AddDuty'
+                            ? Navigator.pop(context)
+                            : Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const Wrapper(role: 'Employee')));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6BB577)),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

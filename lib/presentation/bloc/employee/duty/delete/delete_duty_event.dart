@@ -6,3 +6,9 @@ sealed class DeleteDutyEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class DeleteDutyButtonClickedEvent extends DeleteDutyEvent{
+  final ProfDuty profDuty;
+
+  const DeleteDutyButtonClickedEvent({required this.profDuty});
+}

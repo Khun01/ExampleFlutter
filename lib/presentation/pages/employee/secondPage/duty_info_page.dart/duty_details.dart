@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/data/prof_duty.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/delete/delete_duty_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/update/update_duty_bloc.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
@@ -29,12 +32,30 @@ class _DutyDetailsState extends State<DutyDetails> {
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
   @override
+  void initState(){
+    super.initState();
+    date.text;
+  }
+
+  @override
+  void dispose() {
+    building.dispose();
+    date.dispose();
+    startAt.dispose();
+    endAt.dispose();
+    students.dispose();
+    message.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
@@ -50,7 +71,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         hintText: widget.profDuty.building!,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter building';
+                            return null;
                           }
                           return null;
                         }),
@@ -74,7 +95,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                           String pattern = r'^\d{4}-\d{2}-\d{2}$';
                           RegExp regExp = RegExp(pattern);
                           if (value == null || value.isEmpty) {
-                            return 'Please enter date';
+                            return null;
                           } else if (!regExp.hasMatch(value)) {
                             return 'Enter a valid date (YYYY-MM-DD)';
                           }
@@ -87,6 +108,7 @@ class _DutyDetailsState extends State<DutyDetails> {
           ),
           const SizedBox(height: 16),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
@@ -104,7 +126,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                           String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                           RegExp regExp = RegExp(pattern);
                           if (value == null || value.isEmpty) {
-                            return 'Please enter a time';
+                            return null;
                           } else if (!regExp.hasMatch(value)) {
                             return 'Enter a valid time in 24-hour format (HH:mm)';
                           }
@@ -130,7 +152,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                           String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                           RegExp regExp = RegExp(pattern);
                           if (value == null || value.isEmpty) {
-                            return 'Please enter a time';
+                            return null;
                           } else if (!regExp.hasMatch(value)) {
                             return 'Enter a valid time in 24-hour format (HH:mm)';
                           }
@@ -143,12 +165,15 @@ class _DutyDetailsState extends State<DutyDetails> {
           ),
           const SizedBox(height: 16),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
                   children: [
                     const MyAddDutiesLabel(
-                        icon: Icons.person_outline_rounded, label: 'Students', fontWeight: FontWeight.bold),
+                        icon: Icons.person_outline_rounded,
+                        label: 'Students',
+                        fontWeight: FontWeight.bold),
                     MyAddDutyField(
                         formKey: _formKeyStudent,
                         controller: students,
@@ -156,7 +181,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter students';
+                            return null;
                           }
                           return null;
                         })
@@ -192,7 +217,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                 expands: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter message';
+                    return null;
                   }
                   return null;
                 },
@@ -206,7 +231,11 @@ class _DutyDetailsState extends State<DutyDetails> {
             children: [
               Expanded(
                 child: MyButton(
-                    onTap: () {},
+                    onTap: () {
+                      context.read<DeleteDutyBloc>().add(
+                          DeleteDutyButtonClickedEvent(
+                              profDuty: widget.profDuty));
+                    },
                     buttonText: 'Delete',
                     textColor: const Color(0xFF3B3B3B),
                     color: Theme.of(context).scaffoldBackgroundColor,
@@ -214,7 +243,50 @@ class _DutyDetailsState extends State<DutyDetails> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: MyButton(onTap: () {}, buttonText: 'Update'),
+                child: MyButton(
+                    onTap: () {
+                      final validatedDate =
+                          _formKeyDate.currentState!.validate();
+                      final validatedStartAt =
+                          _formKeyStartAt.currentState!.validate();
+                      final validatedEndAt =
+                          _formKeyEndAt.currentState!.validate();
+                      final validatedBuilding =
+                          _formKeyBuilding.currentState!.validate();
+                      final validatedStudents =
+                          _formKeyStudent.currentState!.validate();
+                      final validatedMessage =
+                          _formKeyMessage.currentState!.validate();
+                      if (validatedDate &&
+                          validatedStartAt &&
+                          validatedEndAt &&
+                          validatedBuilding &&
+                          validatedStudents &&
+                          validatedMessage) {
+                        context.read<UpdateDutyBloc>().add(
+                            UpdateDutyButtonClickedEvent(
+                                building.text.isNotEmpty
+                                    ? building.text
+                                    : widget.profDuty.building!,
+                                date.text.isNotEmpty
+                                    ? date.text
+                                    : widget.profDuty.date!,
+                                startAt.text.isNotEmpty
+                                    ? startAt.text
+                                    : widget.profDuty.formattedStartTime,
+                                endAt.text.isNotEmpty
+                                    ? endAt.text
+                                    : widget.profDuty.formattedEndTime,
+                                message.text.isNotEmpty
+                                    ? message.text
+                                    : widget.profDuty.message!,
+                                students.text.isNotEmpty
+                                    ? students.text
+                                    : widget.profDuty.maxScholars.toString(),
+                                profDuty: widget.profDuty));
+                      }
+                    },
+                    buttonText: 'Update'),
               )
             ],
           )

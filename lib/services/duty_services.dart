@@ -63,11 +63,12 @@ class DutyServices implements DutyRepository {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          // 'first_name': profDuty.firstName,
-          // 'last_name': profDuty.lastName,
-          // 'course': profDuty.course,
-          // 'year': profDuty.year,
-          // 'enrolled': profDuty.enrolled,
+          'building': profDuty.building,
+          'date': profDuty.date,
+          'start_time': profDuty.startTime,
+          'end_time': profDuty.endTime,
+          'message': profDuty.message,
+          'max_scholars': profDuty.maxScholars
         }));
     return {
       'statusCode': response.statusCode,
@@ -77,7 +78,7 @@ class DutyServices implements DutyRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> deleteStudents(int id) async {
+  Future<Map<String, dynamic>> deleteDuty(int id) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
     var url = Uri.parse('$baseUrl/professors/duties/$id');
