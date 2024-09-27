@@ -67,6 +67,7 @@ class _ChatListCardState extends State<ChatListCard> {
                   targetUserId: state.targetUserId,
                   name: state.name,
                   profile: state.profile,
+                  schoolId: state.schoolId,
                 ),
               ),
             ),
@@ -109,6 +110,8 @@ class _ChatListCardState extends State<ChatListCard> {
                         role: widget.role,
                         targetUserId: state.existingChats[index].user.id,
                         name: state.existingChats[index].user.name,
+                        schoolId:
+                            state.existingChats[index].user.school_id ?? '',
                         profile:
                             state.existingChats[index].user.profileImage!));
                     MessengerPage.listen = true;

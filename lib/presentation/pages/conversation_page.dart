@@ -14,14 +14,15 @@ class ConversationPage extends StatefulWidget {
   final String name;
   final String profile;
   final int targetUserId;
+  final String schoolId;
 
-  const ConversationPage({
-    super.key,
-    required this.role,
-    required this.targetUserId,
-    required this.name,
-    required this.profile,
-  });
+  const ConversationPage(
+      {super.key,
+      required this.role,
+      required this.targetUserId,
+      required this.name,
+      required this.profile,
+      required this.schoolId});
 
   @override
   State<ConversationPage> createState() => _ChatPageState();
@@ -262,7 +263,7 @@ class _ChatPageState extends State<ConversationPage> {
                                         ),
                                       ),
                                       Text(
-                                        widget.name,
+                                        widget.schoolId,
                                         style: GoogleFonts.nunito(
                                           fontSize: 12,
                                           color: const Color(0xFF3B3B3B),

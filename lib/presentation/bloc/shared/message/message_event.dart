@@ -26,13 +26,14 @@ class MessageNavigateToChatEvent extends MessageEvent {
   final String role;
   final String name;
   final String profile;
+  final String schoolId;
   final int targetUserId;
-  const MessageNavigateToChatEvent({
-    required this.role,
-    required this.targetUserId,
-    required this.name,
-    required this.profile
-  });
+  const MessageNavigateToChatEvent(
+      {required this.schoolId,
+      required this.role,
+      required this.targetUserId,
+      required this.name,
+      required this.profile});
 }
 
 class MessagePusherChatEvent extends MessageEvent {
