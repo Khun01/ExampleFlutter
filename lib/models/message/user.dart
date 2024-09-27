@@ -6,8 +6,10 @@ class User {
   String email;
   String role;
   String? profileImage;
+  String? school_id;
   User(
-    this.profileImage, {
+    this.profileImage,
+    this.school_id, {
     required this.id,
     required this.name,
     required this.email,
@@ -17,6 +19,7 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       map['profile_image'],
+      map['user_school_id'],
       id: map['user']['id'] as int,
       name: map['user']['name'] as String,
       email: map['user']['email'] as String,

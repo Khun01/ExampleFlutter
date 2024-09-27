@@ -60,7 +60,8 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
     emit(MessageNavigatetoChatState(
         targetUserId: event.targetUserId,
         name: event.name,
-        profile: event.profile));
+        profile: event.profile,
+        schoolId: event.schoolId));
     emit(MessageFetchLoadingChatState());
     try {
       final int currentUserId;

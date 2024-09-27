@@ -33,8 +33,12 @@ class MessageNavigatetoChatState extends MessageState {
   final int targetUserId;
   final String name;
   final String profile;
+  final String schoolId;
   const MessageNavigatetoChatState(
-      {required this.targetUserId, required this.name, required this.profile});
+      {required this.schoolId,
+      required this.targetUserId,
+      required this.name,
+      required this.profile});
 
   @override
   List<Object> get props => [targetUserId];
