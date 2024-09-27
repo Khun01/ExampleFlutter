@@ -8,6 +8,7 @@ import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_blo
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
@@ -55,8 +56,7 @@ class EmployeeHomePage extends StatelessWidget {
                 if (state is AnnouncementLoadingState) {
                   return const SliverToBoxAdapter(
                     child: SizedBox(
-                      height: 163,
-                      child: MyAnnouncementLoadingIndicator()),
+                        height: 163, child: MyAnnouncementLoadingIndicator()),
                   );
                 } else if (state is AnnouncementSuccessState) {
                   if (state.announcement.isEmpty) {
@@ -96,20 +96,18 @@ class EmployeeHomePage extends StatelessWidget {
                                         });
                                   },
                                   child: FadeInRight(
-                                    duration:
-                                        const Duration(milliseconds: 700),
+                                    duration: const Duration(milliseconds: 700),
                                     child: AnnouncementCard(
                                         heading: state
-                                            .announcement[actualIndex]
-                                            .heading,
+                                            .announcement[actualIndex].heading,
                                         description: state
                                             .announcement[actualIndex]
                                             .description,
                                         announcementImg: state
                                             .announcement[actualIndex]
                                             .announcementImg,
-                                        time: state
-                                            .announcement[actualIndex].formattedTime),
+                                        time: state.announcement[actualIndex]
+                                            .formattedTime),
                                   ),
                                 );
                               },
@@ -254,11 +252,21 @@ class EmployeeHomePage extends StatelessWidget {
                           final duty = reversedList[index];
                           return FadeInRight(
                             duration: const Duration(milliseconds: 700),
-                            child: PostedDutiesHome(
-                                date: duty.date!,
-                                building: duty.building!,
-                                message: duty.message!,
-                                dutyStatus: duty.dutyStatus!),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PostedDutyInfoPage(
+                                                profDuty: duty)));
+                              },
+                              child: PostedDutiesHome(
+                                  date: duty.date!,
+                                  building: duty.building!,
+                                  message: duty.message!,
+                                  dutyStatus: duty.dutyStatus!),
+                            ),
                           );
                         },
                       ),

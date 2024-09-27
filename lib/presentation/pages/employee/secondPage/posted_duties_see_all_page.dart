@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/posted_duties_see_all_card.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty_services.dart';
@@ -40,12 +41,6 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
               childCount: 15,
             ),
           );
-          // body = const SliverFillRemaining(
-          //   hasScrollBody: false,
-          //   child: Center(
-          //     child: CircularProgressIndicator(),
-          //   ),
-          // );
         } else if (state is PostedDutiesSuccessState) {
           if (state.duty.isEmpty) {
             body = SliverFillRemaining(
@@ -78,13 +73,22 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
                         begin: const Offset(0, -0.1),
                         end: Offset.zero,
                       ).animate(animation),
-                      child: PostedDutiesSeeAllCard(
-                          date: duty.date!,
-                          building: duty.building!,
-                          message: duty.message!,
-                          dutyStatus: duty.dutyStatus!,
-                          startTime: duty.formattedStartTime,
-                          endTime: duty.formattedEndTime)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      PostedDutyInfoPage(profDuty: duty)));
+                        },
+                        child: PostedDutiesSeeAllCard(
+                            date: duty.date!,
+                            building: duty.building!,
+                            message: duty.message!,
+                            dutyStatus: duty.dutyStatus!,
+                            startTime: duty.formattedStartTime,
+                            endTime: duty.formattedEndTime),
+                      )),
                 );
               },
             );

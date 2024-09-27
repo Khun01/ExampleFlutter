@@ -21,31 +21,22 @@ class AddDutyBloc extends Bloc<AddDutyEvent, AddDutyState> {
     log('The submit button is cliked');
     emit(AddDutyLoadingState());
     try {
-      if (event.building.isNotEmpty &&
-          event.date.isNotEmpty &&
-          event.startAt.isNotEmpty &&
-          event.endAt.isNotEmpty &&
-          event.message.isNotEmpty) {
-        final profDuty = ProfDuty(
-            building: event.building,
-            date: event.date,
-            startTime: event.startAt,
-            endTime: event.endAt,
-            maxScholars: int.tryParse(event.students),
-            message: event.message);
-        await Future.delayed(const Duration(seconds: 2));
-        final duty = await dutyServices.addDuty(profDuty);
-        if (duty['statusCode'] == 200) {
-          event.postedDutiesBloc.add(FetchDuty());
-          emit(AddDutySuccessState());
-        } else {
-          log('Failed to add duty: ${duty['statusCode']}');
-          emit(AddDutyFailedState(
-              error: 'Failed to add duty: ${duty['statusCode']}'));
-        }
+      final profDuty = ProfDuty(
+          building: event.building,
+          date: event.date,
+          startTime: event.startAt,
+          endTime: event.endAt,
+          maxScholars: int.tryParse(event.students),
+          message: event.message);
+      await Future.delayed(const Duration(seconds: 2));
+      final duty = await dutyServices.addDuty(profDuty);
+      if (duty['statusCode'] == 200) {
+        event.postedDutiesBloc.add(FetchDuty());
+        emit(AddDutySuccessState());
       } else {
-        emit(const AddDutyFailedState(
-            error: 'Please fill out all the required information'));
+        log('Failed to add duty: ${duty['statusCode']}');
+        emit(AddDutyFailedState(
+            error: 'Failed to add duty: ${duty['statusCode']}'));
       }
     } catch (e) {
       emit(AddDutyFailedState(error: e.toString()));

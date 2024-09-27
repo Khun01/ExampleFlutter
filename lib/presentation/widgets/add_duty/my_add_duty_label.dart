@@ -4,10 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 class MyAddDutiesLabel extends StatelessWidget {
   final IconData icon;
   final String label;
+  final FontWeight? fontWeight;
   const MyAddDutiesLabel({
     super.key,
     required this.icon,
-    required this.label
+    required this.label,
+    this.fontWeight
   });
 
   @override
@@ -24,6 +26,7 @@ class MyAddDutiesLabel extends StatelessWidget {
           label,
           style: GoogleFonts.nunito(
             fontSize: 14,
+            fontWeight: fontWeight,
             color: const Color(0xFF3B3B3B)
           ),
         )

@@ -11,7 +11,9 @@ import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile
 import 'package:help_isko/presentation/pages/messenger_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_duties_page.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_profile_page.dart';
-import 'package:help_isko/presentation/widgets/my_add_duty_bottom_dialog.dart';
+import 'package:help_isko/presentation/widgets/duty_dialog/add_duty_success_dialog.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
+import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -45,164 +47,196 @@ class _WrapperState extends State<Wrapper> {
           ..add(FetchDuty());
     return BlocProvider(
       create: (context) => postedDutiesBloc,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              IndexedStack(
-                  index: selectedIndex,
-                  children: widget.role == 'Employee'
-                      ? [
-                          MultiBlocProvider(
-                            providers: [
-                              BlocProvider.value(
-                                value: postedDutiesBloc,
+      child: BlocConsumer<AddDutyBloc, AddDutyState>(
+        bloc: addDutyBloc,
+        listener: (context, state) {
+          if (state is AddDutySuccessState) {
+            showDialog(
+                context: context,
+                builder: (context) => const AddDutySuccessDialog());
+          } else if (state is AddDutyFailedState) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.error)));
+          }
+        },
+        builder: (context, state) {
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Stack(
+                children: [
+                  IndexedStack(
+                      index: selectedIndex,
+                      children: widget.role == 'Employee'
+                          ? [
+                              MultiBlocProvider(
+                                providers: [
+                                  BlocProvider.value(
+                                    value: postedDutiesBloc,
+                                  ),
+                                  BlocProvider.value(
+                                    value: announcementBloc,
+                                  ),
+                                ],
+                                child: const EmployeeHomePage(),
                               ),
-                              BlocProvider.value(
-                                value: announcementBloc,
+                              const EmployeeDutiesPage(),
+                              const MessengerPage(
+                                role: 'Employee',
                               ),
-                            ],
-                            child: const EmployeeHomePage(),
-                          ),
-                          const EmployeeDutiesPage(),
-                          const MessengerPage(
-                            role: 'Employee',
-                          ),
-                          const EmployeeProfilePage()
-                        ]
-                      : const [
-                          StudentHomePage(),
-                          StudentDutiesPage(),
-                          MessengerPage(
-                            role: 'Student',
-                          ),
-                          StudentProfilePage()
-                        ]),
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  height: 70,
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.03),
-                        spreadRadius: 1,
-                        blurRadius: 6,
-                        offset: const Offset(0, -6))
-                  ]),
-                  child: FadeInUp(
-                    duration: const Duration(milliseconds: 700),
-                    child: BottomNavigationBar(
-                      selectedItemColor: const Color(0xFF6BB577),
-                      unselectedItemColor: const Color(0xFF3B3B3B),
-                      selectedLabelStyle: GoogleFonts.nunito(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      items: [
-                        BottomNavigationBarItem(
-                            label: 'Home',
-                            icon: selectedIndex == 0
-                                ? const ImageIcon(
-                                    AssetImage(
-                                        'assets/images/home_clicked.png'),
-                                    color: Color(0xFF6BB577))
-                                : const ImageIcon(
-                                    AssetImage('assets/images/home.png'))),
-                        BottomNavigationBarItem(
-                            label: widget.role == 'Employee'
-                                ? 'Request'
-                                : 'Duties',
-                            icon: selectedIndex == 1
-                                ? const ImageIcon(
-                                    AssetImage(
-                                        'assets/images/duties_clicked.png'),
-                                    color: Color(0xFF6BB577))
-                                : const ImageIcon(
-                                    AssetImage('assets/images/duties.png'))),
-                        BottomNavigationBarItem(
-                            label: 'Message',
-                            icon: selectedIndex == 2
-                                ? const Icon(Ionicons.chatbubble_ellipses,
-                                    color: Color(0xFF6BB577))
-                                : const Icon(
-                                    Ionicons.chatbubble_ellipses_outline)),
-                        BottomNavigationBarItem(
-                            label: 'Profile',
-                            icon: selectedIndex == 3
-                                ? const ImageIcon(AssetImage(
-                                    'assets/images/circle-user-clicked.png'))
-                                : const ImageIcon(AssetImage(
-                                    'assets/images/circle-user.png')))
-                      ],
-                      currentIndex: selectedIndex,
-                      onTap: (int index) {
-                        setState(() {
-                          selectedIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.role == 'Employee' && selectedIndex == 0)
-                Positioned(
-                  bottom: 86,
-                  right: 16,
-                  child: FadeInRight(
-                    duration: const Duration(milliseconds: 700),
+                              const EmployeeProfilePage()
+                            ]
+                          : const [
+                              StudentHomePage(),
+                              StudentDutiesPage(),
+                              MessengerPage(
+                                role: 'Student',
+                              ),
+                              StudentProfilePage()
+                            ]),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
                     child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: const Color(0xFF6BB577),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: const Offset(0, 6))
-                          ]),
-                      child: GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20))),
-                              context: context,
-                              builder: (context) {
-                                return SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.85,
-                                    child: MultiBlocProvider(
-                                      providers: [
-                                        BlocProvider.value(
-                                          value: addDutyBloc,
-                                        ),
-                                        BlocProvider.value(
-                                          value: postedDutiesBloc,
-                                        ),
-                                      ],
-                                      child: const MyAddDutyBottomDialog(),
-                                    ));
-                              });
-                        },
-                        child: const Icon(
-                          Icons.add_rounded,
-                          size: 40,
-                          color: Color(0xFFFCFCFC),
+                      height: 70,
+                      decoration: BoxDecoration(boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.03),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(0, -6))
+                      ]),
+                      child: FadeInUp(
+                        duration: const Duration(milliseconds: 700),
+                        child: BottomNavigationBar(
+                          selectedItemColor: const Color(0xFF6BB577),
+                          unselectedItemColor: const Color(0xFF3B3B3B),
+                          selectedLabelStyle: GoogleFonts.nunito(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          items: [
+                            BottomNavigationBarItem(
+                                label: 'Home',
+                                icon: selectedIndex == 0
+                                    ? const ImageIcon(
+                                        AssetImage(
+                                            'assets/images/home_clicked.png'),
+                                        color: Color(0xFF6BB577))
+                                    : const ImageIcon(
+                                        AssetImage('assets/images/home.png'))),
+                            BottomNavigationBarItem(
+                                label: widget.role == 'Employee'
+                                    ? 'Request'
+                                    : 'Duties',
+                                icon: selectedIndex == 1
+                                    ? const ImageIcon(
+                                        AssetImage(
+                                            'assets/images/duties_clicked.png'),
+                                        color: Color(0xFF6BB577))
+                                    : const ImageIcon(AssetImage(
+                                        'assets/images/duties.png'))),
+                            BottomNavigationBarItem(
+                                label: 'Message',
+                                icon: selectedIndex == 2
+                                    ? const Icon(Ionicons.chatbubble_ellipses,
+                                        color: Color(0xFF6BB577))
+                                    : const Icon(
+                                        Ionicons.chatbubble_ellipses_outline)),
+                            BottomNavigationBarItem(
+                                label: 'Profile',
+                                icon: selectedIndex == 3
+                                    ? const ImageIcon(AssetImage(
+                                        'assets/images/circle-user-clicked.png'))
+                                    : const ImageIcon(AssetImage(
+                                        'assets/images/circle-user.png')))
+                          ],
+                          currentIndex: selectedIndex,
+                          onTap: (int index) {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                          },
                         ),
                       ),
                     ),
                   ),
-                ),
-            ],
-          ),
-        ),
+                  if (widget.role == 'Employee' && selectedIndex == 0)
+                    Positioned(
+                      bottom: 86,
+                      right: 16,
+                      child: FadeInRight(
+                        duration: const Duration(milliseconds: 700),
+                        child: Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: const Color(0xFF6BB577),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 6))
+                              ]),
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20))),
+                                  context: context,
+                                  builder: (context) {
+                                    return SizedBox(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.81,
+                                        child: MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider.value(
+                                                value: addDutyBloc,
+                                              ),
+                                              BlocProvider.value(
+                                                value: postedDutiesBloc,
+                                              ),
+                                            ],
+                                            child:
+                                                const MyAddDutyBottomDialog()));
+                                  });
+                            },
+                            child: const Icon(
+                              Icons.add_rounded,
+                              size: 40,
+                              color: Color(0xFFFCFCFC),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (state is AddDutyLoadingState) ...[
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                    ),
+                    const Center(
+                      child: MyCircularProgressIndicator(),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
