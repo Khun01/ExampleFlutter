@@ -2,14 +2,30 @@ PODS:
   - Flutter (1.0.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
+  - NWWebSocket (0.5.4)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - pusher_client (2.0.0):
+    - Flutter
+    - PusherSwift (~> 9.0)
+  - PusherSwift (9.2.2):
+    - NWWebSocket (~> 0.5.2)
+    - TweetNacl (~> 1.0.0)
+  - TweetNacl (1.0.2)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - pusher_client (from `.symlinks/plugins/pusher_client/ios`)
+  - PusherSwift
+
+SPEC REPOS:
+  trunk:
+    - NWWebSocket
+    - PusherSwift
+    - TweetNacl
 
 EXTERNAL SOURCES:
   Flutter:
@@ -18,12 +34,18 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  pusher_client:
+    :path: ".symlinks/plugins/pusher_client/ios"
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  NWWebSocket: 040d22f23438cc09aaeabf537beff67699c3c76d
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  pusher_client: ed0c4db398a6fb9cd6e461c06da4e4d4258c4451
+  PusherSwift: 8b252244aca6a662572be48a97b756d14cd7542c
+  TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
-PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+PODFILE CHECKSUM: a106e89b0c0f4ce1b7d3c148e3b7ae71d6959498
 
 COCOAPODS: 1.15.2
