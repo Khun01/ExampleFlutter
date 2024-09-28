@@ -16,13 +16,13 @@ class DutyServices implements DutyRepository {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
     final response = await http.get(
-      Uri.parse('$baseUrl/professors/duties'),
+      Uri.parse('$baseUrl/employees/duty'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
       },
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 404) {
       final List<dynamic> dutyList = json.decode(response.body);
       return dutyList.map((json) => ProfDuty.fromJson(json)).toList();
     } else {
@@ -35,7 +35,7 @@ class DutyServices implements DutyRepository {
   Future<Map<String, dynamic>> addDuty(ProfDuty profDuty) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
-    var url = Uri.parse('$baseUrl/professors/duties/create');
+    var url = Uri.parse('$baseUrl/employees/duties/create');
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ class DutyServices implements DutyRepository {
   Future<Map<String, dynamic>> updateDuty(int id, ProfDuty profDuty) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
-    var url = Uri.parse('$baseUrl/professors/updateInfo/$id');
+    var url = Uri.parse('$baseUrl/employees/updateInfo/$id');
     final response = await http.put(url,
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ class DutyServices implements DutyRepository {
   Future<Map<String, dynamic>> deleteDuty(int id) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
-    var url = Uri.parse('$baseUrl/professors/duties/$id');
+    var url = Uri.parse('$baseUrl/employees/duties/$id');
     final response = await http.delete(
       url,
       headers: {

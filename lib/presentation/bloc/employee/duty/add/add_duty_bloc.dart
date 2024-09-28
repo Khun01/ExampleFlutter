@@ -30,7 +30,7 @@ class AddDutyBloc extends Bloc<AddDutyEvent, AddDutyState> {
           message: event.message);
       await Future.delayed(const Duration(seconds: 2));
       final duty = await dutyServices.addDuty(profDuty);
-      if (duty['statusCode'] == 200) {
+      if (duty['statusCode'] == 201) {
         event.postedDutiesBloc.add(FetchDuty());
         emit(AddDutySuccessState());
       } else {

@@ -60,19 +60,19 @@ class PostedDutiesHome extends StatelessWidget {
                             topRight: Radius.circular(18),
                             bottomLeft: Radius.circular(18),
                             bottomRight: Radius.circular(5)),
-                        color: dutyStatus == 'Pending'
+                        color: dutyStatus == 'pending'
                             ? const Color(0xFFE5BA03)
-                            : dutyStatus == 'Active'
+                            : dutyStatus == 'active'
                                 ? const Color(0xFF6BB577)
-                                : dutyStatus == 'Completed'
+                                : dutyStatus == 'completed'
                                     ? const Color(0xFF6BB577)
                                     : const Color(0xFFF44336)),
                     child: Text(
-                      dutyStatus == 'Pending'
+                      dutyStatus == 'pending'
                           ? 'Pending'
-                          : dutyStatus == 'Active'
+                          : dutyStatus == 'active'
                               ? 'Active'
-                              : dutyStatus == 'Completed'
+                              : dutyStatus == 'completed'
                                   ? 'Completed'
                                   : dutyStatus,
                       style: GoogleFonts.nunito(
