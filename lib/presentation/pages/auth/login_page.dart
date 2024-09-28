@@ -42,108 +42,110 @@ class LoginPage extends StatelessWidget {
             builder: (context, state) {
               return Stack(
                 children: [
-                  SizedBox(
-                    child: Image.asset(
-                      'assets/images/login_bg.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Color(0xFFFCFCFC),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Stack(
+                          children: [
+                            Image.asset('assets/images/login_bg.png',
+                                height: 350,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover),
+                            Positioned(
+                              top: 50,
+                              left: 50,
+                              right: 50,
+                              bottom: 70,
+                              child: Image.asset(
+                                'assets/images/upang_logo.png',
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 24, left: 24, right: 24),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/upang_logo.png',
-                            width: 200,
-                            fit: BoxFit.contain,
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, bottom: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                role!,
+                                style: GoogleFonts.nunito(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF3B3B3B)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(
+                                  'Please sign in to your account',
+                                  style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      color: const Color(0xFF3B3B3B)),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              MyForm(
+                                  labelText: 'Email',
+                                  errorText: !state.isEmailNotEmpty
+                                      ? 'Enter email'
+                                      : (!state.isEmailValid
+                                          ? 'Invalid email'
+                                          : null),
+                                  icon: const Icon(Icons.person),
+                                  onChanged: (value) => context
+                                      .read<LoginBloc>()
+                                      .add(LoginEmailChanged(email: value))),
+                              const SizedBox(height: 16),
+                              MyForm(
+                                  labelText: 'Password',
+                                  errorText: !state.isPasswordNotEmpty
+                                      ? 'Enter password'
+                                      : (!state.isPasswordValid
+                                          ? 'Password should be greater than 6'
+                                          : null),
+                                  icon: const Icon(Icons.lock),
+                                  obscureText: true,
+                                  onChanged: (value) => context
+                                      .read<LoginBloc>()
+                                      .add(LoginPassChanged(password: value))),
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ForgotPassswordPage()));
+                                  },
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: GoogleFonts.nunito(
+                                        fontSize: 14,
+                                        color: const Color(0xFF3B3B3B)),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              MyButton(
+                                  onTap: state.isFormValid
+                                      ? () => context
+                                          .read<LoginBloc>()
+                                          .add(LoginSubmitted(role: role!))
+                                      : null,
+                                  buttonText: 'Login')
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 48),
-                        Text(
-                          role!,
-                          style: GoogleFonts.nunito(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF3B3B3B)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4),
-                          child: Text(
-                            'Please sign in to your account',
-                            style: GoogleFonts.nunito(
-                                fontSize: 14, color: const Color(0xFF3B3B3B)),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        MyForm(
-                            labelText: 'Email',
-                            errorText: !state.isEmailNotEmpty
-                                ? 'Enter email'
-                                : (!state.isEmailValid
-                                    ? 'Invalid email'
-                                    : null),
-                            icon: const Icon(Icons.person),
-                            onChanged: (value) => context
-                                .read<LoginBloc>()
-                                .add(LoginEmailChanged(email: value))),
-                        const SizedBox(height: 16),
-                        MyForm(
-                            labelText: 'Password',
-                            errorText: !state.isPasswordNotEmpty
-                                ? 'Enter password'
-                                : (!state.isPasswordValid
-                                    ? 'Password should be greater than 6'
-                                    : null),
-                            icon: const Icon(Icons.lock),
-                            obscureText: true,
-                            onChanged: (value) => context
-                                .read<LoginBloc>()
-                                .add(LoginPassChanged(password: value))),
-                        const SizedBox(height: 8),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ForgotPassswordPage()));
-                            },
-                            child: Text(
-                              'Forgot Password?',
-                              style: GoogleFonts.nunito(
-                                  fontSize: 14, color: const Color(0xFF3B3B3B)),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 32),
-                        MyButton(
-                            onTap: state.isFormValid
-                                ? () => context
-                                    .read<LoginBloc>()
-                                    .add(LoginSubmitted(role: role!))
-                                : null,
-                            buttonText: 'Login')
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                   if (state.isSubmitting) ...[
                     Positioned(
