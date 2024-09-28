@@ -64,81 +64,80 @@ class LandingPage extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               top: 50, bottom: 16, left: 16, right: 16),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FadeIn(
-                                duration: const Duration(seconds: 3),
-                                child: Image.asset(
-                                  'assets/images/upang_logo.png',
-                                  fit: BoxFit.cover,
-                                  width: 200,
-                                ),
-                              ),
-                              FadeIn(
-                                duration: const Duration(seconds: 3),
-                                child: Text(
-                                  'University\nof\nPangasinan',
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.abhayaLibre(
-                                      fontSize: 30,
-                                      color: const Color(0xFF3B3B3B)),
-                                ),
-                              ),
-                              const Spacer(),
-                              FadeIn(
-                                duration: const Duration(seconds: 3),
-                                child: FittedBox(
-                                  child: Text(
-                                    'Welcome to Help, isKo',
-                                    style: GoogleFonts.nunito(
-                                        fontSize: 33,
-                                        fontWeight: FontWeight.bold,
-                                        color: const Color(0xFF3B3B3B)),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
+                              Expanded(
                                 child: FadeIn(
                                   duration: const Duration(seconds: 3),
-                                  child: Text(
-                                    'Track duties, grab opportunities, and stay organized. Simplify your journey with the Help, isKo App. Join the Help, isKo App today!',
-                                    style: GoogleFonts.nunito(
-                                        fontSize: 15,
-                                        color: const Color(0xCC3B3B3B)),
+                                  child: Image.asset(
+                                    'assets/images/upang_logo.png',
+                                    fit: BoxFit.contain,
+                                    width: 250,
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 30),
-                              FadeIn(
-                                duration: const Duration(seconds: 3),
-                                child: MyButton(
-                                  onTap: () {
-                                    selectedRole = 'Employee';
-                                    context.read<LoginBloc>().add(
-                                        CheckLoginStatusEvent(
-                                            role: selectedRole!));
-                                  },
-                                  buttonText: 'Employee',
-                                  color: const Color(0xFF6BB577),
-                                  textColor: const Color(0xFFFCFCFC),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    FadeIn(
+                                      duration: const Duration(seconds: 3),
+                                      child: FittedBox(
+                                        child: Text(
+                                          'Welcome to Help, isKo',
+                                          style: GoogleFonts.nunito(
+                                              fontSize: 33,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xFF3B3B3B)),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 4),
+                                      child: FadeIn(
+                                        duration: const Duration(seconds: 3),
+                                        child: Text(
+                                          'Track duties, grab opportunities, and stay organized. Simplify your journey with the Help, isKo App. Join the Help, isKo App today!',
+                                          style: GoogleFonts.nunito(
+                                              fontSize: 15,
+                                              color: const Color(0xCC3B3B3B)),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 30),
+                                    FadeIn(
+                                      duration: const Duration(seconds: 3),
+                                      child: MyButton(
+                                        onTap: () {
+                                          selectedRole = 'Employee';
+                                          context.read<LoginBloc>().add(
+                                              CheckLoginStatusEvent(
+                                                  role: selectedRole!));
+                                        },
+                                        buttonText: 'Employee',
+                                        color: const Color(0xFF6BB577),
+                                        textColor: const Color(0xFFFCFCFC),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    FadeIn(
+                                      duration: const Duration(seconds: 3),
+                                      child: MyButton(
+                                        onTap: () {
+                                          selectedRole = 'Student';
+                                          context.read<LoginBloc>().add(
+                                              CheckLoginStatusEvent(
+                                                  role: selectedRole!));
+                                        },
+                                        buttonText: 'Student',
+                                        color: const Color(0xFFFCFCFC),
+                                        textColor: const Color(0xFF3B3B3B),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(height: 15),
-                              FadeIn(
-                                duration: const Duration(seconds: 3),
-                                child: MyButton(
-                                  onTap: () {
-                                    selectedRole = 'Student';
-                                    context.read<LoginBloc>().add(
-                                        CheckLoginStatusEvent(
-                                            role: selectedRole!));
-                                  },
-                                  buttonText: 'Student',
-                                  color: const Color(0xFFFCFCFC),
-                                  textColor: const Color(0xFF3B3B3B),
-                                ),
-                              ),
+                              )
                             ],
                           ),
                         ),
