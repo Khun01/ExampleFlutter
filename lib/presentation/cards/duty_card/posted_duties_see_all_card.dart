@@ -100,7 +100,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
               decoration: BoxDecoration(
-                  color: dutyStatus == 'Pending'
+                  color: dutyStatus == 'pending'
                       ? const Color(0xFFE5BA03)
                       : const Color(0xFFF44336),
                   borderRadius: const BorderRadius.only(
@@ -109,7 +109,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                       bottomRight: Radius.circular(5),
                       bottomLeft: Radius.circular(18))),
               child: Text(
-                dutyStatus,
+                dutyStatus == 'pending' ? 'Pending' : 'Cancel',
                 style: GoogleFonts.nunito(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,

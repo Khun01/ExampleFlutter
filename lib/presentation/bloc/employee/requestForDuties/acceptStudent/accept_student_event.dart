@@ -7,9 +7,13 @@ sealed class AcceptStudentEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AcceptStudentButtonClickedEvent extends AcceptStudentEvent{
+class AcceptStudentButtonClickedEvent extends AcceptStudentEvent {
   final int dutyId;
   final int studentId;
+  final RequestForDutiesBloc requestForDutiesBloc;
 
-  const AcceptStudentButtonClickedEvent({required this.dutyId, required this.studentId});
+  const AcceptStudentButtonClickedEvent(
+      {required this.dutyId,
+      required this.studentId,
+      required this.requestForDutiesBloc});
 }

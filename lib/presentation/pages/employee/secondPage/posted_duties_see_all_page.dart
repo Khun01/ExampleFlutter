@@ -60,7 +60,7 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
             body = LiveSliverList(
               controller: scrollController,
               showItemDuration: const Duration(milliseconds: 300),
-              itemCount: 15,
+              itemCount: reversedList.length,
               itemBuilder: (context, index, animation) {
                 final duty = reversedList[index];
                 return FadeTransition(

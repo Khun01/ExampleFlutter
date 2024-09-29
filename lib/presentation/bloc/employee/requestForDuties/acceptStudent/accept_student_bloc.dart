@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/repositories/duty/request_for_duty_repository.dart';
 
 part 'accept_student_event.dart';
@@ -21,8 +21,14 @@ class AcceptStudentBloc extends Bloc<AcceptStudentEvent, AcceptStudentState> {
     emit(AcceptStudentLoadingState());
     try {
       await Future.delayed(const Duration(seconds: 3));
-      log('The button Accept Stundent is clicked: Duty ID: ${event.dutyId}, Student ID: ${event.studentId}');
-      emit(AcceptStudentSuccessSate());
+      final response = await requestForDutyRepository.acceptStudent(
+          event.dutyId, event.studentId);
+      if (response['statusCode'] == 200) {
+        event.requestForDutiesBloc.add(FetchRequestForDutiesEvent());
+        emit(AcceptStudentSuccessSate());
+      }else{
+        emit(const AcceptStudentFailedState(error: 'Failed to accept student'));
+      }
     } catch (e) {
       emit(AcceptStudentFailedState(error: e.toString()));
     }

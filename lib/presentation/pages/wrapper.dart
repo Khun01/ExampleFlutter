@@ -52,7 +52,9 @@ class _WrapperState extends State<Wrapper> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => postedDutiesBloc,),
+        BlocProvider(
+          create: (context) => postedDutiesBloc,
+        ),
         BlocProvider(create: (context) => acceptStudentBloc),
         BlocProvider(create: (context) => addDutyBloc)
       ],

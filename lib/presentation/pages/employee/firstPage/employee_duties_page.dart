@@ -39,7 +39,7 @@ class EmployeeDutiesPage extends StatelessWidget {
               hasScrollBody: false,
               child: Center(
                 child: Text(
-                  'There is no request for now',
+                  'No request available',
                   style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -57,16 +57,19 @@ class EmployeeDutiesPage extends StatelessWidget {
                   onTap: () {
                     log('The Request for duty card is clicked');
                   },
-                  child: RequestForDutiesCard(
-                    dutyId: requestForDuty.dutyId,
-                    profile: requestForDuty.studentData.profile!,
-                    name: requestForDuty.studentData.name,
-                    building: requestForDuty.building,
-                    startTime: requestForDuty.formattedStartTime,
-                    endTime: requestForDuty.formattedEndTime,
-                    date: requestForDuty.date,
-                    message: requestForDuty.message,
-                    studentId: requestForDuty.studentData.studentId,
+                  child: BlocProvider.value(
+                    value: requestForDutiesBloc,
+                    child: RequestForDutiesCard(
+                      dutyId: requestForDuty.dutyId,
+                      profile: requestForDuty.studentData.profile!,
+                      name: requestForDuty.studentData.name,
+                      building: requestForDuty.building,
+                      startTime: requestForDuty.formattedStartTime,
+                      endTime: requestForDuty.formattedEndTime,
+                      date: requestForDuty.date,
+                      message: requestForDuty.message,
+                      studentId: requestForDuty.studentData.studentId,
+                    ),
                   ),
                 );
               }, childCount: state.requestForDuty.length),
