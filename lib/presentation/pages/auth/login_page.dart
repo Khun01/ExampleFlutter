@@ -61,7 +61,20 @@ class LoginPage extends StatelessWidget {
                               child: Image.asset(
                                 'assets/images/upang_logo.png',
                               ),
-                            )
+                            ),
+                            Positioned(
+                                top: 16,
+                                left: 16,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_rounded,
+                                    size: 24,
+                                    color: Color(0xFFFCFCFC),
+                                  ),
+                                ))
                           ],
                         ),
                       ),
