@@ -2,11 +2,19 @@ class RequestForDutiesStudent {
   int studentId;
   String? profile;
   String name;
+  String email;
+  String studentNumber;
+  String course;
+  String semester;
 
   RequestForDutiesStudent({
     required this.studentId,
     required this.profile,
     required this.name,
+    required this.email,
+    required this.studentNumber,
+    required this.course,
+    required this.semester
   });
 
   factory RequestForDutiesStudent.fromJson(Map<String, dynamic> json) {
@@ -14,6 +22,10 @@ class RequestForDutiesStudent {
       studentId: json['student_id'],
       profile: json['profile_image'] ?? '',
       name: json['name'],
+      email: json['email'],
+      studentNumber: json['student_number'],
+      course: json['course'],
+      semester: json['semester']
     );
   }
 }

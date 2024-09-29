@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/request_for_duties_card.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty/request_for_duties_services.dart';
@@ -56,6 +57,12 @@ class EmployeeDutiesPage extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     log('The Request for duty card is clicked');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StudentInfoPage(
+                                requestForDutiesStudent:
+                                    requestForDuty.studentData)));
                   },
                   child: BlocProvider.value(
                     value: requestForDutiesBloc,

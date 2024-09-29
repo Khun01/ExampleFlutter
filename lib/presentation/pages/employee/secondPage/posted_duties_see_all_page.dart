@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_see_all_card.dart';
-import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/posted_duty_info_page.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/duty/duty_services.dart';

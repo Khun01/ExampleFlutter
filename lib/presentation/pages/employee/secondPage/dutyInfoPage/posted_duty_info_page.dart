@@ -4,8 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/delete/delete_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/update/update_duty_bloc.dart';
-import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/duty_details.dart';
-import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/duty_details_student.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/duty_details.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/duty_details_student.dart';
 import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_success_dialog.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -120,7 +120,7 @@ class PostedDutyInfoPage extends StatelessWidget {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF3B3B3B)),
-                              indicatorColor: const Color(0xFF6BB577),
+                              indicatorColor: const Color(0xFF3B3B3B),
                             ),
                             Expanded(
                               child: TabBarView(

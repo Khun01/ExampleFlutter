@@ -201,114 +201,18 @@ class EmployeeProfilePage extends StatelessWidget {
                     SliverToBoxAdapter(
                       child: Container(
                         padding:
-                            const EdgeInsets.only(top: 8, left: 16, right: 16),
+                            const EdgeInsets.only(top: 16, left: 16, right: 16),
                         color: Theme.of(context).scaffoldBackgroundColor,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Campus',
+                              'Person Details',
                               style: GoogleFonts.nunito(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0x803B3B3B)),
-                            ),
-                            Text(
-                              'Dagupan Campus',
-                              style: GoogleFonts.nunito(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF3B3B3B)),
-                            ),
-                            const Divider(color: Color(0x303B3B3B)),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Course',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      'Bachelor of\nScience-Information\nTechnology',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Course',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      'FLEX',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            const Divider(color: Color(0x303B3B3B)),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Curriculum',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      'CITE - Bachelor of\nScience in Information\nTechnology in Systems\nDevelopment 22 - 23',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Semester',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      'Y3S1',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF6BB577)
+                              ),
                             ),
                           ],
                         ),
