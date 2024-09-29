@@ -41,10 +41,21 @@ class RequestForDutiesServices implements RequestForDutyRepository {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         },
-        body: jsonEncode({
-          'duty_id': dutyId,
-          'stud_id': studentId
-        }));
+        body: jsonEncode({'duty_id': dutyId, 'stud_id': studentId}));
+    return {'statusCode': response.statusCode};
+  }
+
+  @override
+  Future<Map<String, dynamic>> declineStudent(int dutyId, int studentId) async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    final url = Uri.parse('$baseUrl/employees/requests/reject');
+    final response = await http.delete(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({'duty_id': dutyId, 'stud_id': studentId}));
     return {'statusCode': response.statusCode};
   }
 }

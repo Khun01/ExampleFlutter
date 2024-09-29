@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/acceptStudent/accept_student_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/requestForDuties/declineStudent/decline_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
@@ -41,6 +42,8 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     final AcceptStudentBloc acceptStudentBloc = AcceptStudentBloc(
         requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl));
+    final DeclineStudentBloc declineStudentBloc = DeclineStudentBloc(
+        requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl));
     final AnnouncementBloc announcementBloc =
         AnnouncementBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
           ..add(FetchAnnouncement(role: widget.role));
@@ -56,7 +59,8 @@ class _WrapperState extends State<Wrapper> {
           create: (context) => postedDutiesBloc,
         ),
         BlocProvider(create: (context) => acceptStudentBloc),
-        BlocProvider(create: (context) => addDutyBloc)
+        BlocProvider(create: (context) => addDutyBloc),
+        BlocProvider(create: (context) => declineStudentBloc)
       ],
       child: MultiBlocListener(
         listeners: [
@@ -85,202 +89,222 @@ class _WrapperState extends State<Wrapper> {
                       const SnackBar(content: Text('Woww!!! Grape!!!')));
                 }
               }),
+          BlocListener<DeclineStudentBloc, DeclineStudentState>(
+              bloc: declineStudentBloc,
+              listener: (context, state) {
+                if (state is DeclineStudentFailedState) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.error)));
+                } else if (state is DeclineStudentSuccessState) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Woww!!! Grape!!!')));
+                }
+              }),
         ],
-        child: BlocBuilder<AddDutyBloc, AddDutyState>(
-          bloc: addDutyBloc,
-          builder: (context, addDutyState) {
-            return BlocBuilder<AcceptStudentBloc, AcceptStudentState>(
-              bloc: acceptStudentBloc,
-              builder: (context, acceptStudentState) {
-                return Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: SafeArea(
-                    child: Stack(
-                      children: [
-                        IndexedStack(
-                          index: selectedIndex,
-                          children: widget.role == 'Employee'
-                              ? [
-                                  MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                          value: postedDutiesBloc),
-                                      BlocProvider.value(
-                                          value: announcementBloc),
+        child: BlocBuilder<DeclineStudentBloc, DeclineStudentState>(
+          bloc: declineStudentBloc,
+          builder: (context, state) {
+            return BlocBuilder<AddDutyBloc, AddDutyState>(
+              bloc: addDutyBloc,
+              builder: (context, addDutyState) {
+                return BlocBuilder<AcceptStudentBloc, AcceptStudentState>(
+                  bloc: acceptStudentBloc,
+                  builder: (context, acceptStudentState) {
+                    return Scaffold(
+                      resizeToAvoidBottomInset: false,
+                      body: SafeArea(
+                        child: Stack(
+                          children: [
+                            IndexedStack(
+                              index: selectedIndex,
+                              children: widget.role == 'Employee'
+                                  ? [
+                                      MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: postedDutiesBloc),
+                                          BlocProvider.value(
+                                              value: announcementBloc),
+                                        ],
+                                        child: const EmployeeHomePage(),
+                                      ),
+                                      MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: acceptStudentBloc),
+                                          BlocProvider.value(
+                                              value: declineStudentBloc)
+                                        ],
+                                        child: const EmployeeDutiesPage(),
+                                      ),
+                                      const MessengerPage(role: 'Employee'),
+                                      const EmployeeProfilePage(),
+                                    ]
+                                  : const [
+                                      StudentHomePage(),
+                                      StudentDutiesPage(),
+                                      MessengerPage(role: 'Student'),
+                                      StudentProfilePage(),
                                     ],
-                                    child: const EmployeeHomePage(),
+                            ),
+                            Positioned(
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                height: 70,
+                                decoration: BoxDecoration(boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.03),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset: const Offset(0, -6),
                                   ),
-                                  MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                          value: acceptStudentBloc),
+                                ]),
+                                child: FadeInUp(
+                                  duration: const Duration(milliseconds: 700),
+                                  child: BottomNavigationBar(
+                                    selectedItemColor: const Color(0xFF6BB577),
+                                    unselectedItemColor:
+                                        const Color(0xFF3B3B3B),
+                                    selectedLabelStyle: GoogleFonts.nunito(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    items: [
+                                      BottomNavigationBarItem(
+                                        label: 'Home',
+                                        icon: selectedIndex == 0
+                                            ? const ImageIcon(
+                                                AssetImage(
+                                                    'assets/images/home_clicked.png'),
+                                                color: Color(0xFF6BB577))
+                                            : const ImageIcon(AssetImage(
+                                                'assets/images/home.png')),
+                                      ),
+                                      BottomNavigationBarItem(
+                                        label: widget.role == 'Employee'
+                                            ? 'Request'
+                                            : 'Duties',
+                                        icon: selectedIndex == 1
+                                            ? const ImageIcon(
+                                                AssetImage(
+                                                    'assets/images/duties_clicked.png'),
+                                                color: Color(0xFF6BB577))
+                                            : const ImageIcon(AssetImage(
+                                                'assets/images/duties.png')),
+                                      ),
+                                      BottomNavigationBarItem(
+                                        label: 'Message',
+                                        icon: selectedIndex == 2
+                                            ? const Icon(
+                                                Ionicons.chatbubble_ellipses,
+                                                color: Color(0xFF6BB577))
+                                            : const Icon(Ionicons
+                                                .chatbubble_ellipses_outline),
+                                      ),
+                                      BottomNavigationBarItem(
+                                        label: 'Profile',
+                                        icon: selectedIndex == 3
+                                            ? const ImageIcon(AssetImage(
+                                                'assets/images/circle-user-clicked.png'))
+                                            : const ImageIcon(AssetImage(
+                                                'assets/images/circle-user.png')),
+                                      ),
                                     ],
-                                    child: const EmployeeDutiesPage(),
+                                    currentIndex: selectedIndex,
+                                    onTap: (int index) {
+                                      setState(() {
+                                        selectedIndex = index;
+                                      });
+                                    },
                                   ),
-                                  const MessengerPage(role: 'Employee'),
-                                  const EmployeeProfilePage(),
-                                ]
-                              : const [
-                                  StudentHomePage(),
-                                  StudentDutiesPage(),
-                                  MessengerPage(role: 'Student'),
-                                  StudentProfilePage(),
-                                ],
-                        ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            height: 70,
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.03),
-                                spreadRadius: 1,
-                                blurRadius: 6,
-                                offset: const Offset(0, -6),
-                              ),
-                            ]),
-                            child: FadeInUp(
-                              duration: const Duration(milliseconds: 700),
-                              child: BottomNavigationBar(
-                                selectedItemColor: const Color(0xFF6BB577),
-                                unselectedItemColor: const Color(0xFF3B3B3B),
-                                selectedLabelStyle: GoogleFonts.nunito(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                                items: [
-                                  BottomNavigationBarItem(
-                                    label: 'Home',
-                                    icon: selectedIndex == 0
-                                        ? const ImageIcon(
-                                            AssetImage(
-                                                'assets/images/home_clicked.png'),
-                                            color: Color(0xFF6BB577))
-                                        : const ImageIcon(AssetImage(
-                                            'assets/images/home.png')),
-                                  ),
-                                  BottomNavigationBarItem(
-                                    label: widget.role == 'Employee'
-                                        ? 'Request'
-                                        : 'Duties',
-                                    icon: selectedIndex == 1
-                                        ? const ImageIcon(
-                                            AssetImage(
-                                                'assets/images/duties_clicked.png'),
-                                            color: Color(0xFF6BB577))
-                                        : const ImageIcon(AssetImage(
-                                            'assets/images/duties.png')),
-                                  ),
-                                  BottomNavigationBarItem(
-                                    label: 'Message',
-                                    icon: selectedIndex == 2
-                                        ? const Icon(
-                                            Ionicons.chatbubble_ellipses,
-                                            color: Color(0xFF6BB577))
-                                        : const Icon(Ionicons
-                                            .chatbubble_ellipses_outline),
-                                  ),
-                                  BottomNavigationBarItem(
-                                    label: 'Profile',
-                                    icon: selectedIndex == 3
-                                        ? const ImageIcon(AssetImage(
-                                            'assets/images/circle-user-clicked.png'))
-                                        : const ImageIcon(AssetImage(
-                                            'assets/images/circle-user.png')),
-                                  ),
-                                ],
-                                currentIndex: selectedIndex,
-                                onTap: (int index) {
-                                  setState(() {
-                                    selectedIndex = index;
-                                  });
-                                },
                               ),
                             ),
-                          ),
-                        ),
-                        if (widget.role == 'Employee' && selectedIndex == 0)
-                          Positioned(
-                            bottom: 86,
-                            right: 16,
-                            child: FadeInRight(
-                              duration: const Duration(milliseconds: 700),
-                              child: Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: const Color(0xFF6BB577),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      spreadRadius: 1,
-                                      blurRadius: 5,
-                                      offset: const Offset(0, 6),
+                            if (widget.role == 'Employee' && selectedIndex == 0)
+                              Positioned(
+                                bottom: 86,
+                                right: 16,
+                                child: FadeInRight(
+                                  duration: const Duration(milliseconds: 700),
+                                  child: Container(
+                                    height: 60,
+                                    width: 60,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: const Color(0xFF6BB577),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          offset: const Offset(0, 6),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20)),
-                                      ),
-                                      context: context,
-                                      builder: (context) {
-                                        return SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.81,
-                                          child: MultiBlocProvider(
-                                            providers: [
-                                              BlocProvider.value(
-                                                  value: addDutyBloc),
-                                              BlocProvider.value(
-                                                  value: postedDutiesBloc),
-                                            ],
-                                            child:
-                                                const MyAddDutyBottomDialog(),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(20)),
                                           ),
+                                          context: context,
+                                          builder: (context) {
+                                            return SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.81,
+                                              child: MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider.value(
+                                                      value: addDutyBloc),
+                                                  BlocProvider.value(
+                                                      value: postedDutiesBloc),
+                                                ],
+                                                child:
+                                                    const MyAddDutyBottomDialog(),
+                                              ),
+                                            );
+                                          },
                                         );
                                       },
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.add_rounded,
-                                    size: 40,
-                                    color: Color(0xFFFCFCFC),
+                                      child: const Icon(
+                                        Icons.add_rounded,
+                                        size: 40,
+                                        color: Color(0xFFFCFCFC),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        if (addDutyState is AddDutyLoadingState ||
-                            acceptStudentState
-                                is AcceptStudentLoadingState) ...[
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                          ),
-                          const Center(
-                            child: MyCircularProgressIndicator(),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
+                            if (addDutyState is AddDutyLoadingState ||
+                                acceptStudentState
+                                    is AcceptStudentLoadingState ||
+                                state is DeclineStudentLoadingState) ...[
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  color: Colors.black.withOpacity(0.5),
+                                ),
+                              ),
+                              const Center(
+                                child: MyCircularProgressIndicator(),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             );

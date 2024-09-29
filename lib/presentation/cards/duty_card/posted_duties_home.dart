@@ -48,46 +48,51 @@ class PostedDutiesHome extends StatelessWidget {
                   color: Color(0xFF3B3B3B),
                 ),
               ),
-              const Spacer(),
-              Column(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(5),
-                            topRight: Radius.circular(18),
-                            bottomLeft: Radius.circular(18),
-                            bottomRight: Radius.circular(5)),
-                        color: dutyStatus == 'pending'
-                            ? const Color(0xFFE5BA03)
-                            : dutyStatus == 'active'
-                                ? const Color(0xFF6BB577)
-                                : dutyStatus == 'completed'
-                                    ? const Color(0xFF6BB577)
-                                    : const Color(0xFFF44336)),
-                    child: Text(
-                      dutyStatus == 'pending'
-                          ? 'Pending'
-                          : dutyStatus == 'active'
-                              ? 'Active'
-                              : dutyStatus == 'completed'
-                                  ? 'Completed'
-                                  : dutyStatus,
-                      style: GoogleFonts.nunito(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFFFCFCFC)),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(5),
+                              topRight: Radius.circular(18),
+                              bottomLeft: Radius.circular(18),
+                              bottomRight: Radius.circular(5)),
+                          color: dutyStatus == 'pending'
+                              ? const Color(0xFFE5BA03)
+                              : dutyStatus == 'active'
+                                  ? const Color(0xFF6BB577)
+                                  : dutyStatus == 'on-going'
+                                      ? const Color(0xFF26A1F4)
+                                      : const Color(0xFFF44336)),
+                      child: Center(
+                        child: Text(
+                          dutyStatus == 'pending'
+                              ? 'Pending'
+                              : dutyStatus == 'active'
+                                  ? 'Active'
+                                  : dutyStatus == 'on-going'
+                                      ? 'On-going'
+                                      : dutyStatus,
+                          style: GoogleFonts.nunito(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFFCFCFC)),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    date,
-                    style: GoogleFonts.nunito(
-                        fontSize: 8, color: const Color(0xCC3B3B3B)),
-                  )
-                ],
+                    const SizedBox(height: 5),
+                    Text(
+                      date,
+                      style: GoogleFonts.nunito(
+                          fontSize: 8, color: const Color(0xCC3B3B3B)),
+                    )
+                  ],
+                ),
               )
             ],
           ),
