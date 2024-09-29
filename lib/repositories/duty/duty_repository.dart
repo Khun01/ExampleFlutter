@@ -1,4 +1,4 @@
-import 'package:help_isko/models/data/prof_duty.dart';
+import 'package:help_isko/models/duty/prof_duty.dart';
 
 abstract class DutyRepository {
   Future<List<ProfDuty>> fetchPostedDuties();

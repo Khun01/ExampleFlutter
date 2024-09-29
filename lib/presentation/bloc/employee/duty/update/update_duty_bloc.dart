@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/data/prof_duty.dart';
-import 'package:help_isko/services/duty_services.dart';
+import 'package:help_isko/models/duty/prof_duty.dart';
+import 'package:help_isko/services/duty/duty_services.dart';
 
 part 'update_duty_event.dart';
 part 'update_duty_state.dart';

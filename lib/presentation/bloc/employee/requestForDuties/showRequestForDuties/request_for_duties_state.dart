@@ -9,7 +9,11 @@ sealed class RequestForDutiesState extends Equatable {
 
 final class RequestForDutiesInitial extends RequestForDutiesState {}
 
-class RequestForDutiesSuccessState extends RequestForDutiesState {}
+class RequestForDutiesSuccessState extends RequestForDutiesState {
+  final List<RequestForDuties> requestForDuty;
+
+  const RequestForDutiesSuccessState({required this.requestForDuty});
+}
 
 class RequestForDutiesLoadingState extends RequestForDutiesState {}
 

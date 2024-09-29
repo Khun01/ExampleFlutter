@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,7 +40,7 @@ class _ChatPageState extends State<ConversationPage> {
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         log('The keyboard is open');
-        Future.delayed(const Duration(milliseconds: 700), (){
+        Future.delayed(const Duration(milliseconds: 700), () {
           _scrollToBottom();
         });
       } else {
@@ -51,9 +52,12 @@ class _ChatPageState extends State<ConversationPage> {
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        final position = _scrollController.position.maxScrollExtent * 1.5;
+        double scrollFactor = Platform.isAndroid ? 2.5 : 1.5;
+        final position =
+            _scrollController.position.maxScrollExtent * scrollFactor;
         _scrollController.animateTo(position,
-            duration: const Duration(seconds: 2), curve: Curves.easeInOut);
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOut);
       }
     });
   }
@@ -123,12 +127,13 @@ class _ChatPageState extends State<ConversationPage> {
                   (context, index) {
                     final convo = successState.chats[index];
                     return ConversationListCard(
-                        name: widget.name,
-                        profile: widget.profile,
-                        message: convo.message,
-                        createdAt: convo.created_at,
-                        isCurrentUser:
-                            convo.sender_id == successState.currentUserId,);
+                      name: widget.name,
+                      profile: widget.profile,
+                      message: convo.message,
+                      createdAt: convo.created_at,
+                      isCurrentUser:
+                          convo.sender_id == successState.currentUserId,
+                    );
                   },
                   childCount: successState.chats.length,
                 ),
