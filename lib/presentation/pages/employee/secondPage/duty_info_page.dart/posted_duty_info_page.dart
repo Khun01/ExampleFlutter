@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/data/prof_duty.dart';
+import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/delete/delete_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/update/update_duty_bloc.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/duty_details.dart';
@@ -9,7 +9,7 @@ import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.
 import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_success_dialog.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
-import 'package:help_isko/services/duty_services.dart';
+import 'package:help_isko/services/duty/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
 class PostedDutyInfoPage extends StatelessWidget {

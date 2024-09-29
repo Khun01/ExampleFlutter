@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/data/prof_duty.dart';
+import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/delete/delete_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/update/update_duty_bloc.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:help_isko/models/data/prof_duty.dart';
-import 'package:help_isko/repositories/duty_repository.dart';
+import 'package:help_isko/models/duty/prof_duty.dart';
+import 'package:help_isko/repositories/duty/duty_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ class DutyServices implements DutyRepository {
         'Authorization': 'Bearer $token'
       },
     );
-    if (response.statusCode == 200 || response.statusCode == 404) {
+    if (response.statusCode == 200) {
       final List<dynamic> dutyList = json.decode(response.body);
       return dutyList.map((json) => ProfDuty.fromJson(json)).toList();
     } else {

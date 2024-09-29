@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
-import 'package:help_isko/presentation/cards/posted_duties_home.dart';
+import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/duty_info_page.dart/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
