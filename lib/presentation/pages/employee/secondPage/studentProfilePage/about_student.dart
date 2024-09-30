@@ -2,15 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/duty/request_for_duties_student.dart';
+import 'package:help_isko/models/duty/students.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class AboutStudent extends StatefulWidget {
-  final RequestForDutiesStudent requestForDutiesStudent;
+  final Students students;
   final double percent;
-  const AboutStudent(
-      {super.key, required this.requestForDutiesStudent, this.percent = 84.4});
+  const AboutStudent({super.key, required this.students, this.percent = 84.4});
 
   @override
   State<AboutStudent> createState() => _AboutStudentState();
@@ -62,9 +61,9 @@ class _AboutStudentState extends State<AboutStudent>
                     CircleAvatar(
                       radius: 35,
                       backgroundColor: const Color(0xFFA3D9A5),
-                      child: widget.requestForDutiesStudent.profile != ''
+                      child: widget.students.profile != ''
                           ? Image.network(
-                              '//${widget.requestForDutiesStudent.profile}',
+                              '//${widget.students.profile}',
                               errorBuilder: (context, error, stackTrace) =>
                                   const Icon(Icons.error_rounded),
                             )
@@ -84,7 +83,7 @@ class _AboutStudentState extends State<AboutStudent>
                             child: Row(
                               children: [
                                 Text(
-                                  widget.requestForDutiesStudent.name,
+                                  widget.students.name,
                                   style: GoogleFonts.nunito(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -106,7 +105,7 @@ class _AboutStudentState extends State<AboutStudent>
                           Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
-                              widget.requestForDutiesStudent.studentNumber,
+                              widget.students.studentNumber,
                               style: GoogleFonts.nunito(
                                   fontSize: 12, color: const Color(0xCC3B3B3B)),
                             ),
@@ -272,7 +271,7 @@ class _AboutStudentState extends State<AboutStudent>
                       const Icon(Icons.mail),
                       const SizedBox(width: 8),
                       Text(
-                        widget.requestForDutiesStudent.email,
+                        widget.students.email,
                         style: GoogleFonts.nunito(
                             fontSize: 14, color: const Color(0xCC3B3B3B)),
                       )
@@ -304,7 +303,7 @@ class _AboutStudentState extends State<AboutStudent>
                       const Icon(Icons.phone),
                       const SizedBox(width: 8),
                       Text(
-                        widget.requestForDutiesStudent.contactNumber,
+                        widget.students.contactNumber,
                         style: GoogleFonts.nunito(
                             fontSize: 14, color: const Color(0xCC3B3B3B)),
                       )
@@ -331,7 +330,7 @@ class _AboutStudentState extends State<AboutStudent>
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             Text(
-                              widget.requestForDutiesStudent.course,
+                              widget.students.course,
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),
@@ -355,7 +354,7 @@ class _AboutStudentState extends State<AboutStudent>
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             Text(
-                              widget.requestForDutiesStudent.semester,
+                              widget.students.semester,
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),

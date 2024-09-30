@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/duty/request_for_duties_student.dart';
+import 'package:help_isko/models/duty/students.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/about_student.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/reviews_student.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentInfoPage extends StatelessWidget {
-  final RequestForDutiesStudent requestForDutiesStudent;
-  const StudentInfoPage({super.key, required this.requestForDutiesStudent});
+  final Students students;
+  const StudentInfoPage({super.key, required this.students});
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +69,10 @@ class StudentInfoPage extends StatelessWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        AboutStudent(requestForDutiesStudent: requestForDutiesStudent),
+                        AboutStudent(students: students),
                         const ReviewsStudent()
                       ],
-                    ),  
+                    ),
                   ),
                 ],
               )

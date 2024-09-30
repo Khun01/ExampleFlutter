@@ -264,6 +264,24 @@ class ReviewsStudent extends StatelessWidget {
                   );
                 },
               ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8, left: 16),
+                  child: Text(
+                    'Comments',
+                    style: GoogleFonts.nunito(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF3B3B3B)
+                    ),
+                  ),
+                )
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  color: Colors.blue,
+                  height: 1000),
+              )
             ],
           ),
           Positioned(

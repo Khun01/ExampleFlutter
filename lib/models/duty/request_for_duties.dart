@@ -1,4 +1,4 @@
-import 'package:help_isko/models/duty/request_for_duties_student.dart';
+import 'package:help_isko/models/duty/students.dart';
 
 class RequestForDuties {
   final int dutyId;
@@ -10,7 +10,7 @@ class RequestForDuties {
   final int currentScholars;
   final int maxScholars;
   final int requestCount;
-  RequestForDutiesStudent studentData;
+  Students studentData;
 
   RequestForDuties({
     required this.dutyId,
@@ -36,7 +36,8 @@ class RequestForDuties {
       currentScholars: json['current_scholars'],
       maxScholars: json['max_scholars'],
       requestCount: json['request_count'],
-      studentData: RequestForDutiesStudent.fromJson(json['student_data'] as Map<String, dynamic>),
+      studentData:
+          Students.fromJson(json['student_data'] as Map<String, dynamic>),
     );
   }
 
@@ -46,5 +47,4 @@ class RequestForDuties {
   String _formatTime(String time) {
     return time.substring(0, 5);
   }
-
 }

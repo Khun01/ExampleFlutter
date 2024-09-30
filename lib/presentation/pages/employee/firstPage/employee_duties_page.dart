@@ -61,8 +61,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => StudentInfoPage(
-                                requestForDutiesStudent:
-                                    requestForDuty.studentData)));
+                                students: requestForDuty.studentData)));
                   },
                   child: BlocProvider.value(
                     value: requestForDutiesBloc,
