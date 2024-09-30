@@ -1,3 +1,5 @@
+import 'package:help_isko/models/duty/students.dart';
+
 class ProfDuty {
   final int? id;
   final String? building;
@@ -12,6 +14,7 @@ class ProfDuty {
   final String? dutyStatus;
   final int? isCompleted;
   final int? profId;
+  final List<Students>? students;
 
   ProfDuty(
       {this.id,
@@ -26,23 +29,29 @@ class ProfDuty {
        this.isLocked,
        this.dutyStatus,
        this.isCompleted,
-       this.profId});
+       this.profId,
+       this.students});
 
   factory ProfDuty.fromJson(Map<String, dynamic> json) {
+    var acceptedStudentsJson = json['accepted_students'] as List;
+    List<Students> studentsList =
+        acceptedStudentsJson.map((studentJson) => Students.fromJson(studentJson)).toList();
+
     return ProfDuty(
-        id: json['id'],
-        building: json['building'],
-        date: json['date'],
-        startTime: json['start_time'],
-        endTime: json['end_time'],
-        duration: json['duration'],
-        message: json['message'],
-        maxScholars: json['max_scholars'],
-        currentScholars: json['current_scholars'],
-        isLocked: json['is_locked'],
-        dutyStatus: json['duty_status'],
-        isCompleted: json['is_completed'],
-        profId: json['prof_id']);
+      id: json['duty']['id'],
+      building: json['duty']['building'],
+      date: json['duty']['date'],
+      startTime: json['duty']['start_time'],
+      endTime: json['duty']['end_time'],
+      duration: json['duty']['duration'],
+      message: json['duty']['message'],
+      maxScholars: json['duty']['max_scholars'],
+      currentScholars: json['duty']['current_scholars'],
+      isLocked: json['duty']['is_locked'],
+      dutyStatus: json['duty']['duty_status'],
+      isCompleted: json['duty']['is_completed'],
+      students: studentsList,
+    );
   }
 
   String get formattedStartTime => _formatTime(startTime!);

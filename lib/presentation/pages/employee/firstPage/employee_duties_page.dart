@@ -68,7 +68,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                     child: RequestForDutiesCard(
                       dutyId: requestForDuty.dutyId,
                       profile: requestForDuty.studentData.profile!,
-                      name: requestForDuty.studentData.name,
+                      name: requestForDuty.studentData.name!,
                       building: requestForDuty.building,
                       startTime: requestForDuty.formattedStartTime,
                       endTime: requestForDuty.formattedEndTime,

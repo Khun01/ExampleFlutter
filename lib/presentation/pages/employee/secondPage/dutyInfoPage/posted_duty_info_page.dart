@@ -136,7 +136,7 @@ class PostedDutyInfoPage extends StatelessWidget {
                                     ],
                                     child: DutyDetails(profDuty: profDuty),
                                   ),
-                                  const DutyDetailsStudent()
+                                  DutyDetailsStudent(students: profDuty.students!)
                                 ],
                               ),
                             )

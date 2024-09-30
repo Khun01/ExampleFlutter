@@ -69,6 +69,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         formKey: _formKeyBuilding,
                         controller: building,
                         hintText: widget.profDuty.building!,
+                        hintColor: const Color(0xFF3B3B3B),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return null;
@@ -91,6 +92,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         formKey: _formKeyDate,
                         controller: date,
                         hintText: widget.profDuty.date!,
+                        hintColor: const Color(0xFF3B3B3B),
                         validator: (value) {
                           String pattern = r'^\d{4}-\d{2}-\d{2}$';
                           RegExp regExp = RegExp(pattern);
@@ -122,6 +124,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         formKey: _formKeyStartAt,
                         controller: startAt,
                         hintText: widget.profDuty.formattedStartTime,
+                        hintColor: const Color(0xFF3B3B3B),
                         validator: (value) {
                           String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                           RegExp regExp = RegExp(pattern);
@@ -148,6 +151,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         formKey: _formKeyEndAt,
                         controller: endAt,
                         hintText: widget.profDuty.formattedEndTime,
+                        hintColor: const Color(0xFF3B3B3B),
                         validator: (value) {
                           String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                           RegExp regExp = RegExp(pattern);
@@ -178,6 +182,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         formKey: _formKeyStudent,
                         controller: students,
                         hintText: widget.profDuty.maxScholars.toString(),
+                        hintColor: const Color(0xFF3B3B3B),
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -209,7 +214,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                 decoration: InputDecoration(
                     hintText: widget.profDuty.message,
                     hintStyle: GoogleFonts.nunito(
-                        fontSize: 14, color: const Color(0x803B3B3B)),
+                        fontSize: 14, color: const Color(0xFF3B3B3B)),
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     border: InputBorder.none),

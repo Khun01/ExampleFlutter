@@ -22,7 +22,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFFCFCFC),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -39,14 +39,13 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 30,
-                  backgroundColor: const Color(0xFFA3D9A5),
-                  child: Image.asset(
-                    width: 30,
-                    'assets/images/profile_clicked.png',
-                    fit: BoxFit.cover,
-                  )
-                ),
+                    radius: 30,
+                    backgroundColor: const Color(0xFFA3D9A5),
+                    child: Image.asset(
+                      width: 30,
+                      'assets/images/profile_clicked.png',
+                      fit: BoxFit.cover,
+                    )),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
@@ -98,22 +97,31 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             top: 2,
             right: 2,
             child: Container(
+              width: 65,
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
               decoration: BoxDecoration(
                   color: dutyStatus == 'pending'
                       ? const Color(0xFFE5BA03)
-                      : const Color(0xFFF44336),
+                      : dutyStatus == 'active'
+                          ? const Color(0xFF6BB577)
+                          : const Color(0xFFF44336),
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(18),
                       topLeft: Radius.circular(5),
                       bottomRight: Radius.circular(5),
                       bottomLeft: Radius.circular(18))),
-              child: Text(
-                dutyStatus == 'pending' ? 'Pending' : 'Cancel',
-                style: GoogleFonts.nunito(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFFCFCFC)),
+              child: Center(
+                child: Text(
+                  dutyStatus == 'pending'
+                      ? 'Pending'
+                      : dutyStatus == 'active'
+                          ? 'Active'
+                          : 'Cancel',
+                  style: GoogleFonts.nunito(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFFCFCFC)),
+                ),
               ),
             ),
           )

@@ -83,7 +83,7 @@ class _AboutStudentState extends State<AboutStudent>
                             child: Row(
                               children: [
                                 Text(
-                                  widget.students.name,
+                                  widget.students.name!,
                                   style: GoogleFonts.nunito(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class _AboutStudentState extends State<AboutStudent>
                           Padding(
                             padding: const EdgeInsets.only(left: 2),
                             child: Text(
-                              widget.students.studentNumber,
+                              widget.students.studentNumber!,
                               style: GoogleFonts.nunito(
                                   fontSize: 12, color: const Color(0xCC3B3B3B)),
                             ),
@@ -271,7 +271,7 @@ class _AboutStudentState extends State<AboutStudent>
                       const Icon(Icons.mail),
                       const SizedBox(width: 8),
                       Text(
-                        widget.students.email,
+                        widget.students.email!,
                         style: GoogleFonts.nunito(
                             fontSize: 14, color: const Color(0xCC3B3B3B)),
                       )
@@ -303,7 +303,7 @@ class _AboutStudentState extends State<AboutStudent>
                       const Icon(Icons.phone),
                       const SizedBox(width: 8),
                       Text(
-                        widget.students.contactNumber,
+                        widget.students.contactNumber!,
                         style: GoogleFonts.nunito(
                             fontSize: 14, color: const Color(0xCC3B3B3B)),
                       )
@@ -330,7 +330,7 @@ class _AboutStudentState extends State<AboutStudent>
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             Text(
-                              widget.students.course,
+                              widget.students.course!,
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),
@@ -354,7 +354,7 @@ class _AboutStudentState extends State<AboutStudent>
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             Text(
-                              widget.students.semester,
+                              widget.students.semester!,
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),
