@@ -4,6 +4,7 @@ class RequestForDutiesStudent {
   String name;
   String email;
   String studentNumber;
+  String contactNumber;
   String course;
   String semester;
 
@@ -13,6 +14,7 @@ class RequestForDutiesStudent {
     required this.name,
     required this.email,
     required this.studentNumber,
+    required this.contactNumber,
     required this.course,
     required this.semester
   });
@@ -24,6 +26,7 @@ class RequestForDutiesStudent {
       name: json['name'],
       email: json['email'],
       studentNumber: json['student_number'],
+      contactNumber: json['contact_number'],
       course: json['course'],
       semester: json['semester']
     );

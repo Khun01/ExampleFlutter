@@ -15,7 +15,7 @@ class _DutyHoursState extends State<MyDutyHours> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 25),
+      margin: const EdgeInsets.only(top: 8),
       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 20),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class _DutyHoursState extends State<MyDutyHours> {
               });
             },
             child: Image.asset(
-              'images/check-mark.png',
+              'assets/images/check-mark.png',
               height: 50,
               width: 50,
             ),
