@@ -110,16 +110,32 @@ class _ChatPageState extends State<ConversationPage> {
             if (successState.chats.isEmpty) {
               body = SliverFillRemaining(
                 hasScrollBody: false,
-                child: Center(
-                  child: Text(
-                    'You do not have a conversation history with this person',
-                    style: GoogleFonts.nunito(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/no_chat.png'
                     ),
-                  ),
-                ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No Message, yet',
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B)
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Send a message to get the conversation started and connect with them.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(
+                        fontSize: 14,
+                        color: const Color(0xCC3B3B3B)
+                      ),
+                    )
+                  ],
+                )
               );
             } else {
               body = SliverList(
@@ -171,7 +187,6 @@ class _ChatPageState extends State<ConversationPage> {
             );
             break;
         }
-
         // ignore: deprecated_member_use
         return WillPopScope(
           onWillPop: () => _onBackPressed(),
@@ -271,9 +286,6 @@ class _ChatPageState extends State<ConversationPage> {
                         },
                       ),
                       body,
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 90),
-                      )
                     ],
                   ),
                   Positioned(

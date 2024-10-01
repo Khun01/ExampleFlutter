@@ -52,7 +52,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 200,
+                        width: 190,
                         child: Text(
                           building,
                           maxLines: 1,
@@ -97,14 +97,16 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             top: 2,
             right: 2,
             child: Container(
-              width: 65,
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+              width: 75,
+              padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
                   color: dutyStatus == 'pending'
                       ? const Color(0xFFE5BA03)
                       : dutyStatus == 'active'
                           ? const Color(0xFF6BB577)
-                          : const Color(0xFFF44336),
+                          : dutyStatus == 'on-going'
+                              ? const Color(0xFF26A1F4)
+                              : const Color(0xFFB2AC88),
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(18),
                       topLeft: Radius.circular(5),
@@ -116,9 +118,11 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                       ? 'Pending'
                       : dutyStatus == 'active'
                           ? 'Active'
-                          : 'Cancel',
+                          : dutyStatus == 'on-going'
+                              ? 'On-going'
+                              : 'Completed',
                   style: GoogleFonts.nunito(
-                      fontSize: 12,
+                      fontSize: 11,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFFFCFCFC)),
                 ),

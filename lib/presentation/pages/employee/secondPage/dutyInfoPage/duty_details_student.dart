@@ -30,7 +30,7 @@ class DutyDetailsStudent extends StatelessWidget {
               profile: student.profile!,
               name: student.name!,
               course: student.course!,
-              schoolId: student.studentId.toString(),
+              studentNumber: student.studentNumber.toString(),
               targetUserId: student.studentId,
             ));
       },

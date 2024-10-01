@@ -181,10 +181,14 @@ class EmployeeHomePage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const PostedDutiesSeeAllPage()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<MessageBloc>(),
+                              child: const PostedDutiesSeeAllPage(),
+                            ),
+                          ),
+                        );
                       },
                       child: FadeInRight(
                         duration: const Duration(milliseconds: 700),
@@ -256,13 +260,14 @@ class EmployeeHomePage extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => BlocProvider.value(
-                                              value:  context.read<MessageBloc>(),
-                                              child: PostedDutyInfoPage(
-                                                  profDuty: duty),
-                                            )));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<MessageBloc>(),
+                                      child: PostedDutyInfoPage(profDuty: duty),
+                                    ),
+                                  ),
+                                );
                               },
                               child: PostedDutiesHome(
                                   date: duty.date!,

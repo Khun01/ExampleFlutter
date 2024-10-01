@@ -10,14 +10,14 @@ class StudentsCard extends StatelessWidget {
   final String profile;
   final String name;
   final String course;
-  final String schoolId;
+  final String studentNumber;
   final int targetUserId;
   const StudentsCard({
     super.key,
     required this.name,
     required this.course,
     required this.profile,
-    required this.schoolId,
+    required this.studentNumber,
     required this.targetUserId,
   });
 
@@ -73,11 +73,11 @@ class StudentsCard extends StatelessWidget {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          log('The message button is clickeds');
+                          log('The message button is clicked in student card');
 
                           context.read<MessageBloc>().add(
                               MessageNavigateToChatEvent(
-                                  schoolId: schoolId,
+                                  schoolId: studentNumber,
                                   role: 'Employee',
                                   targetUserId: targetUserId,
                                   name: name,

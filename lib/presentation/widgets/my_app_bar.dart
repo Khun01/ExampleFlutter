@@ -3,6 +3,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
@@ -73,10 +74,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                             child: GestureDetector(
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HkStudentListPage()));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                        value: context.read<MessageBloc>(),
+                                        child: const HkStudentListPage(),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Icon(UIcons.regularRounded.users)))
                         : FadeInRight(
