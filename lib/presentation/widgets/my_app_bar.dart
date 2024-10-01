@@ -31,14 +31,22 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     FadeInLeft(
                       duration: const Duration(milliseconds: 700),
-                      child: const CircleAvatar(
-                        backgroundColor: Color(0x808CC9A6),
-                        radius: 25,
-                        child: ImageIcon(
-                          AssetImage('assets/images/profile_clicked.png'),
-                          size: 20,
-                          color: Color(0xFF3B3B3B),
-                        ),
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: const Color(0xFFA3D9A5),
+                        child: state.profile != null
+                            ? ClipOval(
+                                child: Image.network(
+                                  'http://192.168.100.212:8000/${state.profile}',
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(Icons.error_rounded),
+                                ),
+                              )
+                            : Image.asset(
+                                'assets/images/profile_clicked.png',
+                                fit: BoxFit.cover,
+                                width: 30,
+                              ),
                       ),
                     ),
                     const SizedBox(width: 10),

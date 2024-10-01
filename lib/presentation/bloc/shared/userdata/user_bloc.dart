@@ -48,12 +48,14 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final name = userData['name'] ?? 'N/A';
         final token = userData['token'] ?? 'N/A';
         final firstName = userData['firstName'] ?? 'N/A';
-        final idNumber = userData['idNumber'] ?? 'N/A'; 
+        final idNumber = userData['idNumber'] ?? 'N/A';
+        final profile = userData['profileImg'] ?? 'N/A';
         emit(UserDataLoaded(
             name: name,
             token: token,
             firstName: firstName,
-            idNumber: idNumber));
+            idNumber: idNumber,
+            profile: profile));
       }
     } catch (e) {
       emit(UserDataError(message: e.toString()));

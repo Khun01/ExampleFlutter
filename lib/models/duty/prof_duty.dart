@@ -38,18 +38,18 @@ class ProfDuty {
         acceptedStudentsJson.map((studentJson) => Students.fromJson(studentJson)).toList();
 
     return ProfDuty(
-      id: json['duty']['id'],
-      building: json['duty']['building'],
-      date: json['duty']['date'],
-      startTime: json['duty']['start_time'],
-      endTime: json['duty']['end_time'],
-      duration: json['duty']['duration'],
-      message: json['duty']['message'],
-      maxScholars: json['duty']['max_scholars'],
-      currentScholars: json['duty']['current_scholars'],
-      isLocked: json['duty']['is_locked'],
-      dutyStatus: json['duty']['duty_status'],
-      isCompleted: json['duty']['is_completed'],
+      id: json['duty']['id'] ?? '',
+      building: json['duty']['building'] ?? '',
+      date: json['duty']['date'] ?? '',
+      startTime: json['duty']['start_time'] ?? '',
+      endTime: json['duty']['end_time'] ?? '',
+      duration: json['duty']['duration'] ?? '',
+      message: json['duty']['message'] ?? '',
+      maxScholars: json['duty']['max_scholars'] ?? '',
+      currentScholars: json['duty']['current_scholars'] ?? '',
+      isLocked: json['duty']['is_locked'] ?? '',
+      dutyStatus: json['duty']['duty_status'] ?? '',
+      isCompleted: json['duty']['is_completed'] ?? '',
       students: studentsList,
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
@@ -173,7 +174,8 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                     child: Column(
                       children: [
                         const MyAddDutiesLabel(
-                            icon: Icons.person_outline_rounded, label: 'Students'),
+                            icon: Icons.person_outline_rounded,
+                            label: 'Students'),
                         MyAddDutyField(
                             formKey: _formKeyStudent,
                             controller: students,
@@ -247,7 +249,7 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                         validatedStudents &&
                         validatedMessage) {
                       context.read<AddDutyBloc>().add(
-                          AddDutySubmitButtonClicked(
+                            AddDutySubmitButtonClicked(
                               building.text,
                               date.text,
                               startAt.text,
@@ -256,7 +258,11 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                               message.text,
                               profDuty: const [],
                               postedDutiesBloc:
-                                  context.read<PostedDutiesBloc>()));
+                                  context.read<PostedDutiesBloc>(),
+                              recentActivitiesBloc:
+                                  context.read<RecentActivitiesBloc>(),
+                            ),
+                          );
                       Navigator.pop(context);
                     }
                   },

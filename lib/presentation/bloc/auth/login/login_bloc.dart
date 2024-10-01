@@ -261,7 +261,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(
               isSubmitting: false,
               hasFailed: true,
-              failureMessage: 'User not found'));
+              failureMessage: 'Network Error'));
         }
       } else {
         emit(state.copyWith(

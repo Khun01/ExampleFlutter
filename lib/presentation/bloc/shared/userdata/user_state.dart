@@ -10,6 +10,7 @@ class UserDataInitial extends UserDataState {}
 class UserDataLoading extends UserDataState {}
 
 class UserDataLoaded extends UserDataState {
+  final String? profile;
   final String? token;
   final String? name;
   final String? firstName;
@@ -25,22 +26,23 @@ class UserDataLoaded extends UserDataState {
   final String? motherName;
   final String? motherContactNumber;
 
-  UserDataLoaded(
-      {this.token,
-      this.name,
-      this.firstName,
-      this.lastName,
-      this.idNumber,
-      this.college,
-      this.course,
-      this.department,
-      this.semester,
-      this.learningModality,
-      this.fatherName,
-      this.fatherContactNumber,
-      this.motherName,
-      this.motherContactNumber,
-      });
+  UserDataLoaded({
+    this.profile,
+    this.token,
+    this.name,
+    this.firstName,
+    this.lastName,
+    this.idNumber,
+    this.college,
+    this.course,
+    this.department,
+    this.semester,
+    this.learningModality,
+    this.fatherName,
+    this.fatherContactNumber,
+    this.motherName,
+    this.motherContactNumber,
+  });
 }
 
 class UserDataError extends UserDataState {

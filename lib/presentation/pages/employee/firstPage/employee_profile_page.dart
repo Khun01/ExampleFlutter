@@ -37,19 +37,19 @@ class EmployeeProfilePage extends StatelessWidget {
                             duration: const Duration(milliseconds: 300),
                             height: 250,
                             decoration: BoxDecoration(
-                                color: scrolled
-                                    ? Theme.of(context).scaffoldBackgroundColor
-                                    : const Color(0xFF6BB577),
-                                boxShadow: scrolled
-                                    ? [
-                                        BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.2),
-                                            offset: const Offset(0.0, 10.0),
-                                            blurRadius: 10.0,
-                                            spreadRadius: -6.0)
-                                      ]
-                                    : []),
+                              color: scrolled
+                                  ? Theme.of(context).scaffoldBackgroundColor
+                                  : const Color(0xFF6BB577),
+                              boxShadow: scrolled
+                                  ? [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          offset: const Offset(0.0, 10.0),
+                                          blurRadius: 10.0,
+                                          spreadRadius: -6.0)
+                                    ]
+                                  : [],
+                            ),
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
@@ -67,26 +67,32 @@ class EmployeeProfilePage extends StatelessWidget {
                                       fit: StackFit.expand,
                                       children: [
                                         AnimatedContainer(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrolled ? 550 : 0),
-                                              image: const DecorationImage(
-                                                  image: AssetImage(
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                scrolled ? 550 : 0),
+                                            image: DecorationImage(
+                                              image: state.profile != null
+                                                  ? NetworkImage(
+                                                      'http://192.168.100.212:8000/${state.profile}',
+                                                    )
+                                                  : const AssetImage(
                                                       'assets/images/luffy.jpeg'),
-                                                  fit: BoxFit.cover),
-                                            )),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
                                         AnimatedContainer(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        scrolled ? 550 : 0),
-                                                color: Colors.black
-                                                    .withOpacity(0.2))),
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                scrolled ? 550 : 0),
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -209,10 +215,9 @@ class EmployeeProfilePage extends StatelessWidget {
                             Text(
                               'Person Details',
                               style: GoogleFonts.nunito(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF6BB577)
-                              ),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
                             ),
                           ],
                         ),

@@ -16,8 +16,9 @@ class AddDutySubmitButtonClicked extends AddDutyEvent {
   final String message;
   final List<ProfDuty> profDuty;
   final PostedDutiesBloc postedDutiesBloc;
+  final RecentActivitiesBloc recentActivitiesBloc;
 
   const AddDutySubmitButtonClicked(this.building, this.date, this.startAt,
       this.endAt, this.students, this.message,
-      {required this.profDuty, required this.postedDutiesBloc,});
+      {required this.profDuty, required this.postedDutiesBloc, required this.recentActivitiesBloc});
 }
