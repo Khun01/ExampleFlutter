@@ -1,12 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/message_card/chat_list_card.dart';
-import 'package:help_isko/repositories/messenger_repositories.dart';
-import 'package:help_isko/services/messenger_service.dart';
 import 'package:ionicons/ionicons.dart';
 
 class MessengerPage extends StatefulWidget {
