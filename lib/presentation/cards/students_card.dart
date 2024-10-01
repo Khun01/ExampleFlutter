@@ -11,7 +11,7 @@ class StudentsCard extends StatelessWidget {
   final String name;
   final String course;
   final String schoolId;
-  final targetUserId;
+  final int targetUserId;
   const StudentsCard({
     super.key,
     required this.name,
