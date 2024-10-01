@@ -7,6 +7,7 @@ import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_blo
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/acceptStudent/accept_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/declineStudent/decline_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_profile_page.dart';
@@ -19,8 +20,10 @@ import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_bottom_dialo
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/repositories/messenger_repositories.dart';
 import 'package:help_isko/services/duty/duty_services.dart';
 import 'package:help_isko/services/duty/request_for_duties_services.dart';
+import 'package:help_isko/services/messenger_service.dart';
 import 'package:ionicons/ionicons.dart';
 
 class Wrapper extends StatefulWidget {
@@ -52,6 +55,10 @@ class _WrapperState extends State<Wrapper> {
     final PostedDutiesBloc postedDutiesBloc =
         PostedDutiesBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
           ..add(FetchDuty());
+    final messengerBloc = MessageBloc(
+        messengerRepository:
+            MessengerRepository(MessengerService(role: widget.role)))
+      ..add(MessageFetchEvent(role: widget.role));
 
     return MultiBlocProvider(
       providers: [
@@ -60,7 +67,8 @@ class _WrapperState extends State<Wrapper> {
         ),
         BlocProvider(create: (context) => acceptStudentBloc),
         BlocProvider(create: (context) => addDutyBloc),
-        BlocProvider(create: (context) => declineStudentBloc)
+        BlocProvider(create: (context) => declineStudentBloc),
+        BlocProvider(create: (context) => messengerBloc),
       ],
       child: MultiBlocListener(
         listeners: [

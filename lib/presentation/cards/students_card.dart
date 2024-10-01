@@ -1,18 +1,28 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
+import 'package:help_isko/presentation/pages/conversation_page.dart';
+import 'package:help_isko/repositories/messenger_repositories.dart';
+import 'package:help_isko/services/messenger_service.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentsCard extends StatelessWidget {
   final String profile;
   final String name;
   final String course;
-  const StudentsCard(
-      {super.key,
-      required this.name,
-      required this.course,
-      required this.profile});
+  final String schoolId;
+  final targetUserId;
+  const StudentsCard({
+    super.key,
+    required this.name,
+    required this.course,
+    required this.profile,
+    required this.schoolId,
+    required this.targetUserId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,15 @@ class StudentsCard extends StatelessWidget {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          log('The message button is clicked');
+                          log('The message button is clickeds');
+
+                          context.read<MessageBloc>().add(
+                              MessageNavigateToChatEvent(
+                                  schoolId: schoolId,
+                                  role: 'Employee',
+                                  targetUserId: targetUserId,
+                                  name: name,
+                                  profile: profile));
                         },
                         child: const Icon(
                           Ionicons.chatbubble_ellipses_outline,

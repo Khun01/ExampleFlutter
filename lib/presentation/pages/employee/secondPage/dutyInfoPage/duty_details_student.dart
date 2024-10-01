@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/models/duty/students.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/students_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 
@@ -14,20 +16,23 @@ class DutyDetailsStudent extends StatelessWidget {
       itemBuilder: (context, index) {
         final student = students[index];
         return GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StudentInfoPage(students: student),
-              ),
-            );
-          },
-          child: StudentsCard(
-            profile: student.profile!,
-            name: student.name!,
-            course: student.course!,
-          ),
-        );
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: context.read<MessageBloc>(),
+                      child: StudentInfoPage(students: student)),
+                ),
+              );
+            },
+            child: StudentsCard(
+              profile: student.profile!,
+              name: student.name!,
+              course: student.course!,
+              schoolId: student.studentId.toString(),
+              targetUserId: student.studentId,
+            ));
       },
     );
   }

@@ -32,7 +32,7 @@ class _DutyDetailsState extends State<DutyDetails> {
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     date.text;
   }

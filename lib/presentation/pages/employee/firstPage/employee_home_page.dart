@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
@@ -257,9 +258,11 @@ class EmployeeHomePage extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            PostedDutyInfoPage(
-                                                profDuty: duty)));
+                                        builder: (_) => BlocProvider.value(
+                                              value:  context.read<MessageBloc>(),
+                                              child: PostedDutyInfoPage(
+                                                  profDuty: duty),
+                                            )));
                               },
                               child: PostedDutiesHome(
                                   date: duty.date!,

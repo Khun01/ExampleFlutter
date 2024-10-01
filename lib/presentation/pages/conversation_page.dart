@@ -56,8 +56,7 @@ class _ChatPageState extends State<ConversationPage> {
         final position =
             _scrollController.position.maxScrollExtent * scrollFactor;
         _scrollController.animateTo(position,
-            duration: const Duration(seconds: 1),
-            curve: Curves.easeInOut);
+            duration: const Duration(seconds: 1), curve: Curves.easeInOut);
       }
     });
   }
@@ -80,6 +79,7 @@ class _ChatPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
+    log('building this widget');
     return BlocConsumer<MessageBloc, MessageState>(
       listenWhen: (previous, current) =>
           current is MessageFetchSuccessChatState ||
