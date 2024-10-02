@@ -26,7 +26,10 @@ class RecentActivityCard extends StatelessWidget {
                 ? Image.asset('assets/images/duty_dialog_images/checked.png')
                 : title == 'Deleted'
                     ? Image.asset('assets/images/duty_dialog_images/delete.png')
-                    : null,
+                    : title == 'Updated'
+                        ? Image.asset(
+                            'assets/images/duty_dialog_images/edit.png')
+                        : null,
           ),
           const SizedBox(width: 8),
           Expanded(

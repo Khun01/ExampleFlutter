@@ -72,16 +72,19 @@ class EmployeeProfilePage extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(
                                                 scrolled ? 550 : 0),
-                                            image: DecorationImage(
-                                              image: state.profile != null
-                                                  ? NetworkImage(
-                                                      'http://192.168.100.212:8000/${state.profile}',
-                                                    )
-                                                  : const AssetImage(
-                                                      'assets/images/luffy.jpeg'),
-                                              fit: BoxFit.cover,
-                                            ),
                                           ),
+                                          child: state.profile != null
+                                              ? Image.network(
+                                                  'http://192.168.100.215:8000/${state.profile}',
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Container()
+                                                )
+                                              : Image.asset(
+                                                  'assets/images/profile_clicked.png',
+                                                  fit: BoxFit.cover,
+                                                  width: 30,
+                                                ),
                                         ),
                                         AnimatedContainer(
                                           duration:

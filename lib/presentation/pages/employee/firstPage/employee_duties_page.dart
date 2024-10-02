@@ -7,19 +7,13 @@ import 'package:help_isko/presentation/bloc/employee/requestForDuties/showReques
 import 'package:help_isko/presentation/cards/duty_card/request_for_duties_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
-import 'package:help_isko/repositories/global.dart';
-import 'package:help_isko/services/duty/request_for_duties_services.dart';
 
 class EmployeeDutiesPage extends StatelessWidget {
   const EmployeeDutiesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final RequestForDutiesBloc requestForDutiesBloc = RequestForDutiesBloc(
-        requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl))
-      ..add(FetchRequestForDutiesEvent());
     return BlocConsumer<RequestForDutiesBloc, RequestForDutiesState>(
-      bloc: requestForDutiesBloc,
       listener: (context, state) {
         if (state is RequestForDutiesFailedState) {
           ScaffoldMessenger.of(context)
@@ -64,7 +58,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                                 students: requestForDuty.studentData)));
                   },
                   child: BlocProvider.value(
-                    value: requestForDutiesBloc,
+                    value: context.read<RequestForDutiesBloc>(),
                     child: RequestForDutiesCard(
                       dutyId: requestForDuty.dutyId,
                       profile: requestForDuty.studentData.profile!,

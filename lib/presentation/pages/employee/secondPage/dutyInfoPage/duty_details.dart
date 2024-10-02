@@ -152,6 +152,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                       formKey: _formKeyStartAt,
                       controller: startAt,
                       hintText: widget.profDuty.formattedStartTime,
+                      hintColor: const Color(0xFF3B3B3B),
                       readOnly: true,
                       validator: (value) {
                         String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
@@ -198,6 +199,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                       formKey: _formKeyEndAt,
                       controller: endAt,
                       hintText: widget.profDuty.formattedEndTime,
+                      hintColor: const Color(0xFF3B3B3B),
                       readOnly: true,
                       validator: (value) {
                         String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
@@ -311,7 +313,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                 )
               : widget.profDuty.dutyStatus == 'active'
                   ? Text(
-                      'This duty has already active.',
+                      'This duty is already active.',
                       style: GoogleFonts.nunito(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
