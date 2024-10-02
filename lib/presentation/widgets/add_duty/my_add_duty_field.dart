@@ -8,6 +8,8 @@ class MyAddDutyField extends StatelessWidget {
   final Color hintColor;
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
+  final bool readOnly; 
+  final VoidCallback? onTap;
   const MyAddDutyField(
       {super.key,
       required this.formKey,
@@ -15,7 +17,9 @@ class MyAddDutyField extends StatelessWidget {
       required this.hintText,
       required this.validator,
       this.keyboardType,
-      this.hintColor = const Color(0x803B3B3B)});
+      this.hintColor = const Color(0x803B3B3B),
+      this.readOnly = false,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +34,8 @@ class MyAddDutyField extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(horizontal: 8)),
         validator: validator,
         keyboardType: keyboardType,
+        readOnly: readOnly,
+        onTap: onTap,
       ),
     );
   }

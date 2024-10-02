@@ -34,19 +34,23 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child: CircleAvatar(
                         radius: 30,
                         backgroundColor: const Color(0xFFA3D9A5),
-                        child: state.profile != null
-                            ? ClipOval(
-                                child: Image.network(
-                                  'http://192.168.100.212:8000/${state.profile}',
+                        child: ClipOval(
+                          child: state.profile != null
+                              ? Image.network(
+                                  'http://192.168.100.215:8000/${state.profile}',
                                   errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error_rounded),
+                                      Image.asset(
+                                    'assets/images/profile_clicked.png',
+                                    fit: BoxFit.cover,
+                                    width: 30,
+                                  ),
+                                )
+                              : Image.asset(
+                                  'assets/images/profile_clicked.png',
+                                  fit: BoxFit.cover,
+                                  width: 30,
                                 ),
-                              )
-                            : Image.asset(
-                                'assets/images/profile_clicked.png',
-                                fit: BoxFit.cover,
-                                width: 30,
-                              ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
