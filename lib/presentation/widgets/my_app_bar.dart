@@ -37,7 +37,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: ClipOval(
                           child: state.profile != null
                               ? Image.network(
-                                  'http://192.168.100.215:8000/${state.profile}',
+                                  'http://192.168.100.212:8000/${state.profile}',
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
                                     'assets/images/profile_clicked.png',

@@ -158,7 +158,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                         RegExp regExp = RegExp(pattern);
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a time';
+                          return null;
                         } else if (!regExp.hasMatch(value)) {
                           return 'Enter a valid time in 24-hour format (HH:mm)';
                         }
@@ -205,7 +205,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                         String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                         RegExp regExp = RegExp(pattern);
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a time';
+                          return null;
                         } else if (!regExp.hasMatch(value)) {
                           return 'Enter a valid time in 24-hour format (HH:mm)';
                         }

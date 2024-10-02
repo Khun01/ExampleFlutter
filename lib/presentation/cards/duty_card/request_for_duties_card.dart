@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/acceptStudent/accept_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/declineStudent/decline_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -19,6 +20,7 @@ class RequestForDutiesCard extends StatelessWidget {
   final String date;
   final String message;
   final int? studentId;
+  final String? studentNumber;
   const RequestForDutiesCard(
       {super.key,
       this.dutyId,
@@ -29,7 +31,8 @@ class RequestForDutiesCard extends StatelessWidget {
       required this.endTime,
       required this.date,
       required this.message,
-      this.studentId});
+      this.studentId,
+      this.studentNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +90,13 @@ class RequestForDutiesCard extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            log('The message button is clicked');
+                            context.read<MessageBloc>().add(
+                              MessageNavigateToChatEvent(
+                                  schoolId: studentNumber!,
+                                  role: 'Employee',
+                                  targetUserId: studentId!,
+                                  name: name,
+                                  profile: profile));
                           },
                           child: const Icon(
                             Ionicons.chatbubble_ellipses_outline,

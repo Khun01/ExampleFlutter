@@ -95,15 +95,17 @@ class _AboutStudentState extends State<AboutStudent>
                                 GestureDetector(
                                   onTap: () {
                                     context.read<MessageBloc>().add(
-                                        MessageNavigateToChatEvent(
-                                            schoolId: widget
-                                                .students.studentNumber
-                                                .toString(),
-                                            role: "Employee",
-                                            targetUserId:
-                                                widget.students.studentId,
-                                            name: widget.students.name!,
-                                            profile: widget.students.profile!));
+                                          MessageNavigateToChatEvent(
+                                              schoolId: widget
+                                                  .students.studentNumber
+                                                  .toString(),
+                                              role: "Employee",
+                                              targetUserId:
+                                                  widget.students.studentId,
+                                              name: widget.students.name!,
+                                              profile:
+                                                  widget.students.profile!),
+                                        );
                                     log('The message button is clicked');
                                   },
                                   child: const Icon(
