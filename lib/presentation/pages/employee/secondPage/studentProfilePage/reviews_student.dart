@@ -1,18 +1,64 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetch_comment_bloc.dart';
+import 'package:help_isko/presentation/cards/comment_card.dart';
+import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:uicons/uicons.dart';
 
-class ReviewsStudent extends StatelessWidget {
-  const ReviewsStudent({super.key});
+class ReviewsStudent extends StatefulWidget {
+  final String id;
+  const ReviewsStudent({super.key, required this.id});
+
+  @override
+  State<ReviewsStudent> createState() => _ReviewsStudentState();
+}
+
+class _ReviewsStudentState extends State<ReviewsStudent> {
+  final scrollController = ScrollController();
+  FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        log('The keyboard is open');
+        Future.delayed(const Duration(milliseconds: 700), () {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (scrollController.hasClients) {
+              double scrollFactor = Platform.isAndroid ? 2.5 : 1.5;
+              final position =
+                  scrollController.position.maxScrollExtent * scrollFactor;
+              scrollController.animateTo(position,
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeInOut);
+            }
+          });
+        });
+      } else {
+        log('The keyboard is remove');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final FetchCommentBloc fetchCommentBloc =
+        FetchCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
+          ..add(FetchCommentsEvent(id: widget.id));
     return Scaffold(
       body: Stack(
         children: [
           CustomScrollView(
+            controller: scrollController,
             slivers: [
               SliverLayoutBuilder(
                 builder: (BuildContext context, constraints) {
@@ -26,7 +72,10 @@ class ReviewsStudent extends StatelessWidget {
                       duration: const Duration(milliseconds: 300),
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.only(
-                          top: scrolledFirst ? 16 : 48, left: 16, right: 16, bottom: 16),
+                          top: scrolledFirst ? 16 : 48,
+                          left: 16,
+                          right: 16,
+                          bottom: 16),
                       decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
                           border: const Border(
@@ -93,7 +142,8 @@ class ReviewsStudent extends StatelessWidget {
                                           fontSize: scrolledFirst ? 16 : 24,
                                           fontWeight: FontWeight.bold,
                                           color: const Color(0xCC3B3B3B)),
-                                      duration: const Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       child: const Text('Overall Rating'),
                                     ),
                                   ),
@@ -113,7 +163,8 @@ class ReviewsStudent extends StatelessWidget {
                                           fontSize: scrolledFirst ? 56 : 64,
                                           fontWeight: FontWeight.bold,
                                           color: const Color(0xCC3B3B3B)),
-                                      duration: const Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       child: const Text('4.3'),
                                     ),
                                   ),
@@ -141,7 +192,8 @@ class ReviewsStudent extends StatelessWidget {
                                         animation: true,
                                         animationDuration: 2000,
                                         progressColor: const Color(0xFF6ABF69),
-                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        backgroundColor:
+                                            const Color(0xFFD9D9D9),
                                         barRadius: const Radius.circular(20),
                                       ),
                                     )
@@ -168,7 +220,8 @@ class ReviewsStudent extends StatelessWidget {
                                         animation: true,
                                         animationDuration: 2000,
                                         progressColor: const Color(0xFFA3C79A),
-                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        backgroundColor:
+                                            const Color(0xFFD9D9D9),
                                         barRadius: const Radius.circular(20),
                                       ),
                                     )
@@ -195,7 +248,8 @@ class ReviewsStudent extends StatelessWidget {
                                         animation: true,
                                         animationDuration: 2000,
                                         progressColor: const Color(0xFFD8D47F),
-                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        backgroundColor:
+                                            const Color(0xFFD9D9D9),
                                         barRadius: const Radius.circular(20),
                                       ),
                                     )
@@ -222,7 +276,8 @@ class ReviewsStudent extends StatelessWidget {
                                         animation: true,
                                         animationDuration: 2000,
                                         progressColor: const Color(0xFFE3B878),
-                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        backgroundColor:
+                                            const Color(0xFFD9D9D9),
                                         barRadius: const Radius.circular(20),
                                       ),
                                     )
@@ -249,7 +304,8 @@ class ReviewsStudent extends StatelessWidget {
                                         animation: true,
                                         animationDuration: 2000,
                                         progressColor: const Color(0xFFE08C85),
-                                        backgroundColor: const Color(0xFFD9D9D9),
+                                        backgroundColor:
+                                            const Color(0xFFD9D9D9),
                                         barRadius: const Radius.circular(20),
                                       ),
                                     )
@@ -270,17 +326,93 @@ class ReviewsStudent extends StatelessWidget {
                   child: Text(
                     'Comments',
                     style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B)
-                    ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B)),
                   ),
-                )
+                ),
               ),
-              SliverToBoxAdapter(
-                child: Container(
-                  color: Colors.blue,
-                  height: 1000),
+              BlocConsumer<FetchCommentBloc, FetchCommentState>(
+                bloc: fetchCommentBloc,
+                listener: (context, state) {
+                  if (state is FetchCommentFailedState) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
+                  }
+                },
+                builder: (context, state) {
+                  if (state is FetchCommentLoadingState) {
+                    return const SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  } else if (state is FetchCommentSuccessState) {
+                    if (state.comment.isEmpty) {
+                      return SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            'You are the first to comment here',
+                            style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return LiveSliverList(
+                        controller: scrollController,
+                        showItemDuration: const Duration(milliseconds: 300),
+                        itemCount: state.comment.length,
+                        itemBuilder: (context, index, animation) {
+                          final comment = state.comment[index];
+                          return FadeTransition(
+                            opacity: Tween<double>(
+                              begin: 0,
+                              end: 1,
+                            ).animate(animation),
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0, -0.1),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: CommentCard(
+                                comment: comment.comment,
+                                firstName: comment.commenterFirstName,
+                                lastName: comment.commenterLastName,
+                                time: comment.formattedTime,
+                                profile: comment.commenterProfileImg,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  } else if (state is FetchCommentFailedState) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          'Failed to load',
+                          style: GoogleFonts.nunito(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B)),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return SliverToBoxAdapter(
+                      child: Container(),
+                    );
+                  }
+                },
+              ),
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 106),
               )
             ],
           ),
@@ -308,6 +440,7 @@ class ReviewsStudent extends StatelessWidget {
                     Expanded(
                       child: Form(
                         child: TextFormField(
+                          focusNode: focusNode,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your message';

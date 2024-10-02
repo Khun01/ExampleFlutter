@@ -70,7 +70,7 @@ class StudentInfoPage extends StatelessWidget {
                     child: TabBarView(
                       children: [
                         AboutStudent(students: students),
-                        const ReviewsStudent()
+                        ReviewsStudent(id: students.studentId.toString())
                       ],
                     ),
                   ),
