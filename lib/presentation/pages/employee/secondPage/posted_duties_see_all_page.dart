@@ -48,7 +48,7 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
               hasScrollBody: false,
               child: Center(
                 child: Text(
-                  'Coming soon!',
+                  'You have not posted any duties yet.',
                   style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

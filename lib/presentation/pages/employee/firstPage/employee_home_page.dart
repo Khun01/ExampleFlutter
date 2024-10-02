@@ -71,7 +71,7 @@ class EmployeeHomePage extends StatelessWidget {
                         height: 163,
                         child: Center(
                           child: Text(
-                            'Coming soon!',
+                            'Stay tuned for announcements!',
                             style: GoogleFonts.nunito(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -240,7 +240,7 @@ class EmployeeHomePage extends StatelessWidget {
                         height: 174,
                         child: Center(
                           child: Text(
-                            'Coming soon!',
+                            'You have not posted any duties yet.',
                             style: GoogleFonts.nunito(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -380,7 +380,7 @@ class EmployeeHomePage extends StatelessWidget {
                       hasScrollBody: false,
                       child: Center(
                         child: Text(
-                          'You still do not have action',
+                          'Your activity log is empty!',
                           style: GoogleFonts.nunito(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
