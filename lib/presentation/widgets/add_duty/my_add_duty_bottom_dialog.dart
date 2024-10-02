@@ -33,6 +33,9 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
   final GlobalKey<FormState> _formKeyStudent = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
+  DateTime? selectedDate;
+  TimeOfDay? selectedStartTime;
+
   @override
   void dispose() {
     building.dispose();
@@ -109,9 +112,11 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                               lastDate: DateTime(2101),
                             );
                             if (pickedDate != null) {
-                              String formattedDate =
-                                  DateFormat('yyyy-MM-dd').format(pickedDate);
-                              date.text = formattedDate;
+                              setState(() {
+                                selectedDate = pickedDate;
+                                date.text =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                              });
                             }
                           },
                           child: AbsorbPointer(
@@ -158,32 +163,34 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                             String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                             RegExp regExp = RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return 'Please enter a time';
+                              return null;
                             } else if (!regExp.hasMatch(value)) {
                               return 'Enter a valid time in 24-hour format (HH:mm)';
                             }
                             return null;
                           },
                           onTap: () async {
-                            final now = DateTime.now();
                             TimeOfDay? selectedTime = await showTimePicker(
                               context: context,
-                              initialTime:
-                                  TimeOfDay(hour: now.hour, minute: now.minute),
+                              initialTime: TimeOfDay.now(),
                             );
                             if (selectedTime != null) {
-                              final now = DateTime.now();
-                              final selectedDateTime = DateTime(
-                                  now.year,
-                                  now.month,
-                                  now.day,
-                                  selectedTime.hour,
-                                  selectedTime.minute);
-                              if (selectedDateTime.isBefore(now)) {
-                                log('THe time has already passed');
-                                return;
+                              if (selectedDate != null &&
+                                  selectedDate!
+                                      .isAtSameMomentAs(DateTime.now())) {
+                                final now = DateTime.now();
+                                final currentTime = TimeOfDay(
+                                    hour: now.hour, minute: now.minute);
+                                if (selectedTime.hour < currentTime.hour ||
+                                    (selectedTime.hour == currentTime.hour &&
+                                        selectedTime.minute <
+                                            currentTime.minute)) {
+                                  log('Selected start time has already passed');
+                                  return;
+                                }
                               }
                               setState(() {
+                                selectedStartTime = selectedTime;
                                 startAt.text = formatTimeOfDay(selectedTime);
                               });
                             }
@@ -215,23 +222,28 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                             return null;
                           },
                           onTap: () async {
-                            final now = DateTime.now();
                             TimeOfDay? selectedTime = await showTimePicker(
                               context: context,
-                              initialTime:
-                                  TimeOfDay(hour: now.hour, minute: now.minute),
+                              initialTime: TimeOfDay.now(),
                             );
                             if (selectedTime != null) {
-                              final now = DateTime.now();
-                              final selectedDateTime = DateTime(
-                                  now.year,
-                                  now.month,
-                                  now.day,
-                                  selectedTime.hour,
-                                  selectedTime.minute);
-                              if (selectedDateTime.isBefore(now)) {
-                                log('THe time has already passed');
-                                return;
+                              if (selectedStartTime != null) {
+                                final startDateTime = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    selectedStartTime!.hour,
+                                    selectedStartTime!.minute);
+                                final endDateTime = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    selectedTime.hour,
+                                    selectedTime.minute);
+                                if (endDateTime.isBefore(startDateTime)) {
+                                  log('End time cannot be earlier than start time');
+                                  return;
+                                }
                               }
                               setState(() {
                                 endAt.text = formatTimeOfDay(selectedTime);

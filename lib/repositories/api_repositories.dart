@@ -215,4 +215,17 @@ class ApiRepositories {
       throw Exception('Failed to load feedbacks');
     }
   }
+
+  Future<Map<String, dynamic>> addComment(String comment, String studId) async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    var url = Uri.parse('$baseUrl/feedback/$studId');
+    final response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"comment": comment}));
+    return {'statusCode': response.statusCode};
+  }
 }

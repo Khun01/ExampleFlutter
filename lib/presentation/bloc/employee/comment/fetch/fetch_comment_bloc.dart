@@ -17,7 +17,6 @@ class FetchCommentBloc extends Bloc<FetchCommentEvent, FetchCommentState> {
   FutureOr<void> fetchCommentsEvent(FetchCommentsEvent event, Emitter<FetchCommentState> emit) async {
     emit(FetchCommentLoadingState());
     try{
-      await Future.delayed(const Duration(milliseconds: 2));
       final comments = await apiRepositories.fetchComment(event.id);
       emit(FetchCommentSuccessState(comment: comments));
     }catch(e){

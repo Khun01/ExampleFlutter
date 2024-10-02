@@ -34,6 +34,9 @@ class _DutyDetailsState extends State<DutyDetails> {
   final GlobalKey<FormState> _formKeyStudent = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
+  DateTime? selectedDate;
+  TimeOfDay? selectedStartTime;
+
   @override
   void initState() {
     super.initState();
@@ -108,9 +111,11 @@ class _DutyDetailsState extends State<DutyDetails> {
                           lastDate: DateTime(2101),
                         );
                         if (pickedDate != null) {
-                          String formattedDate =
-                              DateFormat('yyyy-MM-dd').format(pickedDate);
-                          date.text = formattedDate;
+                          setState(() {
+                            selectedDate = pickedDate;
+                            date.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                          });
                         }
                       },
                       child: AbsorbPointer(
@@ -118,12 +123,12 @@ class _DutyDetailsState extends State<DutyDetails> {
                           formKey: _formKeyDate,
                           controller: date,
                           hintText: widget.profDuty.date!,
-                          hintColor: const Color(0xFF3B3B3B),
+                          keyboardType: TextInputType.datetime,
                           validator: (value) {
                             String pattern = r'^\d{4}-\d{2}-\d{2}$';
                             RegExp regExp = RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return null;
+                              return 'Please enter date';
                             } else if (!regExp.hasMatch(value)) {
                               return 'Enter a valid date (YYYY-MM-DD)';
                             }
@@ -165,21 +170,25 @@ class _DutyDetailsState extends State<DutyDetails> {
                         return null;
                       },
                       onTap: () async {
-                        final now = DateTime.now();
                         TimeOfDay? selectedTime = await showTimePicker(
                           context: context,
-                          initialTime:
-                              TimeOfDay(hour: now.hour, minute: now.minute),
+                          initialTime: TimeOfDay.now(),
                         );
                         if (selectedTime != null) {
-                          final now = DateTime.now();
-                          final selectedDateTime = DateTime(now.year, now.month,
-                              now.day, selectedTime.hour, selectedTime.minute);
-                          if (selectedDateTime.isBefore(now)) {
-                            log('THe time has already passed');
-                            return;
+                          if (selectedDate != null &&
+                              selectedDate!.isAtSameMomentAs(DateTime.now())) {
+                            final now = DateTime.now();
+                            final currentTime =
+                                TimeOfDay(hour: now.hour, minute: now.minute);
+                            if (selectedTime.hour < currentTime.hour ||
+                                (selectedTime.hour == currentTime.hour &&
+                                    selectedTime.minute < currentTime.minute)) {
+                              log('Selected start time has already passed');
+                              return;
+                            }
                           }
                           setState(() {
+                            selectedStartTime = selectedTime;
                             startAt.text = formatTimeOfDay(selectedTime);
                           });
                         }
@@ -212,19 +221,28 @@ class _DutyDetailsState extends State<DutyDetails> {
                         return null;
                       },
                       onTap: () async {
-                        final now = DateTime.now();
                         TimeOfDay? selectedTime = await showTimePicker(
                           context: context,
-                          initialTime:
-                              TimeOfDay(hour: now.hour, minute: now.minute),
+                          initialTime: TimeOfDay.now(),
                         );
                         if (selectedTime != null) {
-                          final now = DateTime.now();
-                          final selectedDateTime = DateTime(now.year, now.month,
-                              now.day, selectedTime.hour, selectedTime.minute);
-                          if (selectedDateTime.isBefore(now)) {
-                            log('THe time has already passed');
-                            return;
+                          if (selectedStartTime != null) {
+                            final startDateTime = DateTime(
+                                selectedDate!.year,
+                                selectedDate!.month,
+                                selectedDate!.day,
+                                selectedStartTime!.hour,
+                                selectedStartTime!.minute);
+                            final endDateTime = DateTime(
+                                selectedDate!.year,
+                                selectedDate!.month,
+                                selectedDate!.day,
+                                selectedTime.hour,
+                                selectedTime.minute);
+                            if (endDateTime.isBefore(startDateTime)) {
+                              log('End time cannot be earlier than start time');
+                              return;
+                            }
                           }
                           setState(() {
                             endAt.text = formatTimeOfDay(selectedTime);
