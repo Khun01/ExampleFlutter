@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class PostedDutiesSeeAllCard extends StatelessWidget {
+  final String profile;
   final String date;
   final String building;
   final String message;
@@ -10,6 +12,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
   final String endTime;
   const PostedDutiesSeeAllCard(
       {super.key,
+      required this.profile,
       required this.date,
       required this.building,
       required this.message,
@@ -38,14 +41,27 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xFFA3D9A5),
-                    child: Image.asset(
-                      width: 30,
-                      'assets/images/profile_clicked.png',
-                      fit: BoxFit.cover,
-                    )),
+                Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFA3D9A5),
+                      borderRadius: BorderRadius.circular(500)),
+                  child: ClipOval(
+                    child: profile != ''
+                        ? Image.network(
+                            '$profileUrl$profile',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.person, size: 10),
+                          )
+                        : Image.asset(
+                            'assets/images/profile_clicked.png',
+                            width: 5,
+                            height: 5,
+                          ),
+                  ),
+                ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(

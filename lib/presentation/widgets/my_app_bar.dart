@@ -9,6 +9,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/hk_student_list_page.dart';
 import 'package:help_isko/presentation/pages/notification_page.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
 
@@ -38,7 +39,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         child: ClipOval(
                           child: state.profile != null
                               ? Image.network(
-                                  'http://192.168.100.212:8000/${state.profile}',
+                                  '$profileUrl${state.profile}',
                                   errorBuilder: (context, error, stackTrace) =>
                                       Image.asset(
                                     'assets/images/profile_clicked.png',

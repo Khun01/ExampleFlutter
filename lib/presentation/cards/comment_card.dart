@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class CommentCard extends StatelessWidget {
@@ -30,7 +31,7 @@ class CommentCard extends StatelessWidget {
             child: profile != ''
                 ? ClipOval(
                     child: Image.network(
-                      'http://192.168.100.212:8000/$profile',
+                      '$profileUrl$profile',
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.error_rounded),
                     ),

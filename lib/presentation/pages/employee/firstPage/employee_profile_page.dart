@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class EmployeeProfilePage extends StatelessWidget {
@@ -72,7 +73,7 @@ class EmployeeProfilePage extends StatelessWidget {
                                                     BorderRadius.circular(
                                                         scrolled ? 500 : 0),
                                                 child: Image.network(
-                                                    'http://192.168.100.212:8000/${state.profile}',
+                                                    '$profileUrl${state.profile}',
                                                     fit: BoxFit.cover,
                                                     errorBuilder: (context,
                                                             error,

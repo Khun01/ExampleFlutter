@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class ConversationListCard extends StatelessWidget {
   final String name;
-  final String profile;
+  final String? profile;
   final String message;
   final String createdAt;
   final bool isCurrentUser;
@@ -39,21 +40,26 @@ class ConversationListCard extends StatelessWidget {
                         ),
                       ]),
             child: CircleAvatar(
-                radius: isCurrentUser ? 0 : 25,
-                backgroundColor: const Color(0xFFD1D1D1),
-                child: isCurrentUser
-                    ? null
-                    : profile != ''
-                        ? Image.network(
-                            '//$profile',
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.error_rounded),
-                          )
-                        : Image.asset(
+              radius: isCurrentUser ? 0 : 25,
+              backgroundColor: const Color(0xFFD1D1D1),
+              child: isCurrentUser
+                  ? null
+                  : profile != null
+                      ? Image.network(
+                          '$profileUrl$profile',
+                          errorBuilder: (context, error, stackTrace) =>
+                              Image.asset(
                             'assets/images/profile_clicked.png',
                             fit: BoxFit.cover,
-                            width: 25,
-                          )),
+                            width: 30,
+                          ),
+                        )
+                      : Image.asset(
+                          'assets/images/profile_clicked.png',
+                          fit: BoxFit.cover,
+                          width: 30,
+                        ),
+            ),
           ),
           Column(
             crossAxisAlignment: isCurrentUser

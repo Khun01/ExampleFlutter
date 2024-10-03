@@ -53,7 +53,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     comment.dispose();
     super.dispose();
   }
@@ -450,12 +450,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
             ),
             BlocConsumer<AddCommentBloc, AddCommentState>(
               bloc: addCommentBloc,
-              listener: (context, state) {
-                if (state is AddCommentSuccessState) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Commented Succcessfully')));
-                }
-              },
+              listener: (context, state) {},
               builder: (context, state) {
                 return Positioned(
                   bottom: 0,
@@ -526,7 +521,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                           context.read<FetchCommentBloc>(),
                                         ),
                                       );
-                                      comment.clear();
+                                  comment.clear();
                                 }
                               },
                               child: Icon(

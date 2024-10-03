@@ -275,10 +275,12 @@ class EmployeeHomePage extends StatelessWidget {
                                 );
                               },
                               child: PostedDutiesHome(
-                                  date: duty.date!,
-                                  building: duty.building!,
-                                  message: duty.message!,
-                                  dutyStatus: duty.dutyStatus!),
+                                date: duty.date!,
+                                building: duty.building!,
+                                message: duty.message!,
+                                dutyStatus: duty.dutyStatus!,
+                                profile: duty.profProfile,
+                              ),
                             ),
                           );
                         },

@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentsCard extends StatelessWidget {
-  final String profile;
+  final String? profile;
   final String name;
   final String course;
   final String studentNumber;
@@ -39,20 +40,26 @@ class StudentsCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: const Color(0xFFA3D9A5),
-            child: profile != ''
-                ? Image.network(
-                    '//$profile',
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error_rounded),
-                  )
-                : Image.asset(
-                    'assets/images/profile_clicked.png',
-                    fit: BoxFit.cover,
-                    width: 30,
-                  ),
+          Container(
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+                color: const Color(0xFFA3D9A5),
+                borderRadius: BorderRadius.circular(500)),
+            child: ClipOval(
+              child: profile != ''
+                  ? Image.network(
+                      '$profileUrl$profile',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.person, size: 10),
+                    )
+                  : Image.asset(
+                      'assets/images/profile_clicked.png',
+                      width: 5,
+                      height: 5,
+                    ),
+            ),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -81,7 +88,7 @@ class StudentsCard extends StatelessWidget {
                                   role: 'Employee',
                                   targetUserId: targetUserId,
                                   name: name,
-                                  profile: profile));
+                                  profile: profile!));
                         },
                         child: const Icon(
                           Ionicons.chatbubble_ellipses_outline,
