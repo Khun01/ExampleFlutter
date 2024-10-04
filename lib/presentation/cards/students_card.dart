@@ -50,6 +50,7 @@ class StudentsCard extends StatelessWidget {
                 ? ClipOval(
                     child: Image.network(
                       '$profileUrl$profile',
+                      fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.person, size: 40),
                     ),
