@@ -1,17 +1,17 @@
 class Comment {
   final String? rating;
-  final String comment;
-  final String createdAt;
-  final String commenterFirstName;
-  final String commenterLastName;
+  final String? comment;
+  final String? createdAt;
+  final String? commenterFirstName;
+  final String? commenterLastName;
   final String? commenterProfileImg;
 
   Comment(
-      {required this.rating,
-      required this.comment,
-      required this.createdAt,
-      required this.commenterFirstName,
-      required this.commenterLastName,
+      {this.rating,
+      this.comment,
+      this.createdAt,
+      this.commenterFirstName,
+      this.commenterLastName,
       this.commenterProfileImg});
 
   factory Comment.fromJson(Map<String, dynamic> json) {
@@ -25,9 +25,14 @@ class Comment {
     );
   }
 
-  String get formattedTime => _formatTime(createdAt);
+  String get formattedTime => _formatTime(createdAt!);
 
   String _formatTime(String time) {
     return time.substring(0, 10);
+  }
+
+  @override
+  String toString() {
+    return comment!;
   }
 }

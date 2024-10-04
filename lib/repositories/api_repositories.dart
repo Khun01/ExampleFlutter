@@ -227,7 +227,10 @@ class ApiRepositories {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({"comment": comment}));
-    return {'statusCode': response.statusCode};
+    return {
+      'statusCode': response.statusCode,
+      'body': response.body
+    };
   }
 
   // ------------------- Notification --------------------//
@@ -258,11 +261,7 @@ class ApiRepositories {
           .map((item) => Notification.fromJson(item))
           .toList();
 
-      return {
-        'today': today,
-        'yesterday': yesterday,
-        'by_date' : byDate
-      };
+      return {'today': today, 'yesterday': yesterday, 'by_date': byDate};
     } else {
       throw Exception('Failed to load notification');
     }

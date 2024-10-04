@@ -12,6 +12,7 @@ class FetchCommentBloc extends Bloc<FetchCommentEvent, FetchCommentState> {
   final ApiRepositories apiRepositories;
   FetchCommentBloc({required this.apiRepositories}) : super(FetchCommentInitial()) {
     on<FetchCommentsEvent>(fetchCommentsEvent);
+    on<UpdateCommentsEvent>(updateCommentsEvent);
   }
 
   FutureOr<void> fetchCommentsEvent(FetchCommentsEvent event, Emitter<FetchCommentState> emit) async {
@@ -22,5 +23,9 @@ class FetchCommentBloc extends Bloc<FetchCommentEvent, FetchCommentState> {
     }catch(e){
       emit(FetchCommentFailedState(error: e.toString()));
     }
+  }
+
+  FutureOr<void> updateCommentsEvent(UpdateCommentsEvent event, Emitter<FetchCommentState> emit) {
+    emit(FetchCommentSuccessState(comment: event.updatedComments));
   }
 }

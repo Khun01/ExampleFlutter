@@ -60,19 +60,22 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
 
   @override
   Widget build(BuildContext context) {
-    final FetchCommentBloc fetchCommentBloc =
-        FetchCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
-          ..add(FetchCommentsEvent(id: widget.id));
-    final AddCommentBloc addCommentBloc =
-        AddCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl));
+    // final FetchCommentBloc fetchCommentBloc =
+    //     FetchCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
+    //       ..add(FetchCommentsEvent(id: widget.id));
+    // final AddCommentBloc addCommentBloc =
+    //     AddCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl));
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => addCommentBloc,
+          create: (context) => FetchCommentBloc(
+              apiRepositories: ApiRepositories(apiUrl: baseUrl))
+            ..add(FetchCommentsEvent(id: widget.id)),
         ),
         BlocProvider(
-          create: (context) => fetchCommentBloc,
-        ),
+            create: (context) => AddCommentBloc(
+                apiRepositories: ApiRepositories(apiUrl: baseUrl),
+                fetchCommentBloc: context.read<FetchCommentBloc>())),
       ],
       child: Scaffold(
         body: Stack(
@@ -364,14 +367,16 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                   ),
                 ),
                 BlocConsumer<FetchCommentBloc, FetchCommentState>(
-                  bloc: fetchCommentBloc,
                   listener: (context, state) {
                     if (state is FetchCommentFailedState) {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(state.error)));
                     }
                   },
+                  buildWhen: (previous, current) =>
+                      current is FetchCommentSuccessState,
                   builder: (context, state) {
+                    log('The state is: $state');
                     if (state is FetchCommentLoadingState) {
                       return const SliverFillRemaining(
                         hasScrollBody: false,
@@ -394,13 +399,12 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                           ),
                         );
                       } else {
-                        final reversedComment = state.comment.reversed.toList();
                         return LiveSliverList(
                           controller: scrollController,
                           showItemDuration: const Duration(milliseconds: 300),
-                          itemCount: reversedComment.length,
+                          itemCount: state.comment.length,
                           itemBuilder: (context, index, animation) {
-                            final comment = reversedComment[index];
+                            final comment = state.comment[index];
                             return FadeTransition(
                               opacity: Tween<double>(
                                 begin: 0,
@@ -412,9 +416,9 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                   end: Offset.zero,
                                 ).animate(animation),
                                 child: CommentCard(
-                                  comment: comment.comment,
-                                  firstName: comment.commenterFirstName,
-                                  lastName: comment.commenterLastName,
+                                  comment: comment.comment!,
+                                  firstName: comment.commenterFirstName!,
+                                  lastName: comment.commenterLastName!,
                                   time: comment.formattedTime,
                                   profile: comment.commenterProfileImg,
                                 ),
@@ -449,8 +453,32 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
               ],
             ),
             BlocConsumer<AddCommentBloc, AddCommentState>(
-              bloc: addCommentBloc,
-              listener: (context, state) {},
+              listenWhen: (previous, current) =>
+                  current is AddCommentSuccessState ||
+                  current is AddCommentLoadingState,
+              listener: (context, state) {
+                if (state is AddCommentSuccessState) {
+                  context
+                      .read<FetchCommentBloc>()
+                      .add(FetchCommentsEvent(id: widget.id));
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (scrollController.hasClients) {
+                        double scrollFactor = Platform.isAndroid ? 2.5 : 1.5;
+                        final position =
+                            scrollController.position.maxScrollExtent *
+                                scrollFactor;
+                        scrollController.animateTo(position,
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.easeInOut);
+                      }
+                    });
+                  });
+                }
+              },
+              buildWhen: (previous, current) =>
+                  current is AddCommentSuccessState ||
+                  current is AddCommentLoadingState,
               builder: (context, state) {
                 return Positioned(
                   bottom: 0,

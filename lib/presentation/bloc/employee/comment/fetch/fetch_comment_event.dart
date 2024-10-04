@@ -12,3 +12,13 @@ class FetchCommentsEvent extends FetchCommentEvent{
 
   const FetchCommentsEvent({required this.id});
 }
+
+
+class UpdateCommentsEvent extends FetchCommentEvent {
+  final List<Comment> updatedComments;
+
+  const UpdateCommentsEvent({required this.updatedComments});
+
+  @override
+  List<Object> get props => [updatedComments];
+}
