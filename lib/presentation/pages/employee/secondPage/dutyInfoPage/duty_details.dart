@@ -128,7 +128,7 @@ class _DutyDetailsState extends State<DutyDetails> {
                             String pattern = r'^\d{4}-\d{2}-\d{2}$';
                             RegExp regExp = RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return 'Please enter date';
+                              return null;
                             } else if (!regExp.hasMatch(value)) {
                               return 'Enter a valid date (YYYY-MM-DD)';
                             }
@@ -321,88 +321,104 @@ class _DutyDetailsState extends State<DutyDetails> {
           const SizedBox(height: 8),
           const Divider(),
           const SizedBox(height: 16),
-          widget.profDuty.dutyStatus == 'completed'
-              ? Text(
-                  'This duty has already been completed.',
-                  style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B)),
-                )
-              : widget.profDuty.dutyStatus == 'active'
+          widget.profDuty.dutyStatus == 'cancelled'
+              ? MyButton(
+                  onTap: () {
+                    context.read<DeleteDutyBloc>().add(
+                        DeleteDutyButtonClickedEvent(
+                            profDuty: widget.profDuty));
+                  },
+                  buttonText: 'Delete',
+                  textColor: const Color(0xFF3B3B3B),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderColor: const Color(0xFF3B3B3B))
+              : widget.profDuty.dutyStatus == 'completed'
                   ? Text(
-                      'This duty is already active.',
+                      'This duty has already been completed.',
                       style: GoogleFonts.nunito(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B)),
                     )
-                  : Row(
-                      children: [
-                        Expanded(
-                          child: MyButton(
-                              onTap: () {
-                                context.read<DeleteDutyBloc>().add(
-                                    DeleteDutyButtonClickedEvent(
-                                        profDuty: widget.profDuty));
-                              },
-                              buttonText: 'Delete',
-                              textColor: const Color(0xFF3B3B3B),
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                              borderColor: const Color(0xFF3B3B3B)),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: MyButton(
-                              onTap: () {
-                                final validatedDate =
-                                    _formKeyDate.currentState!.validate();
-                                final validatedStartAt =
-                                    _formKeyStartAt.currentState!.validate();
-                                final validatedEndAt =
-                                    _formKeyEndAt.currentState!.validate();
-                                final validatedBuilding =
-                                    _formKeyBuilding.currentState!.validate();
-                                final validatedStudents =
-                                    _formKeyStudent.currentState!.validate();
-                                final validatedMessage =
-                                    _formKeyMessage.currentState!.validate();
-                                if (validatedDate &&
-                                    validatedStartAt &&
-                                    validatedEndAt &&
-                                    validatedBuilding &&
-                                    validatedStudents &&
-                                    validatedMessage) {
-                                  context.read<UpdateDutyBloc>().add(
-                                      UpdateDutyButtonClickedEvent(
-                                          building.text.isNotEmpty
-                                              ? building.text
-                                              : widget.profDuty.building!,
-                                          date.text.isNotEmpty
-                                              ? date.text
-                                              : widget.profDuty.date!,
-                                          startAt.text.isNotEmpty
-                                              ? startAt.text
-                                              : widget
-                                                  .profDuty.formattedStartTime,
-                                          endAt.text.isNotEmpty
-                                              ? endAt.text
-                                              : widget
-                                                  .profDuty.formattedEndTime,
-                                          message.text.isNotEmpty
-                                              ? message.text
-                                              : widget.profDuty.message!,
-                                          students.text.isNotEmpty
-                                              ? students.text
-                                              : widget.profDuty.maxScholars
-                                                  .toString(),
-                                          profDuty: widget.profDuty));
-                                }
-                              },
-                              buttonText: 'Update'),
+                  : widget.profDuty.dutyStatus == 'active'
+                      ? Text(
+                          'This duty is already active.',
+                          style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B)),
                         )
-                      ],
-                    )
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: MyButton(
+                                  onTap: () {
+                                    context.read<DeleteDutyBloc>().add(
+                                        DeleteDutyButtonClickedEvent(
+                                            profDuty: widget.profDuty));
+                                  },
+                                  buttonText: 'Delete',
+                                  textColor: const Color(0xFF3B3B3B),
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderColor: const Color(0xFF3B3B3B)),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: MyButton(
+                                  onTap: () {
+                                    final validatedDate =
+                                        _formKeyDate.currentState!.validate();
+                                    final validatedStartAt = _formKeyStartAt
+                                        .currentState!
+                                        .validate();
+                                    final validatedEndAt =
+                                        _formKeyEndAt.currentState!.validate();
+                                    final validatedBuilding = _formKeyBuilding
+                                        .currentState!
+                                        .validate();
+                                    final validatedStudents = _formKeyStudent
+                                        .currentState!
+                                        .validate();
+                                    final validatedMessage = _formKeyMessage
+                                        .currentState!
+                                        .validate();
+                                    if (validatedDate &&
+                                        validatedStartAt &&
+                                        validatedEndAt &&
+                                        validatedBuilding &&
+                                        validatedStudents &&
+                                        validatedMessage) {
+                                      context.read<UpdateDutyBloc>().add(
+                                          UpdateDutyButtonClickedEvent(
+                                              building.text.isNotEmpty
+                                                  ? building.text
+                                                  : widget.profDuty.building!,
+                                              date.text.isNotEmpty
+                                                  ? date.text
+                                                  : widget.profDuty.date!,
+                                              startAt.text.isNotEmpty
+                                                  ? startAt.text
+                                                  : widget.profDuty
+                                                      .formattedStartTime,
+                                              endAt.text.isNotEmpty
+                                                  ? endAt.text
+                                                  : widget.profDuty
+                                                      .formattedEndTime,
+                                              message.text.isNotEmpty
+                                                  ? message.text
+                                                  : widget.profDuty.message!,
+                                              students.text.isNotEmpty
+                                                  ? students.text
+                                                  : widget.profDuty.maxScholars
+                                                      .toString(),
+                                              profDuty: widget.profDuty));
+                                    }
+                                  },
+                                  buttonText: 'Update'),
+                            )
+                          ],
+                        )
         ],
       ),
     );

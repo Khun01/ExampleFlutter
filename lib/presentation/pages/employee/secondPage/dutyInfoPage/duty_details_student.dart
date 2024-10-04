@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/models/duty/students.dart';
@@ -15,6 +17,7 @@ class DutyDetailsStudent extends StatelessWidget {
       itemCount: students.length,
       itemBuilder: (context, index) {
         final student = students[index];
+        log('The stud is: ${student.name}');
         return GestureDetector(
             onTap: () {
               Navigator.push(

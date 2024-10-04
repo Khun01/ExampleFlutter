@@ -46,20 +46,15 @@ class StudentsCard extends StatelessWidget {
             decoration: BoxDecoration(
                 color: const Color(0xFFA3D9A5),
                 borderRadius: BorderRadius.circular(500)),
-            child: ClipOval(
-              child: profile != ''
-                  ? Image.network(
+            child: profile != ''
+                ? ClipOval(
+                    child: Image.network(
                       '$profileUrl$profile',
-                      fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.person, size: 10),
-                    )
-                  : Image.asset(
-                      'assets/images/profile_clicked.png',
-                      width: 5,
-                      height: 5,
+                          const Icon(Icons.person, size: 40),
                     ),
-            ),
+                  )
+                : const Icon(Icons.person_rounded, size: 40)
           ),
           const SizedBox(width: 8),
           Expanded(

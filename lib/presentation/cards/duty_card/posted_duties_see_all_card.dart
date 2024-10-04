@@ -122,7 +122,9 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                           ? const Color(0xFF6BB577)
                           : dutyStatus == 'on-going'
                               ? const Color(0xFF26A1F4)
-                              : const Color(0xFFB2AC88),
+                              : dutyStatus == 'cancelled'
+                                  ? const Color(0xFFF44336)
+                                  : const Color(0xFFB2AC88),
                   borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(18),
                       topLeft: Radius.circular(5),
@@ -136,7 +138,9 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                           ? 'Active'
                           : dutyStatus == 'on-going'
                               ? 'On-going'
-                              : 'Completed',
+                              : dutyStatus == 'cancelled'
+                                  ? 'Cancelled'
+                                  : 'Completed',
                   style: GoogleFonts.nunito(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,

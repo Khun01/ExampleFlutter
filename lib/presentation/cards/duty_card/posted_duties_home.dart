@@ -81,7 +81,9 @@ class PostedDutiesHome extends StatelessWidget {
                                   ? const Color(0xFF6BB577)
                                   : dutyStatus == 'ongoing'
                                       ? const Color(0xFF26A1F4)
-                                      : const Color(0xFFB2AC88)),
+                                      : dutyStatus == 'cancelled'
+                                          ? const Color(0xFFF44336)
+                                          : const Color(0xFFB2AC88)),
                       child: Center(
                         child: Text(
                           dutyStatus == 'pending'
@@ -90,7 +92,9 @@ class PostedDutiesHome extends StatelessWidget {
                                   ? 'Active'
                                   : dutyStatus == 'ongoing'
                                       ? 'On-going'
-                                      : 'Completed',
+                                      : dutyStatus == 'cancelled'
+                                          ? 'Cancelled'
+                                          : 'Completed',
                           style: GoogleFonts.nunito(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
