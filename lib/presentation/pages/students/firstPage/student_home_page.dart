@@ -4,16 +4,18 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/hk_status/hk_status_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/announcement_card.dart';
+import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/student_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/presentation/widgets/studentDutyHours/my_duty_hours.dart';
-import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/repositories/student/homepage/hk_status_repository.dart';
 import 'package:help_isko/services/student/homepage/hk_status_service.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -50,7 +52,7 @@ class StudentHomePage extends StatelessWidget {
                   builder: (context, state) {
                     switch (state.runtimeType) {
                       case HkStatusFetchLoading:
-                        return CircularProgressIndicator();
+                        return const Center(child: CircularProgressIndicator());
                       case HkStatusFetchSuccess:
                         state as HkStatusFetchSuccess;
                         return Padding(
@@ -196,12 +198,12 @@ class StudentHomePage extends StatelessWidget {
                 },
               ),
               SliverToBoxAdapter(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Text(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         'Requested Duties',
                         style: GoogleFonts.nunito(
                           fontSize: 16,
@@ -209,8 +211,7 @@ class StudentHomePage extends StatelessWidget {
                           color: const Color(0xFF3B3B3B),
                         ),
                       ),
-                    ),
-                    GestureDetector(
+                      GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -220,129 +221,78 @@ class StudentHomePage extends StatelessWidget {
                                           context.read<RequestedDutiesBloc>(),
                                       child: const StudentSeeAllPage())));
                         },
-                        child: const Text('See all'))
-                  ],
+                        child: Text(
+                          'See all',
+                          style: GoogleFonts.nunito(
+                            fontSize: 14,
+                            color: const Color(0xCC6BB577),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 200,
+                  height: 174,
                   child: BlocBuilder<RequestedDutiesBloc, RequestedDutiesState>(
                     builder: (context, state) {
                       switch (state.runtimeType) {
                         case RequestedDutiesFetchLoadingState:
-                          return CircularProgressIndicator();
+                          return Center(
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  left: 8, right: 16, top: 8),
+                              child: ListView.builder(
+                                itemCount: 15,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return const MyPostedDutiesHomePageLoading();
+                                },
+                              ),
+                            ),
+                          );
                         case RequestedDutiesFetchSuccessState:
                           state as RequestedDutiesFetchSuccessState;
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.requestedDuties.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(15)),
-                                  ),
-                                  width: 128,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // Text(
-                                          // //     "hi ${state.requestedDuties[index].employeeProfile != null}")
-                                          state.requestedDuties[index]
-                                                      .employeeProfile !=
-                                                  ''
-                                              ? Image.network(
-                                                  '$profileUrl${state.requestedDuties[index].employeeProfile!}',
-                                                  height: 30,
-                                                )
-                                              : Image.asset(
-                                                  'assets/images/profile_clicked.png',
-                                                  height: 30),
-
-                                          const SizedBox(width: 6),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                //status button
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    final status =
-                                                        requestDutyStatus(
-                                                            state
-                                                                .requestedDuties[
-                                                                    index]
-                                                                .requestStatus,
-                                                            state
-                                                                .requestedDuties[
-                                                                    index]
-                                                                .dutyStatus);
-
-                                                    if (status == 'cancel') {
-                                                      log('hello');
-                                                      context
-                                                          .read<
-                                                              RequestedDutiesBloc>()
-                                                          .add(RequestedDutyCancelEvent(
-                                                              id: state
-                                                                  .requestedDuties[
-                                                                      index]
-                                                                  .id));
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.amber,
-                                                    ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(vertical: 8),
-                                                    child: Center(
-                                                      child: Text(
-                                                        requestDutyStatus(
-                                                            state
-                                                                .requestedDuties[
-                                                                    index]
-                                                                .requestStatus,
-                                                            state
-                                                                .requestedDuties[
-                                                                    index]
-                                                                .dutyStatus),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                // date
-                                                Text(state
-                                                    .requestedDuties[index]
-                                                    .date)
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      // employee name
-                                      Text(state
-                                          .requestedDuties[index].employeeName),
-                                      // message
-                                      Text(
-                                          state.requestedDuties[index].message),
-
-                                      Text('${state.requestedDuties[index].id}')
-                                    ],
-                                  ),
+                          if (state.requestedDuties.isEmpty) {
+                            return SizedBox(
+                              height: 174,
+                              child: Center(
+                                child: Text(
+                                  'Find duties',
+                                  style: GoogleFonts.nunito(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF3B3B3B)),
                                 ),
-                              );
-                            },
-                          );
+                              ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.requestedDuties.length,
+                              itemBuilder: (context, index) {
+                                final request = state.requestedDuties[index];
+                                return Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 8, right: 16, top: 8),
+                                  child: BlocProvider(
+                                    create: (_) =>
+                                        context.read<RequestForDutiesBloc>(),
+                                    child: PostedDutiesHome(
+                                        id: request.id,
+                                        profile: request.employeeProfile,
+                                        date: request.date,
+                                        building: request.employeeName,
+                                        message: request.message,
+                                        requestStatus: request.requestStatus,
+                                        dutyStatus: request.dutyStatus),
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         case RequestedDutiesFetchFailedState:
                           state as RequestedDutiesFetchFailedState;
                           log('the error in student home page is: ${state.errorMessage}');

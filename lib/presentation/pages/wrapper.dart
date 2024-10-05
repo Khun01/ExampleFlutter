@@ -76,6 +76,11 @@ class _WrapperState extends State<Wrapper> {
         requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl))
       ..add(FetchRequestForDutiesEvent());
 
+    final RequestedDutiesBloc requestedDutiesBloc = RequestedDutiesBloc(
+        requestedDutiesRepository: RequestedDutiesRepository(
+            requestedDutiesService: RequestedDutiesService()))
+      ..add(RequestedDutiesFetch());
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -173,15 +178,10 @@ class _WrapperState extends State<Wrapper> {
                                   : [
                                       MultiBlocProvider(
                                         providers: [
-                                          BlocProvider(
-                                              create: (context) => RequestedDutiesBloc(
-                                                  requestedDutiesRepository:
-                                                      RequestedDutiesRepository(
-                                                          requestedDutiesService:
-                                                              RequestedDutiesService()))
-                                                ..add(RequestedDutiesFetch())),
                                           BlocProvider.value(
-                                              value: announcementBloc)
+                                              value: announcementBloc),
+                                          BlocProvider.value(
+                                              value: requestedDutiesBloc)
                                         ],
                                         child: const StudentHomePage(),
                                       ),

@@ -13,9 +13,6 @@ class RequestedDutiesBloc
   final RequestedDutiesRepository requestedDutiesRepository;
   RequestedDutiesBloc({required this.requestedDutiesRepository})
       : super(RequestedDutiesInitial()) {
-    on<RequestedDutiesEvent>((event, emit) {
-      // TODO: implement event handler
-    });
     on<RequestedDutiesFetch>(requestedDutiesFetch);
     on<RequestedDutyCancelEvent>(requestedDutyCancelEvent);
   }
@@ -24,6 +21,7 @@ class RequestedDutiesBloc
       RequestedDutiesFetch event, Emitter<RequestedDutiesState> emit) async {
     emit(RequestedDutiesFetchLoadingState());
     try {
+      await Future.delayed(const Duration(seconds: 2));
       final requestedDuties =
           await requestedDutiesRepository.getRequestedDuties();
       emit(RequestedDutiesFetchSuccessState(requestedDuties: requestedDuties));
