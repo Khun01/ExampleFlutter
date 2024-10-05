@@ -4,22 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/request_for_duties_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
-import 'package:help_isko/repositories/global.dart';
-import 'package:help_isko/services/duty/request_for_duties_services.dart';
 
 class EmployeeDutiesPage extends StatelessWidget {
   const EmployeeDutiesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final RequestForDutiesBloc requestForDutiesBloc = RequestForDutiesBloc(
-        requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl))
-      ..add(FetchRequestForDutiesEvent());
     return BlocConsumer<RequestForDutiesBloc, RequestForDutiesState>(
-      bloc: requestForDutiesBloc,
       listener: (context, state) {
         if (state is RequestForDutiesFailedState) {
           ScaffoldMessenger.of(context)
@@ -60,11 +55,21 @@ class EmployeeDutiesPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => StudentInfoPage(
-                                students: requestForDuty.studentData)));
+                            builder: (_) => BlocProvider.value(
+                                  value: context.read<MessageBloc>(),
+                                  child: StudentInfoPage(
+                                      students: requestForDuty.studentData),
+                                )));
                   },
-                  child: BlocProvider.value(
-                    value: requestForDutiesBloc,
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: context.read<RequestForDutiesBloc>(),
+                      ),
+                      BlocProvider.value(
+                        value: context.read<MessageBloc>(),
+                      ),
+                    ],
                     child: RequestForDutiesCard(
                       dutyId: requestForDuty.dutyId,
                       profile: requestForDuty.studentData.profile!,
@@ -75,6 +80,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                       date: requestForDuty.date,
                       message: requestForDuty.message,
                       studentId: requestForDuty.studentData.studentId,
+                      studentNumber: requestForDuty.studentData.studentNumber,
                     ),
                   ),
                 );

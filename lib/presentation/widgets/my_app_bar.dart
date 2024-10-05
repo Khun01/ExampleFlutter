@@ -8,6 +8,8 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/hk_student_list_page.dart';
+import 'package:help_isko/presentation/pages/notification_page.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
 
@@ -34,19 +36,23 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                       child: CircleAvatar(
                         radius: 30,
                         backgroundColor: const Color(0xFFA3D9A5),
-                        child: state.profile != null
-                            ? ClipOval(
-                                child: Image.network(
-                                  'http://192.168.100.212:8000/${state.profile}',
+                        child: ClipOval(
+                          child: state.profile != null
+                              ? Image.network(
+                                  '$profileUrl${state.profile}',
                                   errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.error_rounded),
+                                      Image.asset(
+                                    'assets/images/profile_clicked.png',
+                                    fit: BoxFit.cover,
+                                    width: 30,
+                                  ),
+                                )
+                              : Image.asset(
+                                  'assets/images/profile_clicked.png',
+                                  fit: BoxFit.cover,
+                                  width: 30,
                                 ),
-                              )
-                            : Image.asset(
-                                'assets/images/profile_clicked.png',
-                                fit: BoxFit.cover,
-                                width: 30,
-                              ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -100,8 +106,19 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     const SizedBox(width: 16),
                     FadeInRight(
                       duration: const Duration(milliseconds: 700),
-                      child: Icon(UIcons.regularRounded.bell,
-                          color: const Color(0xFF3B3B3B)),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NotificationPage(role: role),
+                            ),
+                          );
+                        },
+                        child: Icon(UIcons.regularRounded.bell,
+                            color: const Color(0xFF3B3B3B)),
+                      ),
                     ),
                   ],
                 ));

@@ -14,6 +14,7 @@ class ProfDuty {
   final String? dutyStatus;
   final int? isCompleted;
   final int? profId;
+  final String? profProfile;
   final List<Students>? students;
 
   ProfDuty(
@@ -30,6 +31,7 @@ class ProfDuty {
        this.dutyStatus,
        this.isCompleted,
        this.profId,
+       this.profProfile,
        this.students});
 
   factory ProfDuty.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class ProfDuty {
       isLocked: json['duty']['is_locked'] ?? '',
       dutyStatus: json['duty']['duty_status'] ?? '',
       isCompleted: json['duty']['is_completed'] ?? '',
+      profProfile: json['profile_img'],
       students: studentsList,
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/duty/students.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -60,21 +61,42 @@ class _AboutStudentState extends State<AboutStudent>
               children: [
                 Row(
                   children: [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundColor: const Color(0xFFA3D9A5),
-                      child: widget.students.profile != ''
-                          ? Image.network(
-                              '//${widget.students.profile}',
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.error_rounded),
-                            )
-                          : Image.asset(
-                              'assets/images/profile_clicked.png',
-                              fit: BoxFit.cover,
-                              width: 32,
-                            ),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                          color: const Color(0xFFA3D9A5),
+                          borderRadius: BorderRadius.circular(500)),
+                      child: ClipOval(
+                        child: widget.students.profile != ''
+                            ? Image.network(
+                                '$profileUrl${widget.students.profile}',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.person, size: 10),
+                              )
+                            : Image.asset(
+                                'assets/images/profile_clicked.png',
+                                width: 5,
+                                height: 5,
+                              ),
+                      ),
                     ),
+                    // CircleAvatar(
+                    //   radius: 35,
+                    //   backgroundColor: const Color(0xFFA3D9A5),
+                    //   child: widget.students.profile != ''
+                    //       ? Image.network(
+                    //           '//${widget.students.profile}',
+                    //           errorBuilder: (context, error, stackTrace) =>
+                    //               const Icon(Icons.error_rounded),
+                    //         )
+                    //       : Image.asset(
+                    //           'assets/images/profile_clicked.png',
+                    //           fit: BoxFit.cover,
+                    //           width: 32,
+                    //         ),
+                    // ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(
@@ -95,15 +117,17 @@ class _AboutStudentState extends State<AboutStudent>
                                 GestureDetector(
                                   onTap: () {
                                     context.read<MessageBloc>().add(
-                                        MessageNavigateToChatEvent(
-                                            schoolId: widget
-                                                .students.studentNumber
-                                                .toString(),
-                                            role: "Employee",
-                                            targetUserId:
-                                                widget.students.studentId,
-                                            name: widget.students.name!,
-                                            profile: widget.students.profile!));
+                                          MessageNavigateToChatEvent(
+                                              schoolId: widget
+                                                  .students.studentNumber
+                                                  .toString(),
+                                              role: "Employee",
+                                              targetUserId:
+                                                  widget.students.studentId,
+                                              name: widget.students.name!,
+                                              profile:
+                                                  widget.students.profile!),
+                                        );
                                     log('The message button is clicked');
                                   },
                                   child: const Icon(

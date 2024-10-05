@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activit
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
+import 'package:intl/intl.dart';
 
 class MyAddDutyBottomDialog extends StatefulWidget {
   const MyAddDutyBottomDialog({super.key});
@@ -30,6 +33,9 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
   final GlobalKey<FormState> _formKeyStudent = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
+  DateTime? selectedDate;
+  TimeOfDay? selectedStartTime;
+
   @override
   void dispose() {
     building.dispose();
@@ -43,6 +49,13 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
 
   @override
   Widget build(BuildContext context) {
+    String formatTimeOfDay(TimeOfDay time) {
+      final now = DateTime.now();
+      final formattedTime =
+          DateTime(now.year, now.month, now.day, time.hour, time.minute);
+      return "${formattedTime.hour.toString().padLeft(2, '0')}:${formattedTime.minute.toString().padLeft(2, '0')}";
+    }
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
@@ -90,21 +103,42 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                       children: [
                         const MyAddDutiesLabel(
                             icon: Icons.calendar_month_rounded, label: 'Date'),
-                        MyAddDutyField(
-                            formKey: _formKeyDate,
-                            controller: date,
-                            hintText: 'YYYY-MM-DD',
-                            keyboardType: TextInputType.datetime,
-                            validator: (value) {
-                              String pattern = r'^\d{4}-\d{2}-\d{2}$';
-                              RegExp regExp = RegExp(pattern);
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter date';
-                              } else if (!regExp.hasMatch(value)) {
-                                return 'Enter a valid date (YYYY-MM-DD)';
-                              }
-                              return null;
-                            })
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2101),
+                            );
+                            if (pickedDate != null) {
+                              setState(() {
+                                selectedDate = pickedDate;
+                                date.text =
+                                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                              });
+                            }
+                          },
+                          child: AbsorbPointer(
+                            child: MyAddDutyField(
+                              formKey: _formKeyDate,
+                              controller: date,
+                              hintText: 'YYYY-MM-DD',
+                              keyboardType: TextInputType.datetime,
+                              validator: (value) {
+                                String pattern = r'^\d{4}-\d{2}-\d{2}$';
+                                RegExp regExp = RegExp(pattern);
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter date';
+                                } else if (!regExp.hasMatch(value)) {
+                                  return 'Enter a valid date (YYYY-MM-DD)';
+                                }
+                                return null;
+                              },
+                              readOnly: true,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -121,21 +155,47 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                         const MyAddDutiesLabel(
                             icon: Icons.alarm_rounded, label: 'Start at'),
                         MyAddDutyField(
-                            formKey: _formKeyStartAt,
-                            controller: startAt,
-                            hintText: 'e.g. 09:00',
-                            keyboardType: TextInputType.datetime,
-                            validator: (value) {
-                              String pattern =
-                                  r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                              RegExp regExp = RegExp(pattern);
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a time';
-                              } else if (!regExp.hasMatch(value)) {
-                                return 'Enter a valid time in 24-hour format (HH:mm)';
-                              }
+                          formKey: _formKeyStartAt,
+                          controller: startAt,
+                          hintText: 'Start Time',
+                          readOnly: true,
+                          validator: (value) {
+                            String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                            RegExp regExp = RegExp(pattern);
+                            if (value == null || value.isEmpty) {
                               return null;
-                            })
+                            } else if (!regExp.hasMatch(value)) {
+                              return 'Enter a valid time in 24-hour format (HH:mm)';
+                            }
+                            return null;
+                          },
+                          onTap: () async {
+                            TimeOfDay? selectedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            if (selectedTime != null) {
+                              if (selectedDate != null &&
+                                  selectedDate!
+                                      .isAtSameMomentAs(DateTime.now())) {
+                                final now = DateTime.now();
+                                final currentTime = TimeOfDay(
+                                    hour: now.hour, minute: now.minute);
+                                if (selectedTime.hour < currentTime.hour ||
+                                    (selectedTime.hour == currentTime.hour &&
+                                        selectedTime.minute <
+                                            currentTime.minute)) {
+                                  log('Selected start time has already passed');
+                                  return;
+                                }
+                              }
+                              setState(() {
+                                selectedStartTime = selectedTime;
+                                startAt.text = formatTimeOfDay(selectedTime);
+                              });
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -147,21 +207,50 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                         const MyAddDutiesLabel(
                             icon: Icons.alarm_rounded, label: 'End at'),
                         MyAddDutyField(
-                            formKey: _formKeyEndAt,
-                            controller: endAt,
-                            hintText: 'e.g. 10:00',
-                            keyboardType: TextInputType.datetime,
-                            validator: (value) {
-                              String pattern =
-                                  r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                              RegExp regExp = RegExp(pattern);
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a time';
-                              } else if (!regExp.hasMatch(value)) {
-                                return 'Enter a valid time in 24-hour format (HH:mm)';
+                          formKey: _formKeyEndAt,
+                          controller: endAt,
+                          hintText: 'End Time',
+                          readOnly: true,
+                          validator: (value) {
+                            String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                            RegExp regExp = RegExp(pattern);
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a time';
+                            } else if (!regExp.hasMatch(value)) {
+                              return 'Enter a valid time in 24-hour format (HH:mm)';
+                            }
+                            return null;
+                          },
+                          onTap: () async {
+                            TimeOfDay? selectedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            if (selectedTime != null) {
+                              if (selectedStartTime != null) {
+                                final startDateTime = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    selectedStartTime!.hour,
+                                    selectedStartTime!.minute);
+                                final endDateTime = DateTime(
+                                    selectedDate!.year,
+                                    selectedDate!.month,
+                                    selectedDate!.day,
+                                    selectedTime.hour,
+                                    selectedTime.minute);
+                                if (endDateTime.isBefore(startDateTime)) {
+                                  log('End time cannot be earlier than start time');
+                                  return;
+                                }
                               }
-                              return null;
-                            })
+                              setState(() {
+                                endAt.text = formatTimeOfDay(selectedTime);
+                              });
+                            }
+                          },
+                        )
                       ],
                     ),
                   ),

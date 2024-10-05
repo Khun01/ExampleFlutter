@@ -6,12 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/acceptStudent/accept_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/declineStudent/decline_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class RequestForDutiesCard extends StatelessWidget {
   final int? dutyId;
-  final String profile;
+  final String? profile;
   final String name;
   final String building;
   final String startTime;
@@ -19,17 +21,19 @@ class RequestForDutiesCard extends StatelessWidget {
   final String date;
   final String message;
   final int? studentId;
+  final String? studentNumber;
   const RequestForDutiesCard(
       {super.key,
       this.dutyId,
-      required this.profile,
+      this.profile,
       required this.name,
       required this.building,
       required this.startTime,
       required this.endTime,
       required this.date,
       required this.message,
-      this.studentId});
+      this.studentId,
+      this.studentNumber});
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +57,22 @@ class RequestForDutiesCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                  radius: 30,
-                  backgroundColor: const Color(0xFFA3D9A5),
+              Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                      color: const Color(0xFFA3D9A5),
+                      borderRadius: BorderRadius.circular(500)),
                   child: profile != ''
-                      ? Image.network(
-                          '//$profile',
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error_rounded),
+                      ? ClipOval(
+                          child: Image.network(
+                            '$profileUrl$profile',
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.person, size: 40),
+                          ),
                         )
-                      : Image.asset(
-                          'assets/images/profile_clicked.png',
-                          fit: BoxFit.cover,
-                          width: 30,
-                        )),
+                      : const Icon(Icons.person_rounded, size: 40)),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -87,7 +93,13 @@ class RequestForDutiesCard extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                            log('The message button is clicked');
+                            context.read<MessageBloc>().add(
+                                MessageNavigateToChatEvent(
+                                    schoolId: studentNumber!,
+                                    role: 'Employee',
+                                    targetUserId: studentId!,
+                                    name: name,
+                                    profile: profile!));
                           },
                           child: const Icon(
                             Ionicons.chatbubble_ellipses_outline,

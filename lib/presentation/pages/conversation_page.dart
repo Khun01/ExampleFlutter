@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/message_card/conversation_list_card.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
 
@@ -109,34 +110,31 @@ class _ChatPageState extends State<ConversationPage> {
             final successState = state as MessageFetchSuccessChatState;
             if (successState.chats.isEmpty) {
               body = SliverFillRemaining(
-                hasScrollBody: false,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/no_chat.png'
+                  hasScrollBody: false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/no_chat.png'),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No Message, yet',
+                          style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B)),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Send a message to get the conversation started and connect with them.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.nunito(
+                              fontSize: 14, color: const Color(0xCC3B3B3B)),
+                        )
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'No Message, yet',
-                      style: GoogleFonts.nunito(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xFF3B3B3B)
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Send a message to get the conversation started and connect with them.',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.nunito(
-                        fontSize: 14,
-                        color: const Color(0xCC3B3B3B)
-                      ),
-                    )
-                  ],
-                )
-              );
+                  ));
             } else {
               body = SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -241,21 +239,31 @@ class _ChatPageState extends State<ConversationPage> {
                                     ),
                                   ),
                                   const SizedBox(width: 12),
-                                  CircleAvatar(
-                                      backgroundColor: const Color(0xFFA3D9A5),
-                                      child: widget.profile != ''
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xFFA3D9A5),
+                                        borderRadius:
+                                            BorderRadius.circular(500)),
+                                    child: ClipOval(
+                                      child: widget.profile !=
+                                              ''
                                           ? Image.network(
-                                              '//${widget.profile}',
+                                              '$profileUrl${widget.profile}',
+                                              fit: BoxFit.cover,
                                               errorBuilder: (context, error,
                                                       stackTrace) =>
-                                                  const Icon(
-                                                      Icons.error_rounded),
+                                                  const Icon(Icons.person,
+                                                      size: 10),
                                             )
                                           : Image.asset(
                                               'assets/images/profile_clicked.png',
-                                              fit: BoxFit.cover,
-                                              width: 18,
-                                            )),
+                                              width: 5,
+                                              height: 5,
+                                            ),
+                                    ),
+                                  ),
                                   const SizedBox(width: 12),
                                   Column(
                                     crossAxisAlignment:

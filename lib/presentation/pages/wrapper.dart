@@ -6,6 +6,7 @@ import 'package:help_isko/presentation/bloc/employee/duty/add/add_duty_bloc.dart
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/acceptStudent/accept_student_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/declineStudent/decline_student_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
@@ -66,6 +67,9 @@ class _WrapperState extends State<Wrapper> {
     final RecentActivitiesBloc recentActivitiesBloc =
         RecentActivitiesBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
           ..add(FetchRecentActivitiesEvent(role: widget.role));
+    final RequestForDutiesBloc requestForDutiesBloc = RequestForDutiesBloc(
+        requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl))
+      ..add(FetchRequestForDutiesEvent());
 
     return MultiBlocProvider(
       providers: [
@@ -76,7 +80,8 @@ class _WrapperState extends State<Wrapper> {
         BlocProvider(create: (context) => addDutyBloc),
         BlocProvider(create: (context) => declineStudentBloc),
         BlocProvider(create: (context) => messengerBloc),
-        BlocProvider(create: (context) => recentActivitiesBloc)
+        BlocProvider(create: (context) => recentActivitiesBloc),
+        BlocProvider(create: (context) => requestForDutiesBloc)
       ],
       child: MultiBlocListener(
         listeners: [
@@ -152,6 +157,8 @@ class _WrapperState extends State<Wrapper> {
                                               value: acceptStudentBloc),
                                           BlocProvider.value(
                                               value: declineStudentBloc),
+                                          BlocProvider.value(
+                                              value: requestForDutiesBloc),
                                         ],
                                         child: const EmployeeDutiesPage(),
                                       ),

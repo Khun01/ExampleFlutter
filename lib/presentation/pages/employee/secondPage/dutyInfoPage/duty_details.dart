@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +9,7 @@ import 'package:help_isko/presentation/bloc/employee/duty/update/update_duty_blo
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
+import 'package:intl/intl.dart';
 
 class DutyDetails extends StatefulWidget {
   final ProfDuty profDuty;
@@ -31,6 +34,9 @@ class _DutyDetailsState extends State<DutyDetails> {
   final GlobalKey<FormState> _formKeyStudent = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeyMessage = GlobalKey<FormState>();
 
+  DateTime? selectedDate;
+  TimeOfDay? selectedStartTime;
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +56,13 @@ class _DutyDetailsState extends State<DutyDetails> {
 
   @override
   Widget build(BuildContext context) {
+    String formatTimeOfDay(TimeOfDay time) {
+      final now = DateTime.now();
+      final formattedTime =
+          DateTime(now.year, now.month, now.day, time.hour, time.minute);
+      return "${formattedTime.hour.toString().padLeft(2, '0')}:${formattedTime.minute.toString().padLeft(2, '0')}";
+    }
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -66,16 +79,17 @@ class _DutyDetailsState extends State<DutyDetails> {
                         fontWeight: FontWeight.bold),
                     const SizedBox(width: 8),
                     MyAddDutyField(
-                        formKey: _formKeyBuilding,
-                        controller: building,
-                        hintText: widget.profDuty.building!,
-                        hintColor: const Color(0xFF3B3B3B),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return null;
-                          }
+                      formKey: _formKeyBuilding,
+                      controller: building,
+                      hintText: widget.profDuty.building!,
+                      hintColor: const Color(0xFF3B3B3B),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
                           return null;
-                        }),
+                        }
+                        return null;
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -88,21 +102,42 @@ class _DutyDetailsState extends State<DutyDetails> {
                         label: 'Date',
                         fontWeight: FontWeight.bold),
                     const SizedBox(width: 8),
-                    MyAddDutyField(
-                        formKey: _formKeyDate,
-                        controller: date,
-                        hintText: widget.profDuty.date!,
-                        hintColor: const Color(0xFF3B3B3B),
-                        validator: (value) {
-                          String pattern = r'^\d{4}-\d{2}-\d{2}$';
-                          RegExp regExp = RegExp(pattern);
-                          if (value == null || value.isEmpty) {
+                    GestureDetector(
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            selectedDate = pickedDate;
+                            date.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                          });
+                        }
+                      },
+                      child: AbsorbPointer(
+                        child: MyAddDutyField(
+                          formKey: _formKeyDate,
+                          controller: date,
+                          hintText: widget.profDuty.date!,
+                          keyboardType: TextInputType.datetime,
+                          validator: (value) {
+                            String pattern = r'^\d{4}-\d{2}-\d{2}$';
+                            RegExp regExp = RegExp(pattern);
+                            if (value == null || value.isEmpty) {
+                              return null;
+                            } else if (!regExp.hasMatch(value)) {
+                              return 'Enter a valid date (YYYY-MM-DD)';
+                            }
                             return null;
-                          } else if (!regExp.hasMatch(value)) {
-                            return 'Enter a valid date (YYYY-MM-DD)';
-                          }
-                          return null;
-                        }),
+                          },
+                          readOnly: true,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )
@@ -114,57 +149,110 @@ class _DutyDetailsState extends State<DutyDetails> {
             children: [
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const MyAddDutiesLabel(
-                        icon: Icons.alarm_rounded,
-                        label: 'Start at',
-                        fontWeight: FontWeight.bold),
-                    const SizedBox(width: 8),
+                        icon: Icons.alarm_rounded, label: 'Start at'),
                     MyAddDutyField(
-                        formKey: _formKeyStartAt,
-                        controller: startAt,
-                        hintText: widget.profDuty.formattedStartTime,
-                        hintColor: const Color(0xFF3B3B3B),
-                        validator: (value) {
-                          String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                          RegExp regExp = RegExp(pattern);
-                          if (value == null || value.isEmpty) {
-                            return null;
-                          } else if (!regExp.hasMatch(value)) {
-                            return 'Enter a valid time in 24-hour format (HH:mm)';
-                          }
+                      formKey: _formKeyStartAt,
+                      controller: startAt,
+                      hintText: widget.profDuty.formattedStartTime,
+                      hintColor: const Color(0xFF3B3B3B),
+                      readOnly: true,
+                      validator: (value) {
+                        String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                        RegExp regExp = RegExp(pattern);
+                        if (value == null || value.isEmpty) {
                           return null;
-                        })
+                        } else if (!regExp.hasMatch(value)) {
+                          return 'Enter a valid time in 24-hour format (HH:mm)';
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          if (selectedDate != null &&
+                              selectedDate!.isAtSameMomentAs(DateTime.now())) {
+                            final now = DateTime.now();
+                            final currentTime =
+                                TimeOfDay(hour: now.hour, minute: now.minute);
+                            if (selectedTime.hour < currentTime.hour ||
+                                (selectedTime.hour == currentTime.hour &&
+                                    selectedTime.minute < currentTime.minute)) {
+                              log('Selected start time has already passed');
+                              return;
+                            }
+                          }
+                          setState(() {
+                            selectedStartTime = selectedTime;
+                            startAt.text = formatTimeOfDay(selectedTime);
+                          });
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const MyAddDutiesLabel(
-                        icon: Icons.alarm_rounded,
-                        label: 'End at',
-                        fontWeight: FontWeight.bold),
-                    const SizedBox(width: 8),
+                        icon: Icons.alarm_rounded, label: 'End at'),
                     MyAddDutyField(
-                        formKey: _formKeyEndAt,
-                        controller: endAt,
-                        hintText: widget.profDuty.formattedEndTime,
-                        hintColor: const Color(0xFF3B3B3B),
-                        validator: (value) {
-                          String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                          RegExp regExp = RegExp(pattern);
-                          if (value == null || value.isEmpty) {
-                            return null;
-                          } else if (!regExp.hasMatch(value)) {
-                            return 'Enter a valid time in 24-hour format (HH:mm)';
-                          }
+                      formKey: _formKeyEndAt,
+                      controller: endAt,
+                      hintText: widget.profDuty.formattedEndTime,
+                      hintColor: const Color(0xFF3B3B3B),
+                      readOnly: true,
+                      validator: (value) {
+                        String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                        RegExp regExp = RegExp(pattern);
+                        if (value == null || value.isEmpty) {
                           return null;
-                        })
+                        } else if (!regExp.hasMatch(value)) {
+                          return 'Enter a valid time in 24-hour format (HH:mm)';
+                        }
+                        return null;
+                      },
+                      onTap: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          if (selectedStartTime != null) {
+                            final startDateTime = DateTime(
+                                selectedDate!.year,
+                                selectedDate!.month,
+                                selectedDate!.day,
+                                selectedStartTime!.hour,
+                                selectedStartTime!.minute);
+                            final endDateTime = DateTime(
+                                selectedDate!.year,
+                                selectedDate!.month,
+                                selectedDate!.day,
+                                selectedTime.hour,
+                                selectedTime.minute);
+                            if (endDateTime.isBefore(startDateTime)) {
+                              log('End time cannot be earlier than start time');
+                              return;
+                            }
+                          }
+                          setState(() {
+                            endAt.text = formatTimeOfDay(selectedTime);
+                          });
+                        }
+                      },
+                    )
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -179,17 +267,18 @@ class _DutyDetailsState extends State<DutyDetails> {
                         label: 'Students',
                         fontWeight: FontWeight.bold),
                     MyAddDutyField(
-                        formKey: _formKeyStudent,
-                        controller: students,
-                        hintText: widget.profDuty.maxScholars.toString(),
-                        hintColor: const Color(0xFF3B3B3B),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return null;
-                          }
+                      formKey: _formKeyStudent,
+                      controller: students,
+                      hintText: widget.profDuty.maxScholars.toString(),
+                      hintColor: const Color(0xFF3B3B3B),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
                           return null;
-                        })
+                        }
+                        return null;
+                      },
+                    )
                   ],
                 ),
               ),
@@ -232,69 +321,104 @@ class _DutyDetailsState extends State<DutyDetails> {
           const SizedBox(height: 8),
           const Divider(),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: MyButton(
-                    onTap: () {
-                      context.read<DeleteDutyBloc>().add(
-                          DeleteDutyButtonClickedEvent(
-                              profDuty: widget.profDuty));
-                    },
-                    buttonText: 'Delete',
-                    textColor: const Color(0xFF3B3B3B),
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderColor: const Color(0xFF3B3B3B)),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: MyButton(
-                    onTap: () {
-                      final validatedDate =
-                          _formKeyDate.currentState!.validate();
-                      final validatedStartAt =
-                          _formKeyStartAt.currentState!.validate();
-                      final validatedEndAt =
-                          _formKeyEndAt.currentState!.validate();
-                      final validatedBuilding =
-                          _formKeyBuilding.currentState!.validate();
-                      final validatedStudents =
-                          _formKeyStudent.currentState!.validate();
-                      final validatedMessage =
-                          _formKeyMessage.currentState!.validate();
-                      if (validatedDate &&
-                          validatedStartAt &&
-                          validatedEndAt &&
-                          validatedBuilding &&
-                          validatedStudents &&
-                          validatedMessage) {
-                        context.read<UpdateDutyBloc>().add(
-                            UpdateDutyButtonClickedEvent(
-                                building.text.isNotEmpty
-                                    ? building.text
-                                    : widget.profDuty.building!,
-                                date.text.isNotEmpty
-                                    ? date.text
-                                    : widget.profDuty.date!,
-                                startAt.text.isNotEmpty
-                                    ? startAt.text
-                                    : widget.profDuty.formattedStartTime,
-                                endAt.text.isNotEmpty
-                                    ? endAt.text
-                                    : widget.profDuty.formattedEndTime,
-                                message.text.isNotEmpty
-                                    ? message.text
-                                    : widget.profDuty.message!,
-                                students.text.isNotEmpty
-                                    ? students.text
-                                    : widget.profDuty.maxScholars.toString(),
-                                profDuty: widget.profDuty));
-                      }
-                    },
-                    buttonText: 'Update'),
-              )
-            ],
-          )
+          widget.profDuty.dutyStatus == 'cancelled'
+              ? MyButton(
+                  onTap: () {
+                    context.read<DeleteDutyBloc>().add(
+                        DeleteDutyButtonClickedEvent(
+                            profDuty: widget.profDuty));
+                  },
+                  buttonText: 'Delete',
+                  textColor: const Color(0xFF3B3B3B),
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  borderColor: const Color(0xFF3B3B3B))
+              : widget.profDuty.dutyStatus == 'completed'
+                  ? Text(
+                      'This duty has already been completed.',
+                      style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B)),
+                    )
+                  : widget.profDuty.dutyStatus == 'active'
+                      ? Text(
+                          'This duty is already active.',
+                          style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B)),
+                        )
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: MyButton(
+                                  onTap: () {
+                                    context.read<DeleteDutyBloc>().add(
+                                        DeleteDutyButtonClickedEvent(
+                                            profDuty: widget.profDuty));
+                                  },
+                                  buttonText: 'Delete',
+                                  textColor: const Color(0xFF3B3B3B),
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  borderColor: const Color(0xFF3B3B3B)),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: MyButton(
+                                  onTap: () {
+                                    final validatedDate =
+                                        _formKeyDate.currentState!.validate();
+                                    final validatedStartAt = _formKeyStartAt
+                                        .currentState!
+                                        .validate();
+                                    final validatedEndAt =
+                                        _formKeyEndAt.currentState!.validate();
+                                    final validatedBuilding = _formKeyBuilding
+                                        .currentState!
+                                        .validate();
+                                    final validatedStudents = _formKeyStudent
+                                        .currentState!
+                                        .validate();
+                                    final validatedMessage = _formKeyMessage
+                                        .currentState!
+                                        .validate();
+                                    if (validatedDate &&
+                                        validatedStartAt &&
+                                        validatedEndAt &&
+                                        validatedBuilding &&
+                                        validatedStudents &&
+                                        validatedMessage) {
+                                      context.read<UpdateDutyBloc>().add(
+                                          UpdateDutyButtonClickedEvent(
+                                              building.text.isNotEmpty
+                                                  ? building.text
+                                                  : widget.profDuty.building!,
+                                              date.text.isNotEmpty
+                                                  ? date.text
+                                                  : widget.profDuty.date!,
+                                              startAt.text.isNotEmpty
+                                                  ? startAt.text
+                                                  : widget.profDuty
+                                                      .formattedStartTime,
+                                              endAt.text.isNotEmpty
+                                                  ? endAt.text
+                                                  : widget.profDuty
+                                                      .formattedEndTime,
+                                              message.text.isNotEmpty
+                                                  ? message.text
+                                                  : widget.profDuty.message!,
+                                              students.text.isNotEmpty
+                                                  ? students.text
+                                                  : widget.profDuty.maxScholars
+                                                      .toString(),
+                                              profDuty: widget.profDuty));
+                                    }
+                                  },
+                                  buttonText: 'Update'),
+                            )
+                          ],
+                        )
         ],
       ),
     );

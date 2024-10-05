@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class EmployeeProfilePage extends StatelessWidget {
@@ -66,23 +67,24 @@ class EmployeeProfilePage extends StatelessWidget {
                                     child: Stack(
                                       fit: StackFit.expand,
                                       children: [
-                                        AnimatedContainer(
-                                          duration:
-                                              const Duration(milliseconds: 300),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                                scrolled ? 550 : 0),
-                                            image: DecorationImage(
-                                              image: state.profile != null
-                                                  ? NetworkImage(
-                                                      'http://192.168.100.212:8000/${state.profile}',
-                                                    )
-                                                  : const AssetImage(
-                                                      'assets/images/luffy.jpeg'),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
+                                        state.profile != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        scrolled ? 500 : 0),
+                                                child: Image.network(
+                                                    '$profileUrl${state.profile}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        Container()),
+                                              )
+                                            : Image.asset(
+                                                'assets/images/profile_clicked.png',
+                                                fit: BoxFit.cover,
+                                                width: 30,
+                                              ),
                                         AnimatedContainer(
                                           duration:
                                               const Duration(milliseconds: 300),
@@ -219,6 +221,56 @@ class EmployeeProfilePage extends StatelessWidget {
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF6BB577)),
                             ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Birthday',
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Contact Number',
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    state.birthday ?? "N/A",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 12,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    state.contactNumber ?? "N/A",
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 12,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            const Divider(),
+                            const SizedBox(height: 8),
                           ],
                         ),
                       ),

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:help_isko/models/data/announcement.dart';
+import 'package:help_isko/models/data/comment.dart';
+import 'package:help_isko/models/data/notification.dart';
 import 'package:help_isko/models/data/recent_activities.dart';
 import 'package:help_isko/models/duty/students.dart';
 import 'package:help_isko/repositories/pusher_repository.dart';
@@ -183,26 +185,6 @@ class ApiRepositories {
       },
     );
     if (response.statusCode == 200) {
-      // final Map<String, dynamic> recentActivities = json.decode(response.body);
-      // final List<dynamic>? recentActivitiesList =
-      //     recentActivities['recent_activities'];
-      // if (recentActivitiesList != null) {
-      //   return recentActivitiesList
-      //       .map((e) => RecentActivities.fromJson(e))
-      //       .toList();
-      // } else {
-      //   return [];
-      // }
-      // final Map<String, dynamic> data = json.decode(response.body);
-      // if (data.containsKey('recent_activities') &&
-      //     data['recent_activities'] is List) {
-      //   final List<dynamic> recentActivitiesList = data['recent_activities'];
-      //   return recentActivitiesList
-      //       .map((activity) => RecentActivities.fromJson(activity))
-      //       .toList();
-      // } else {
-      //   return [];
-      // }
       final data = json.decode(response.body);
       final List<dynamic> activitiesJson =
           data['recent_activities'] is List ? data['recent_activities'] : [];
@@ -212,6 +194,76 @@ class ApiRepositories {
     } else {
       log('The status code is: ${response.statusCode}');
       throw Exception('Failed to load duties');
+    }
+  }
+
+  // ------------------- COMMENT --------------------//
+  Future<List<Comment>> fetchComment(String studentId) async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/feedback/index/$studentId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      List<dynamic> commentList = jsonResponse['feedbacks'];
+      return commentList.map((comment) => Comment.fromJson(comment)).toList();
+    } else {
+      throw Exception('Failed to load feedbacks');
+    }
+  }
+
+  Future<Map<String, dynamic>> addComment(String comment, String studId) async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    var url = Uri.parse('$baseUrl/feedback/$studId');
+    final response = await http.post(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: jsonEncode({"comment": comment}));
+    return {
+      'statusCode': response.statusCode,
+      'body': response.body
+    };
+  }
+
+  // ------------------- Notification --------------------//
+  Future<Map<String, List<Notification>>> fetchNotification(String role) async {
+    final userDataStudent = await StudentStorage.getData();
+    final userDataEmployee = await EmployeeStorage.getData();
+    String? tokenEmployee = userDataEmployee['employeeToken'];
+    String? tokenStudent = userDataStudent['studToken'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/duty/notifications'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization':
+            'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}'
+      },
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final today = (data['grouped_notifications']['today'] as List)
+          .map((item) => Notification.fromJson(item))
+          .toList();
+
+      final yesterday = (data['grouped_notifications']['yesterday'] as List)
+          .map((item) => Notification.fromJson(item))
+          .toList();
+
+      final byDate = (data['grouped_notifications']['by_date'] as List)
+          .map((item) => Notification.fromJson(item))
+          .toList();
+
+      return {'today': today, 'yesterday': yesterday, 'by_date': byDate};
+    } else {
+      throw Exception('Failed to load notification');
     }
   }
 }

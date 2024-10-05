@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class PostedDutiesHome extends StatelessWidget {
   final String date;
   final String building;
   final String message;
   final String dutyStatus;
+  final String? profile;
 
   const PostedDutiesHome({
     super.key,
@@ -13,6 +15,7 @@ class PostedDutiesHome extends StatelessWidget {
     required this.building,
     required this.message,
     required this.dutyStatus,
+    this.profile,
   });
 
   @override
@@ -39,13 +42,24 @@ class PostedDutiesHome extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
-                backgroundColor: Color(0x808CC9A6),
-                radius: 25,
-                child: ImageIcon(
-                  AssetImage('assets/images/profile_clicked.png'),
-                  size: 20,
-                  color: Color(0xFF3B3B3B),
+              Container(
+                height: 50,
+                width: 50,
+                decoration: BoxDecoration(
+                    color: const Color(0xFFA3D9A5),
+                    borderRadius: BorderRadius.circular(500)),
+                child: ClipOval(
+                  child: profile != ''
+                      ? Image.network(
+                          '$profileUrl$profile',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.person, size: 30),
+                        )
+                      : Image.asset(
+                          'assets/images/profile_clicked.png',
+                          width: 20,
+                        ),
                 ),
               ),
               const SizedBox(width: 6),
@@ -54,8 +68,7 @@ class PostedDutiesHome extends StatelessWidget {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(5),
@@ -66,18 +79,22 @@ class PostedDutiesHome extends StatelessWidget {
                               ? const Color(0xFFE5BA03)
                               : dutyStatus == 'active'
                                   ? const Color(0xFF6BB577)
-                                  : dutyStatus == 'on-going'
+                                  : dutyStatus == 'ongoing'
                                       ? const Color(0xFF26A1F4)
-                                      : const Color(0xFFB2AC88)),
+                                      : dutyStatus == 'cancelled'
+                                          ? const Color(0xFFF44336)
+                                          : const Color(0xFFB2AC88)),
                       child: Center(
                         child: Text(
                           dutyStatus == 'pending'
                               ? 'Pending'
                               : dutyStatus == 'active'
                                   ? 'Active'
-                                  : dutyStatus == 'on-going'
+                                  : dutyStatus == 'ongoing'
                                       ? 'On-going'
-                                      : 'Completed',
+                                      : dutyStatus == 'cancelled'
+                                          ? 'Cancelled'
+                                          : 'Completed',
                           style: GoogleFonts.nunito(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

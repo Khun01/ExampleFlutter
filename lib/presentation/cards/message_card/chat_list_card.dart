@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/pages/conversation_page.dart';
 import 'package:help_isko/presentation/pages/messenger_page.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/repositories/pusher_repository.dart';
 
 class ChatListCard extends StatefulWidget {
@@ -125,23 +126,29 @@ class _ChatListCardState extends State<ChatListCard> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xFFA3D9A5),
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  color: const Color(0xFFA3D9A5),
+                                  borderRadius: BorderRadius.circular(500)),
+                              child: ClipOval(
                                 child: state.existingChats[index].user
                                             .profileImage !=
                                         ''
                                     ? Image.network(
-                                        '//${state.existingChats[index].user.profileImage}',
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                const Icon(Icons.error_rounded),
+                                        '$profileUrl${state.existingChats[index].user.profileImage}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error,
+                                                stackTrace) =>
+                                            const Icon(Icons.person, size: 20),
                                       )
                                     : Image.asset(
                                         'assets/images/profile_clicked.png',
-                                        fit: BoxFit.cover,
-                                        width: 30,
-                                      )),
+                                        width: 5,
+                                      ),
+                              ),
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(

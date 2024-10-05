@@ -16,6 +16,8 @@ class UserDataLoaded extends UserDataState {
   final String? firstName;
   final String? lastName;
   final String? idNumber;
+  final String? birthday;
+  final String? contactNumber;
   final String? college;
   final String? course;
   final String? department;
@@ -33,6 +35,8 @@ class UserDataLoaded extends UserDataState {
     this.firstName,
     this.lastName,
     this.idNumber,
+    this.birthday,
+    this.contactNumber,
     this.college,
     this.course,
     this.department,
