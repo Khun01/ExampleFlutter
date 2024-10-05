@@ -10,6 +10,7 @@ import 'package:help_isko/presentation/bloc/employee/requestForDuties/showReques
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/dutiespage/duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_duties_page.dart';
 import 'package:help_isko/presentation/pages/employee/firstPage/employee_home_page.dart';
@@ -24,10 +25,12 @@ import 'package:help_isko/presentation/pages/students/firstPage/student_home_pag
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/repositories/messenger_repositories.dart';
+import 'package:help_isko/repositories/student/dutiespage/available_duties_repository.dart';
 import 'package:help_isko/repositories/student/homepage/requested_duties_repository.dart';
 import 'package:help_isko/services/duty/duty_services.dart';
 import 'package:help_isko/services/duty/request_for_duties_services.dart';
 import 'package:help_isko/services/messenger_service.dart';
+import 'package:help_isko/services/student/dutiespage/available_duties_service.dart';
 import 'package:help_isko/services/student/homepage/requested_duties_service.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -175,7 +178,14 @@ class _WrapperState extends State<Wrapper> {
                                                             RequestedDutiesService()))
                                               ..add(RequestedDutiesFetch())),
                                       ], child: StudentHomePage()),
-                                      StudentDutiesPage(),
+                                      MultiBlocProvider(providers: [
+                                        BlocProvider(
+                                          create: (context) => DutiesBloc(
+                                              AvailableDutiesRepository(
+                                                  AvailableDutiesService()))
+                                            ..add(DutiesAvailableFetch()),
+                                        ),
+                                      ], child: StudentDutiesPage()),
                                       MessengerPage(role: 'Student'),
                                       StudentProfilePage(),
                                     ],
