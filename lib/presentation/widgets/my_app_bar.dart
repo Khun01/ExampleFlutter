@@ -100,8 +100,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 child: Icon(UIcons.regularRounded.users)))
                         : FadeInRight(
                             duration: const Duration(milliseconds: 700),
-                            child: const Icon(Ionicons.document_text,
-                                color: Color(0xFF3B3B3B)),
+                            child: const Icon(
+                              Ionicons.document_text_outline,
+                              size: 28,
+                              color: Color(0xFF3B3B3B),
+                            ),
                           ),
                     const SizedBox(width: 16),
                     FadeInRight(
