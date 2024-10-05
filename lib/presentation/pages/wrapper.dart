@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -172,10 +174,11 @@ class _WrapperState extends State<Wrapper> {
                             Positioned(
                               left: 0,
                               right: 0,
-                              bottom: 0,
+                              bottom: Platform.isAndroid ? 0 : -10,
                               child: Container(
                                 height: 70,
-                                decoration: BoxDecoration(boxShadow: [
+                                decoration: BoxDecoration(
+                                  boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.03),
                                     spreadRadius: 1,
