@@ -10,9 +10,6 @@ part 'hk_status_state.dart';
 class HkStatusBloc extends Bloc<HkStatusEvent, HkStatusState> {
   final HkStatusRepository hkStatusRepository;
   HkStatusBloc({required this.hkStatusRepository}) : super(HkStatusInitial()) {
-    on<HkStatusEvent>((event, emit) {
-      // TODO: implement event handler
-    });
     on<HkStatusFetchDataEvent>(hkStatusFetchDataEvent);
   }
 

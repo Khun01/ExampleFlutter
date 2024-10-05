@@ -15,9 +15,6 @@ class DutiesBloc extends Bloc<DutiesEvent, DutiesState> {
   DutiesBloc(
     this.availableDutiesRepository,
   ) : super(DutiesInitial()) {
-    on<DutiesEvent>((event, emit) {
-      // TODO: implement event handler
-    });
     on<DutiesAvailableFetch>(dutiesAvailableFetch);
     on<DutiesAcceptEvent>(dutiesAcceptEvent);
   }

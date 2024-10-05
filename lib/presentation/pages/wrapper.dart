@@ -171,15 +171,20 @@ class _WrapperState extends State<Wrapper> {
                                       const EmployeeProfilePage(),
                                     ]
                                   : [
-                                      MultiBlocProvider(providers: [
-                                        BlocProvider(
-                                            create: (context) => RequestedDutiesBloc(
-                                                requestedDutiesRepository:
-                                                    RequestedDutiesRepository(
-                                                        requestedDutiesService:
-                                                            RequestedDutiesService()))
-                                              ..add(RequestedDutiesFetch())),
-                                      ], child: StudentHomePage()),
+                                      MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider(
+                                              create: (context) => RequestedDutiesBloc(
+                                                  requestedDutiesRepository:
+                                                      RequestedDutiesRepository(
+                                                          requestedDutiesService:
+                                                              RequestedDutiesService()))
+                                                ..add(RequestedDutiesFetch())),
+                                          BlocProvider.value(
+                                              value: announcementBloc)
+                                        ],
+                                        child: const StudentHomePage(),
+                                      ),
                                       MultiBlocProvider(providers: [
                                         BlocProvider(
                                           create: (context) => DutiesBloc(
@@ -187,9 +192,9 @@ class _WrapperState extends State<Wrapper> {
                                                   AvailableDutiesService()))
                                             ..add(DutiesAvailableFetch()),
                                         ),
-                                      ], child: StudentDutiesPage()),
-                                      MessengerPage(role: 'Student'),
-                                      StudentProfilePage(),
+                                      ], child: const StudentDutiesPage()),
+                                      const MessengerPage(role: 'Student'),
+                                      const StudentProfilePage(),
                                     ],
                             ),
                             Positioned(
@@ -198,8 +203,7 @@ class _WrapperState extends State<Wrapper> {
                               bottom: Platform.isAndroid ? 0 : -10,
                               child: Container(
                                 height: 70,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
+                                decoration: BoxDecoration(boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.03),
                                     spreadRadius: 1,

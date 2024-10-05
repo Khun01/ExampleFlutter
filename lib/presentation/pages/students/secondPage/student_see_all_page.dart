@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
-import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
 class StudentSeeAllPage extends StatelessWidget {
   const StudentSeeAllPage({super.key});
@@ -11,12 +13,10 @@ class StudentSeeAllPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Requested Duties"),
+          title: const Text("Requested Duties"),
         ),
         body: BlocConsumer<RequestedDutiesBloc, RequestedDutiesState>(
-          listener: (context, state) {
-            // TODO: implement listener
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             switch (state.runtimeType) {
               case RequestedDutiesFetchSuccessState:
@@ -28,62 +28,55 @@ class StudentSeeAllPage extends StatelessWidget {
                         color: Colors.white,
                         child: Stack(
                           children: [
-                            Container(
-                              child: Row(
-                                children: [
-                                  state.requestedDuties[index]
-                                              .employeeProfile !=
-                                          ""
-                                      ? Image.network(
-                                          '${state.requestedDuties[index].employeeProfile}',
-                                          height: 30,
-                                        )
-                                      : Image.asset(
-                                          'assets/images/profile_clicked.png',
-                                          height: 30,
-                                        ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      // name
-                                      Text(state
-                                          .requestedDuties[index].employeeName),
-                                      // message
-                                      Text(
-                                          state.requestedDuties[index].message),
-
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            'Date: ${state.requestedDuties[index].date}',
-                                            style: TextStyle(fontSize: 10),
-                                          ),
-                                          SizedBox(
-                                            width: 20,
-                                          ),
-                                          Container(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    '${state.requestedDuties[index].building} : ',
-                                                    style: TextStyle(
-                                                        fontSize: 10)),
-                                                Text(
-                                                    '${state.requestedDuties[index].time}',
-                                                    style: TextStyle(
-                                                        fontSize: 10)),
-                                              ],
-                                            ),
-                                          )
-                                        ],
+                            Row(
+                              children: [
+                                state.requestedDuties[index].employeeProfile !=
+                                        ""
+                                    ? Image.network(
+                                        '${state.requestedDuties[index].employeeProfile}',
+                                        height: 30,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/profile_clicked.png',
+                                        height: 30,
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // name
+                                    Text(state
+                                        .requestedDuties[index].employeeName),
+                                    // message
+                                    Text(state.requestedDuties[index].message),
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Date: ${state.requestedDuties[index].date}',
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                                '${state.requestedDuties[index].building} : ',
+                                                style: const TextStyle(
+                                                    fontSize: 10)),
+                                            Text(
+                                                state.requestedDuties[index]
+                                                    .time,
+                                                style: const TextStyle(
+                                                    fontSize: 10)),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                             Positioned(
                                 top: 2,
@@ -119,6 +112,10 @@ class StudentSeeAllPage extends StatelessWidget {
                         ),
                       );
                     });
+              case RequestForDutiesFailedState:
+                state as RequestedDutiesFetchFailedState;
+                log('The error in see all duties page for studnet is: ${state.errorMessage}');
+                return Text(state.errorMessage);
               default:
                 return SizedBox();
             }

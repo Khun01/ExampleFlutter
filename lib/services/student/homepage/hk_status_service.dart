@@ -5,7 +5,7 @@ import 'package:help_isko/repositories/storage/student_storage.dart';
 import 'package:http/http.dart';
 
 class HkStatusService {
-  Future<String> getHkStatus() async {
+  Future<int> getHkStatus() async {
     try {
       final studentData = await StudentStorage.getData();
 
@@ -18,7 +18,7 @@ class HkStatusService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = jsonDecode(response.body);
-        final String percentage = jsonData['percentage'];
+        final int percentage = jsonData['percentage'];
         return percentage;
       } else {
         throw Exception('No Duty Hours');
