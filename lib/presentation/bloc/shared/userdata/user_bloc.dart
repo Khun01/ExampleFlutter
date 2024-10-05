@@ -28,6 +28,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final fatherContactNumber = userData['fatherContactNumber'] ?? 'N/A';
         final motherName = userData['motherName'] ?? 'N/A';
         final motherContactNumber = userData['motherContactNumber'] ?? 'N/A';
+        final profileImg = userData['profileImg'] ?? 'N/A';
         emit(UserDataLoaded(
             name: name,
             token: token,
@@ -42,7 +43,8 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
             fatherName: fatherName,
             fatherContactNumber: fatherContactNumber,
             motherName: motherName,
-            motherContactNumber: motherContactNumber));
+            motherContactNumber: motherContactNumber,
+            profile: profileImg));
       }else if(event.role == 'Employee'){
         final userData = await EmployeeStorage.getData();
         final name = userData['name'] ?? 'N/A';

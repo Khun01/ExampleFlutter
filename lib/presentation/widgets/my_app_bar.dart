@@ -32,29 +32,32 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Row(
                   children: [
                     FadeInLeft(
-                      duration: const Duration(milliseconds: 700),
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: const Color(0xFFA3D9A5),
-                        child: ClipOval(
-                          child: state.profile != null
-                              ? Image.network(
-                                  '$profileUrl${state.profile}',
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Image.asset(
+                        duration: const Duration(milliseconds: 700),
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(500)),
+                          child: ClipOval(
+                            child: state.profile != null
+                                ? Image.network(
+                                    '$profileUrl${state.profile}',
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Image.asset(
+                                      'assets/images/profile_clicked.png',
+                                      fit: BoxFit.cover,
+                                      width: 30,
+                                    ),
+                                  )
+                                : Image.asset(
                                     'assets/images/profile_clicked.png',
                                     fit: BoxFit.cover,
                                     width: 30,
                                   ),
-                                )
-                              : Image.asset(
-                                  'assets/images/profile_clicked.png',
-                                  fit: BoxFit.cover,
-                                  width: 30,
-                                ),
-                        ),
-                      ),
-                    ),
+                          ),
+                        )),
                     const SizedBox(width: 10),
                     FadeInLeft(
                       duration: const Duration(milliseconds: 700),
