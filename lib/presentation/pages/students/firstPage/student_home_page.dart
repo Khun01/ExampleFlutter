@@ -11,9 +11,7 @@ import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/presentation/pages/landing_page.dart';
 import 'package:help_isko/repositories/student/homepage/hk_status_repository.dart';
-import 'package:help_isko/repositories/student/homepage/requested_duties_repository.dart';
 import 'package:help_isko/services/student/homepage/hk_status_service.dart';
-import 'package:help_isko/services/student/homepage/requested_duties_service.dart';
 
 class StudentHomePage extends StatelessWidget {
   const StudentHomePage({
@@ -74,7 +72,7 @@ class StudentHomePage extends StatelessWidget {
                           state as HkStatusFetchSuccess;
                           return Text('Duty Hours: ${state.percentage}');
                         default:
-                          return SizedBox();
+                          return const SizedBox();
                       }
                     },
                   ),

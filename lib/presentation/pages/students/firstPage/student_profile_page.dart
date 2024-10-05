@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentProfilePage extends StatelessWidget {
@@ -66,18 +67,24 @@ class StudentProfilePage extends StatelessWidget {
                                     child: Stack(
                                       fit: StackFit.expand,
                                       children: [
-                                        AnimatedContainer(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrolled ? 550 : 0),
-                                              image: const DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/luffy.jpeg'),
-                                                  fit: BoxFit.cover),
-                                            )),
+                                        state.profile != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        scrolled ? 500 : 0),
+                                                child: Image.network(
+                                                    '$profileUrl${state.profile}',
+                                                    fit: BoxFit.cover,
+                                                    errorBuilder: (context,
+                                                            error,
+                                                            stackTrace) =>
+                                                        Container()),
+                                              )
+                                            : Image.asset(
+                                                'assets/images/profile_clicked.png',
+                                                fit: BoxFit.cover,
+                                                width: 30,
+                                              ),
                                         AnimatedContainer(
                                             duration: const Duration(
                                                 milliseconds: 300),
@@ -156,10 +163,11 @@ class StudentProfilePage extends StatelessWidget {
                                         child: IconButton(
                                           onPressed: () {
                                             showDialog(
-                                              barrierDismissible: false,
+                                                barrierDismissible: false,
                                                 context: context,
                                                 builder: (context) =>
-                                                    const MyDialog(role: 'Student'));
+                                                    const MyDialog(
+                                                        role: 'Student'));
                                           },
                                           icon: Icon(Ionicons.log_out,
                                               color: scrolled
@@ -322,10 +330,9 @@ class StudentProfilePage extends StatelessWidget {
                             Text(
                               'Person Details',
                               style: GoogleFonts.nunito(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF6BB577)
-                              ),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
                             ),
                             const SizedBox(height: 6),
                             Row(
@@ -490,10 +497,9 @@ class StudentProfilePage extends StatelessWidget {
                             Text(
                               'Contact Details',
                               style: GoogleFonts.nunito(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF6BB577)
-                              ),
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
                             ),
                           ],
                         ),
