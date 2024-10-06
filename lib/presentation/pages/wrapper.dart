@@ -184,14 +184,19 @@ class _WrapperState extends State<Wrapper> {
                                           BlocProvider.value(
                                               value: announcementBloc),
                                           BlocProvider.value(
-                                              value: requestedDutiesBloc)
+                                              value: requestedDutiesBloc),
+                                          BlocProvider.value(value: dutiesBloc),
                                         ],
                                         child: const StudentHomePage(),
                                       ),
-                                      MultiBlocProvider(providers: [
-                                        BlocProvider.value(value: dutiesBloc),
-                                        BlocProvider.value(value: requestedDutiesBloc)
-                                      ], child: const StudentDutiesPage()),
+                                      MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(value: dutiesBloc),
+                                          BlocProvider.value(
+                                              value: requestedDutiesBloc)
+                                        ],
+                                        child: const StudentDutiesPage(),
+                                      ),
                                       const MessengerPage(role: 'Student'),
                                       const StudentProfilePage(),
                                     ],

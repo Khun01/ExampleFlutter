@@ -129,70 +129,35 @@ class RequestDutyStudentCard extends StatelessWidget {
                   Positioned(
                     top: 2,
                     right: 2,
-                    child: role == 'Employee'
-                        ? Container(
-                            width: 75,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                                color: dutyStatus == 'pending'
-                                    ? const Color(0xFFE5BA03)
-                                    : dutyStatus == 'active'
-                                        ? const Color(0xFF6BB577)
-                                        : dutyStatus == 'on-going'
-                                            ? const Color(0xFF26A1F4)
-                                            : dutyStatus == 'cancelled'
-                                                ? const Color(0xFFF44336)
-                                                : const Color(0xFFB2AC88),
-                                borderRadius: const BorderRadius.only(
-                                    topRight: Radius.circular(18),
-                                    topLeft: Radius.circular(5),
-                                    bottomRight: Radius.circular(5),
-                                    bottomLeft: Radius.circular(18))),
-                            child: Center(
-                              child: Text(
-                                dutyStatus == 'pending'
-                                    ? 'Pending'
-                                    : dutyStatus == 'active'
-                                        ? 'Active'
-                                        : dutyStatus == 'on-going'
-                                            ? 'On-going'
-                                            : dutyStatus == 'cancelled'
-                                                ? 'Cancelled'
-                                                : 'Completed',
-                                style: GoogleFonts.nunito(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFFFCFCFC)),
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: (){
-                              context.read<DutiesBloc>().add(DutiesAcceptEvent(id: id!));
-                            },
-                            child: Container(
-                              width: 75,
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              decoration: const BoxDecoration(
-                                color: Color(0xFF6BB577),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(18),
-                                    topLeft: Radius.circular(5),
-                                    bottomRight: Radius.circular(5),
-                                    bottomLeft: Radius.circular(18)),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Accept',
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFFFCFCFC),
-                                  ),
-                                ),
-                              ),
+                    child: GestureDetector(
+                      onTap: () {
+                        context
+                            .read<DutiesBloc>()
+                            .add(DutiesAcceptEvent(id: id!));
+                      },
+                      child: Container(
+                        width: 75,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF6BB577),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(18),
+                              topLeft: Radius.circular(5),
+                              bottomRight: Radius.circular(5),
+                              bottomLeft: Radius.circular(18)),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Accept',
+                            style: GoogleFonts.nunito(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFFFCFCFC),
                             ),
                           ),
+                        ),
+                      ),
+                    ),
                   )
                 ],
               ),

@@ -20,6 +20,48 @@ class StudentDutiesPage extends StatelessWidget {
             const SliverToBoxAdapter(
               child: MyAppBar(role: 'Student'),
             ),
+            SliverLayoutBuilder(
+              builder: (context, constraints) {
+                final scrolled = constraints.scrollOffset > 0;
+                return SliverAppBar(
+                  pinned: true,
+                  automaticallyImplyLeading: false,
+                  flexibleSpace: AnimatedContainer(
+                    duration: const Duration(milliseconds: 309),
+                    padding:
+                        EdgeInsets.only(left: 20, bottom: scrolled ? 0 : 8),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        boxShadow: scrolled
+                            ? [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    offset: const Offset(0.0, 10.0),
+                                    blurRadius: 10.0,
+                                    spreadRadius: -6.0)
+                              ]
+                            : []),
+                    child: AnimatedAlign(
+                      duration: const Duration(milliseconds: 300),
+                      alignment: scrolled
+                          ? Alignment.centerLeft
+                          : Alignment.bottomLeft,
+                      child: AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 300),
+                        style: GoogleFonts.nunito(
+                          fontSize: scrolled ? 20 : 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B),
+                        ),
+                        child: const Text(
+                          'Available duties',
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
             BlocConsumer<DutiesBloc, DutiesState>(
               listenWhen: (previous, current) =>
                   current is DutiesAcceptLoading ||

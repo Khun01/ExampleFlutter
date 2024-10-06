@@ -7,6 +7,7 @@ import 'package:help_isko/presentation/bloc/employee/requestForDuties/showReques
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/request_for_duties_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/request_for_duties_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
 class EmployeeDutiesPage extends StatelessWidget {
@@ -25,9 +26,16 @@ class EmployeeDutiesPage extends StatelessWidget {
       builder: (context, state) {
         Widget body;
         if (state is RequestForDutiesLoadingState) {
-          body = const SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(child: CircularProgressIndicator()),
+          body = SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  return const RequestForDutiesLoadingIndicator();
+                },
+              ),
+            ),
           );
         } else if (state is RequestForDutiesSuccessState) {
           if (state.requestForDuty.isEmpty) {

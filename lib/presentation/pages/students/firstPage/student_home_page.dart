@@ -214,12 +214,12 @@ class StudentHomePage extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                      value:
-                                          context.read<RequestedDutiesBloc>(),
-                                      child: const StudentSeeAllPage())));
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                    value: context.read<RequestedDutiesBloc>(),
+                                    child: const StudentSeeAllPage())),
+                          );
                         },
                         child: Text(
                           'See all',
@@ -274,20 +274,23 @@ class StudentHomePage extends StatelessWidget {
                               itemCount: state.requestedDuties.length,
                               itemBuilder: (context, index) {
                                 final request = state.requestedDuties[index];
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 8, right: 16, top: 8),
-                                  child: BlocProvider(
-                                    create: (_) =>
-                                        context.read<RequestForDutiesBloc>(),
-                                    child: PostedDutiesHome(
-                                        id: request.id,
-                                        profile: request.employeeProfile,
-                                        date: request.date,
-                                        building: request.employeeName,
-                                        message: request.message,
-                                        requestStatus: request.requestStatus,
-                                        dutyStatus: request.dutyStatus),
+                                return FadeInRight(
+                                  duration: const Duration(milliseconds: 700),
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.only(left: 8, top: 8),
+                                    child: BlocProvider(
+                                      create: (_) =>
+                                          context.read<RequestForDutiesBloc>(),
+                                      child: PostedDutiesHome(
+                                          id: request.id,
+                                          profile: request.employeeProfile,
+                                          date: request.date,
+                                          building: request.employeeName,
+                                          message: request.message,
+                                          requestStatus: request.requestStatus,
+                                          dutyStatus: request.dutyStatus),
+                                    ),
                                   ),
                                 );
                               },
@@ -304,23 +307,51 @@ class StudentHomePage extends StatelessWidget {
                   ),
                 ),
               ),
+              SliverLayoutBuilder(
+                builder: (context, constraints) {
+                  final scrolled = constraints.scrollOffset > 0;
+                  return SliverAppBar(
+                    pinned: true,
+                    automaticallyImplyLeading: false,
+                    flexibleSpace: AnimatedContainer(
+                      duration: const Duration(milliseconds: 309),
+                      padding: const EdgeInsets.only(left: 20),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          boxShadow: scrolled
+                              ? [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      offset: const Offset(0.0, 10.0),
+                                      blurRadius: 10.0,
+                                      spreadRadius: -6.0)
+                                ]
+                              : []),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 300),
+                          style: GoogleFonts.nunito(
+                            fontSize: scrolled ? 20 : 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF3B3B3B),
+                          ),
+                          child: FadeInLeft(
+                            duration: const Duration(milliseconds: 700),
+                            child: const Text(
+                              'Recent Activities',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-}
-
-String requestDutyStatus(String requestStatus, String dutyStatus) {
-  if (requestStatus == 'undecided' && dutyStatus == 'pending') {
-    return 'cancel';
-  } else if (requestStatus == 'accepted' &&
-      (dutyStatus == 'pending' || dutyStatus == 'active')) {
-    return 'pending';
-  } else if (requestStatus == 'accepted' && dutyStatus == 'ongoing') {
-    return 'ongoing';
-  } else {
-    return '';
   }
 }
