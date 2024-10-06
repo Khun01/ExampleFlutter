@@ -174,14 +174,16 @@ class ApiRepositories {
     }
   }
 
-  Future<List<RecentActivities>> fetchRecentActivities() async {
-    final userData = await EmployeeStorage.getData();
-    String? token = userData['employeeToken'];
+  Future<List<RecentActivities>> fetchRecentActivities(String role) async {
+    final userDataStudent = await StudentStorage.getData();
+    final userDataEmployee = await EmployeeStorage.getData();
+    String? tokenEmployee = userDataEmployee['employeeToken'];
+    String? tokenStudent = userDataStudent['studToken'];
     final response = await http.get(
       Uri.parse('$baseUrl/duty/recent-activities'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
+        'Authorization': 'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}'
       },
     );
     if (response.statusCode == 200) {

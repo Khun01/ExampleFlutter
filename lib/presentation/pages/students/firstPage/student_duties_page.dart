@@ -1,9 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/student/dutiespage/duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_see_all_card.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
@@ -31,6 +32,7 @@ class StudentDutiesPage extends StatelessWidget {
                     content: Text('Successfully Requested'),
                     duration: Duration(seconds: 2),
                   ));
+                  context.read<DutiesBloc>().add(DutiesAvailableFetch());
                 }
                 if (state is DutiesAcceptFailed) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -40,9 +42,10 @@ class StudentDutiesPage extends StatelessWidget {
                   ));
                 }
                 if (state is DutiesFetchFailed) {
+                  log('The error in fetching data is: ${state.errorMessage}');
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.errorMessage),
-                    duration: Duration(seconds: 2),
+                    duration: const Duration(seconds: 2),
                   ));
                 }
               },
@@ -60,23 +63,50 @@ class StudentDutiesPage extends StatelessWidget {
                     );
                   case DutiesFetchSuccess:
                     state as DutiesFetchSuccess;
-                    log('loli3');
-                    return SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final duties = state.availableDuties[index];
-                          // return PostedDutiesSeeAllCard(
-                          //     profile: duties.,
-                          //     date: date,
-                          //     building: building,
-                          //     message: message,
-                          //     dutyStatus: dutyStatus,
-                          //     startTime: startTime,
-                          //     endTime: endTime);
-                        },
-                        childCount: state.availableDuties.length,
-                      ),
-                    );
+                    if (state.availableDuties.isEmpty) {
+                      return SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            'There is no posted duties yet!',
+                            style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final duties = state.availableDuties[index];
+                            return MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: context.read<DutiesBloc>(),
+                                ),
+                                BlocProvider.value(
+                                  value: context.read<RequestedDutiesBloc>(),
+                                ),
+                              ],
+                              child: PostedDutiesSeeAllCard(
+                                role: 'Student',
+                                id: duties.id,
+                                profile: duties.employeeProfile!,
+                                date: duties.date,
+                                building: duties.employeeName,
+                                message: duties.message,
+                                startTime: duties.startTime,
+                                endTime: duties.endTime,
+                              ),
+                            );
+                          },
+                          childCount: state.availableDuties.length,
+                        ),
+                      );
+                    }
                   default:
                     return const SliverToBoxAdapter(child: SizedBox());
                 }

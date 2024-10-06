@@ -16,17 +16,10 @@ class AvailableDutiesService {
         'Accept': 'application/json',
         'Authorization': 'Bearer $token'
       });
-
-      print('loli');
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = jsonDecode(response.body);
-
-        print('loli1');
         final List<AvailableDuty> availableDuties =
             jsonList.map((e) => AvailableDuty.fromMap(e)).toList();
-
-        print('loli2');
-
         return availableDuties;
       } else {
         throw Exception('Cannot retrieve available duties');

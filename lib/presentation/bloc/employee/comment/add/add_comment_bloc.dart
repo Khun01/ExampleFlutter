@@ -42,9 +42,6 @@ class AddCommentBloc extends Bloc<AddCommentEvent, AddCommentState> {
             .add(UpdateCommentsEvent(updatedComments: updatedComments));
         emit(AddCommentSuccessState());
       }
-      // await apiRepositories.addComment(event.addComment, event.studId);
-      // event.fetchCommentBloc.add(FetchCommentsEvent(id: event.studId));
-      // emit(AddCommentSuccessState());
     } catch (e) {
       log('Error adding comment: $e');
       emit(AddCommentFailedState(error: e.toString()));

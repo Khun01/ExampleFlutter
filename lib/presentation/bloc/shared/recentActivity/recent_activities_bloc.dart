@@ -17,7 +17,7 @@ class RecentActivitiesBloc extends Bloc<RecentActivitiesEvent, RecentActivitiesS
   FutureOr<void> fetchRecentActivitiesEvent(FetchRecentActivitiesEvent event, Emitter<RecentActivitiesState> emit) async{
     emit(RecentActivitiesLoadingState());
     try{
-      final recentActivities = await apiRepositories.fetchRecentActivities();
+      final recentActivities = await apiRepositories.fetchRecentActivities(event.role);
       emit(RecentActivitiesSuccessState(recentActivities: recentActivities));
     }catch(e){
       emit(RecentActivitiesFailedState(error: e.toString()));

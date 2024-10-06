@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
 
 class AvailableDuty {
   final int id;
@@ -12,6 +11,7 @@ class AvailableDuty {
   final int maxScholars;
   final int currentScholars;
   final String employeeName;
+  final String? employeeProfile;
 
   AvailableDuty(
       {required this.id,
@@ -23,7 +23,8 @@ class AvailableDuty {
       required this.message,
       required this.maxScholars,
       required this.currentScholars,
-      required this.employeeName});
+      required this.employeeName,
+      this.employeeProfile});
 
   factory AvailableDuty.fromMap(Map<String, dynamic> map) {
     return AvailableDuty(
@@ -37,6 +38,7 @@ class AvailableDuty {
       maxScholars: map['max_scholars'] as int,
       currentScholars: map['current_scholars'] as int,
       employeeName: map['employee_name'] as String,
+      employeeProfile: map['employe_profile'] as String,
     );
   }
 }

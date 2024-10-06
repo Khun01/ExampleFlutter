@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
+import 'package:help_isko/repositories/global.dart';
 
 class StudentSeeAllPage extends StatelessWidget {
   const StudentSeeAllPage({super.key});
@@ -33,7 +34,7 @@ class StudentSeeAllPage extends StatelessWidget {
                                 state.requestedDuties[index].employeeProfile !=
                                         ""
                                     ? Image.network(
-                                        '${state.requestedDuties[index].employeeProfile}',
+                                        '$profileUrl${state.requestedDuties[index].employeeProfile}',
                                         height: 30,
                                       )
                                     : Image.asset(

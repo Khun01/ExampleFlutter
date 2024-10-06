@@ -75,11 +75,13 @@ class _WrapperState extends State<Wrapper> {
     final RequestForDutiesBloc requestForDutiesBloc = RequestForDutiesBloc(
         requestForDutyRepository: RequestForDutiesServices(baseUrl: baseUrl))
       ..add(FetchRequestForDutiesEvent());
-
     final RequestedDutiesBloc requestedDutiesBloc = RequestedDutiesBloc(
         requestedDutiesRepository: RequestedDutiesRepository(
             requestedDutiesService: RequestedDutiesService()))
       ..add(RequestedDutiesFetch());
+    final DutiesBloc dutiesBloc =
+        DutiesBloc(AvailableDutiesRepository(AvailableDutiesService()))
+          ..add(DutiesAvailableFetch());
 
     return MultiBlocProvider(
       providers: [
@@ -91,7 +93,8 @@ class _WrapperState extends State<Wrapper> {
         BlocProvider(create: (context) => declineStudentBloc),
         BlocProvider(create: (context) => messengerBloc),
         BlocProvider(create: (context) => recentActivitiesBloc),
-        BlocProvider(create: (context) => requestForDutiesBloc)
+        BlocProvider(create: (context) => requestForDutiesBloc),
+        BlocProvider(create: (context) => dutiesBloc)
       ],
       child: MultiBlocListener(
         listeners: [
@@ -186,12 +189,8 @@ class _WrapperState extends State<Wrapper> {
                                         child: const StudentHomePage(),
                                       ),
                                       MultiBlocProvider(providers: [
-                                        BlocProvider(
-                                          create: (context) => DutiesBloc(
-                                              AvailableDutiesRepository(
-                                                  AvailableDutiesService()))
-                                            ..add(DutiesAvailableFetch()),
-                                        ),
+                                        BlocProvider.value(value: dutiesBloc),
+                                        BlocProvider.value(value: requestedDutiesBloc)
                                       ], child: const StudentDutiesPage()),
                                       const MessengerPage(role: 'Student'),
                                       const StudentProfilePage(),
