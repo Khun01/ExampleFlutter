@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/student/dutiespage/duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
-import 'package:help_isko/presentation/cards/duty_card/posted_duties_see_all_card.dart';
+import 'package:help_isko/presentation/cards/duty_card/student/request_duty_student_card.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
 class StudentDutiesPage extends StatelessWidget {
@@ -91,7 +91,7 @@ class StudentDutiesPage extends StatelessWidget {
                                   value: context.read<RequestedDutiesBloc>(),
                                 ),
                               ],
-                              child: PostedDutiesSeeAllCard(
+                              child: RequestDutyStudentCard(
                                 role: 'Student',
                                 id: duties.id,
                                 profile: duties.employeeProfile!,
