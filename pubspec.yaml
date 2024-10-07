@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.18.0
   auto_animated: ^3.2.0
   percent_indicator: ^4.2.3
+  easy_stepper: ^0.8.5+1
 
 dev_dependencies:
   flutter_test:
