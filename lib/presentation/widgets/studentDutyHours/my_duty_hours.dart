@@ -49,7 +49,6 @@ class _MyDutyHoursState extends State<MyDutyHours>
               HkStatusRepository(hkStatusService: HkStatusService()))
         ..add(HkStatusFetchDataEvent()),
       child: Container(
-        margin: const EdgeInsets.only(top: 8),
         padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 20),
         width: double.infinity,
         decoration: BoxDecoration(
