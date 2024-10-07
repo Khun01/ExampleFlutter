@@ -12,7 +12,7 @@ final class HkStatusInitial extends HkStatusState {}
 class HkStatusFetchLoading extends HkStatusState {}
 
 class HkStatusFetchSuccess extends HkStatusState {
-  final int percentage;
+  final double percentage;
 
   const HkStatusFetchSuccess({required this.percentage});
 }

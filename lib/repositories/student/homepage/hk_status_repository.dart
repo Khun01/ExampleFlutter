@@ -5,7 +5,7 @@ class HkStatusRepository {
 
   HkStatusRepository({required this.hkStatusService});
 
-  Future<int> getHkStatus() async {
+  Future<double> getHkStatus() async {
     try {
       final percentage = await hkStatusService.getHkStatus();
 

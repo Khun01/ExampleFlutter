@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
+import 'package:help_isko/presentation/widgets/my_profile_page_text.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -228,102 +229,19 @@ class StudentProfilePage extends StatelessWidget {
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             const Divider(color: Color(0x303B3B3B)),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Course',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    SizedBox(
-                                      width: 138,
-                                      child: Text(
-                                        state.course ?? 'N/A',
-                                        maxLines: 3,
-                                        style: GoogleFonts.nunito(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF3B3B3B)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Learning Modality',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      state.learningModality ?? 'N/A',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                )
-                              ],
+                            MyProfilePageText(
+                              title1: 'Course',
+                              body1: state.course ?? 'N/A',
+                              title2: 'Learning Modality',
+                              body2: state.learningModality ?? 'N/A',
                             ),
                             const Divider(color: Color(0x303B3B3B)),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Curriculum',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    SizedBox(
-                                      width: 155,
-                                      child: Text(
-                                        '${state.college} - ${state.course} - ${state.department} - 22 - 23',
-                                        maxLines: 4,
-                                        style: GoogleFonts.nunito(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xFF3B3B3B)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Semester',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0x803B3B3B)),
-                                    ),
-                                    Text(
-                                      state.semester ?? 'N/A',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            MyProfilePageText(
+                              title1: 'Curriculum',
+                              body1:
+                                  '${state.college} - ${state.course} - ${state.department} - 22 - 23',
+                              title2: 'Semester',
+                              body2: state.semester ?? 'N/A',
                             ),
                             const Divider(color: Color(0x303B3B3B)),
                             const SizedBox(height: 12),
@@ -335,75 +253,16 @@ class StudentProfilePage extends StatelessWidget {
                                   color: const Color(0xFF6BB577)),
                             ),
                             const SizedBox(height: 6),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Student Name',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    Text(
-                                      '${state.lastName}, ${state.firstName}',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Student Number',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    Text(
-                                      state.idNumber ?? 'N/A',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            MyProfilePageText(
+                              title1: 'Student Name',
+                              body1: state.name ?? 'N/A',
+                              title2: 'Student Number',
+                              body2: state.idNumber ?? 'N/A',
                             ),
                             const SizedBox(height: 12),
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Course',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    SizedBox(
-                                      width: 150,
-                                      child: Text(
-                                        state.course ?? 'N/A',
-                                        maxLines: 3,
-                                        style: GoogleFonts.nunito(
-                                            fontSize: 12,
-                                            color: const Color(0xFF3B3B3B)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -425,88 +284,24 @@ class StudentProfilePage extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 12),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Semester',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    Text(
-                                      state.semester ?? 'N/A',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Father's Name",
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    Text(
-                                      state.fatherName ?? 'N/A',
-                                      maxLines: 3,
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "Mother's name",
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                    Text(
-                                      state.motherName ?? 'N/A',
-                                      style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B)),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            MyProfilePageText(
+                              title1: "Father's Name",
+                              body1: state.fatherName ?? 'N/A',
+                              title2: "Mother's Name",
+                              body2: state.motherName ?? 'N/A',
                             ),
                             const Divider(color: Color(0x303B3B3B)),
                             const SizedBox(height: 12),
-                            Text(
-                              'Contact Details',
-                              style: GoogleFonts.nunito(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF6BB577)),
-                            ),
+                            // Text(
+                            //   'Contact Details',
+                            //   style: GoogleFonts.nunito(
+                            //       fontSize: 20,
+                            //       fontWeight: FontWeight.bold,
+                            //       color: const Color(0xFF6BB577)),
+                            // ),
                           ],
                         ),
                       ),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 1125),
                     ),
                   ],
                 ),
