@@ -9,6 +9,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/hk_student_list_page.dart';
 import 'package:help_isko/presentation/pages/notification_page.dart';
+import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/renew_form_page.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
@@ -103,10 +104,19 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                                 child: Icon(UIcons.regularRounded.users)))
                         : FadeInRight(
                             duration: const Duration(milliseconds: 700),
-                            child: const Icon(
-                              Ionicons.document_text_outline,
-                              size: 28,
-                              color: Color(0xFF3B3B3B),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const RenewFormPage()));
+                              },
+                              child: const Icon(
+                                Ionicons.document_text_outline,
+                                size: 28,
+                                color: Color(0xFF3B3B3B),
+                              ),
                             ),
                           ),
                     const SizedBox(width: 16),
