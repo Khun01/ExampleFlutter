@@ -242,31 +242,34 @@ class StudentHomePage extends StatelessWidget {
                             ),
                           );
                         } else {
-                          return ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.requestedDuties.length,
-                            itemBuilder: (context, index) {
-                              final request = state.requestedDuties[index];
-                              return FadeInRight(
-                                duration: const Duration(milliseconds: 700),
-                                child: Container(
-                                  margin:
-                                      const EdgeInsets.only(left: 8, top: 8),
-                                  child: BlocProvider(
-                                    create: (_) =>
-                                        context.read<RequestForDutiesBloc>(),
-                                    child: PostedDutiesHome(
-                                        id: request.id,
-                                        profile: request.employeeProfile,
-                                        date: request.date,
-                                        building: request.employeeName,
-                                        message: request.message,
-                                        requestStatus: request.requestStatus,
-                                        dutyStatus: request.dutyStatus),
+                          return Container(
+                            padding: const EdgeInsets.only(left: 8, right: 16),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: state.requestedDuties.length,
+                              itemBuilder: (context, index) {
+                                final request = state.requestedDuties[index];
+                                return FadeInRight(
+                                  duration: const Duration(milliseconds: 700),
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.only(top: 8),
+                                    child: BlocProvider(
+                                      create: (_) =>
+                                          context.read<RequestForDutiesBloc>(),
+                                      child: PostedDutiesHome(
+                                          id: request.id,
+                                          profile: request.employeeProfile,
+                                          date: request.date,
+                                          building: request.employeeName,
+                                          message: request.message,
+                                          requestStatus: request.requestStatus,
+                                          dutyStatus: request.dutyStatus),
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           );
                         }
                       case RequestedDutiesFetchFailedState:

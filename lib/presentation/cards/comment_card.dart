@@ -25,23 +25,22 @@ class CommentCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: const Color(0xFFA3D9A5),
-            child: profile != ''
-                ? ClipOval(
-                    child: Image.network(
-                      '$profileUrl$profile',
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.error_rounded),
-                    ),
-                  )
-                : Image.asset(
-                    'assets/images/profile_clicked.png',
-                    fit: BoxFit.cover,
-                    width: 30,
-                  ),
-          ),
+          Container(
+              height: 60,
+              width: 60,
+              decoration: BoxDecoration(
+                  color: const Color(0xFFA3D9A5),
+                  borderRadius: BorderRadius.circular(500)),
+              child: profile != ''
+                  ? ClipOval(
+                      child: Image.network(
+                        '$profileUrl$profile',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.person, size: 40),
+                      ),
+                    )
+                  : const Icon(Icons.person_rounded, size: 40)),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

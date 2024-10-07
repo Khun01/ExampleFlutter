@@ -162,6 +162,8 @@ class PostedDutiesHome extends StatelessWidget {
                         const SizedBox(height: 5),
                         Text(
                           date,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.nunito(
                               fontSize: 8, color: const Color(0xCC3B3B3B)),
                         )

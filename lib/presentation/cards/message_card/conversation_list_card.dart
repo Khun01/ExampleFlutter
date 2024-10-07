@@ -39,26 +39,32 @@ class ConversationListCard extends StatelessWidget {
                           spreadRadius: -6.0,
                         ),
                       ]),
-            child: CircleAvatar(
-              radius: isCurrentUser ? 0 : 25,
-              backgroundColor: const Color(0xFFD1D1D1),
-              child: isCurrentUser
-                  ? null
-                  : profile != null
-                      ? Image.network(
-                          '$profileUrl$profile',
-                          errorBuilder: (context, error, stackTrace) =>
-                              Image.asset(
+            child: Container(
+              height: isCurrentUser ? 0 : 40,
+              width: isCurrentUser ? 0 : 40,
+              decoration: BoxDecoration(
+                color: const Color(0xFFD1D1D1),
+                borderRadius: BorderRadius.circular(500)
+              ),
+              child: ClipOval(
+                child: isCurrentUser
+                    ? null
+                    : profile != null
+                        ? Image.network(
+                            '$profileUrl$profile',
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.asset(
+                              'assets/images/profile_clicked.png',
+                              fit: BoxFit.cover,
+                              width: 30,
+                            ),
+                          )
+                        : Image.asset(
                             'assets/images/profile_clicked.png',
                             fit: BoxFit.cover,
                             width: 30,
                           ),
-                        )
-                      : Image.asset(
-                          'assets/images/profile_clicked.png',
-                          fit: BoxFit.cover,
-                          width: 30,
-                        ),
+              ),
             ),
           ),
           Column(
