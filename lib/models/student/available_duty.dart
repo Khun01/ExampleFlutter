@@ -38,7 +38,7 @@ class AvailableDuty {
       maxScholars: map['max_scholars'] as int,
       currentScholars: map['current_scholars'] as int,
       employeeName: map['employee_name'] as String,
-      employeeProfile: map['employe_profile'] as String,
+      employeeProfile: map['employe_profile'],
     );
   }
 }

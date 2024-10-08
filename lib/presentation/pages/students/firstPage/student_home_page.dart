@@ -259,7 +259,7 @@ class StudentHomePage extends StatelessWidget {
                                           context.read<RequestForDutiesBloc>(),
                                       child: PostedDutiesHome(
                                           id: request.id,
-                                          profile: request.employeeProfile,
+                                          profile: request.employeeProfile ?? '',
                                           date: request.date,
                                           building: request.employeeName,
                                           message: request.message,

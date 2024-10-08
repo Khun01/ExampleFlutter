@@ -84,7 +84,7 @@ class StudentDutiesPage extends StatelessWidget {
                   ));
                 }
                 if (state is DutiesFetchFailed) {
-                  log('The error in fetching data is: ${state.errorMessage}');
+                  log('The error in fetching data from duties fetched in student is: ${state.errorMessage}');
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.errorMessage),
                     duration: const Duration(seconds: 2),
@@ -136,7 +136,7 @@ class StudentDutiesPage extends StatelessWidget {
                               child: RequestDutyStudentCard(
                                 role: 'Student',
                                 id: duties.id,
-                                profile: duties.employeeProfile!,
+                                profile: duties.employeeProfile ?? '',
                                 date: duties.date,
                                 building: duties.employeeName,
                                 message: duties.message,

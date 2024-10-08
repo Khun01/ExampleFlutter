@@ -73,17 +73,26 @@ class EmployeeProfilePage extends StatelessWidget {
                                                     BorderRadius.circular(
                                                         scrolled ? 500 : 0),
                                                 child: Image.network(
-                                                    '$profileUrl${state.profile}',
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                            error,
-                                                            stackTrace) =>
-                                                        Container()),
+                                                  '$profileUrl${state.profile}',
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Container(
+                                                    margin:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    child: scrolled ? Image.asset(
+                                                      'assets/images/profile_clicked.png',
+                                                    ) : null,
+                                                  ),
+                                                ),
                                               )
-                                            : Image.asset(
-                                                'assets/images/profile_clicked.png',
-                                                fit: BoxFit.cover,
-                                                width: 30,
+                                            : Container(
+                                                margin:
+                                                    const EdgeInsets.all(14),
+                                                child: Image.asset(
+                                                  'assets/images/profile_clicked.png',
+                                                ),
                                               ),
                                         AnimatedContainer(
                                           duration:

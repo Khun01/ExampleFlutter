@@ -73,30 +73,21 @@ class _AboutStudentState extends State<AboutStudent>
                                 '$profileUrl${widget.students.profile}',
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) =>
-                                    const Icon(Icons.person, size: 10),
+                                    Container(
+                                  margin: const EdgeInsets.all(14),
+                                  child: Image.asset(
+                                    'assets/images/profile_clicked.png',
+                                  ),
+                                ),
                               )
-                            : Image.asset(
-                                'assets/images/profile_clicked.png',
-                                width: 5,
-                                height: 5,
+                            : Container(
+                                margin: const EdgeInsets.all(14),
+                                child: Image.asset(
+                                  'assets/images/profile_clicked.png',
+                                ),
                               ),
                       ),
                     ),
-                    // CircleAvatar(
-                    //   radius: 35,
-                    //   backgroundColor: const Color(0xFFA3D9A5),
-                    //   child: widget.students.profile != ''
-                    //       ? Image.network(
-                    //           '//${widget.students.profile}',
-                    //           errorBuilder: (context, error, stackTrace) =>
-                    //               const Icon(Icons.error_rounded),
-                    //         )
-                    //       : Image.asset(
-                    //           'assets/images/profile_clicked.png',
-                    //           fit: BoxFit.cover,
-                    //           width: 32,
-                    //         ),
-                    // ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Column(

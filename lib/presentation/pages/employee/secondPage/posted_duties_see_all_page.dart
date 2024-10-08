@@ -87,7 +87,7 @@ class _PostedDutiesSeeAllPageState extends State<PostedDutiesSeeAllPage> {
                           );
                         },
                         child: PostedDutiesSeeAllCard(
-                            profile: duty.profProfile!,
+                            profile: duty.profProfile ?? '',
                             date: duty.date!,
                             building: duty.building!,
                             message: duty.message!,

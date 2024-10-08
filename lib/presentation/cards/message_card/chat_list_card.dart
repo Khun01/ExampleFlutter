@@ -139,13 +139,20 @@ class _ChatListCardState extends State<ChatListCard> {
                                     ? Image.network(
                                         '$profileUrl${state.existingChats[index].user.profileImage}',
                                         fit: BoxFit.cover,
-                                        errorBuilder: (context, error,
-                                                stackTrace) =>
-                                            const Icon(Icons.person, size: 20),
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Container(
+                                          margin: const EdgeInsets.all(12),
+                                          child: Image.asset(
+                                            'assets/images/profile_clicked.png',
+                                          ),
+                                        ),
                                       )
-                                    : Image.asset(
-                                        'assets/images/profile_clicked.png',
-                                        width: 5,
+                                    : Container(
+                                        margin: const EdgeInsets.all(12),
+                                        child: Image.asset(
+                                          'assets/images/profile_clicked.png',
+                                        ),
                                       ),
                               ),
                             ),

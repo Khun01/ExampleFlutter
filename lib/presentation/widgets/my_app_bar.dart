@@ -38,7 +38,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(500)),
+                            borderRadius: BorderRadius.circular(500),
+                            color: const Color(0xFFAED8B5),
+                          ),
                           child: ClipOval(
                             child: state.profile != null
                                 ? Image.network(
@@ -46,10 +48,13 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                                     fit: BoxFit.cover,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
-                                            Image.asset(
-                                      'assets/images/profile_clicked.png',
-                                      fit: BoxFit.cover,
-                                      width: 30,
+                                            Container(
+                                      margin: const EdgeInsets.all(12),
+                                      child: Image.asset(
+                                        'assets/images/profile_clicked.png',
+                                        fit: BoxFit.cover,
+                                        width: 30,
+                                      ),
                                     ),
                                   )
                                 : Image.asset(

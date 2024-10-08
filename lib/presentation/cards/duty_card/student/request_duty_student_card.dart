@@ -67,7 +67,10 @@ class RequestDutyStudentCard extends StatelessWidget {
                                     fit: BoxFit.cover,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
-                                            const Icon(Icons.person, size: 10),
+                                            Container(
+                                                margin: const EdgeInsets.all(12),
+                                                child: const Icon(Icons.person,
+                                                    size: 10)),
                                   )
                                 : Image.asset(
                                     'assets/images/profile_clicked.png',
