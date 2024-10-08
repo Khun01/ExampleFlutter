@@ -192,6 +192,8 @@ class _WrapperState extends State<Wrapper> {
                                                   value: requestedDutiesBloc),
                                               BlocProvider.value(
                                                   value: dutiesBloc),
+                                              BlocProvider.value(
+                                                  value: recentActivitiesBloc)
                                             ],
                                             child: const StudentHomePage(),
                                           ),
