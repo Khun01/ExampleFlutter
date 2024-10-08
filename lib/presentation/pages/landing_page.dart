@@ -86,7 +86,7 @@ class LandingPage extends StatelessWidget {
                                         child: Text(
                                           'Welcome to Help, isKo',
                                           style: GoogleFonts.nunito(
-                                              fontSize: 33,
+                                              fontSize: 80,
                                               fontWeight: FontWeight.bold,
                                               color: const Color(0xFF3B3B3B)),
                                         ),
