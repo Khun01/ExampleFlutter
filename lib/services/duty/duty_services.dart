@@ -32,7 +32,14 @@ class DutyServices implements DutyRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> addDuty(ProfDuty profDuty) async {
+  Future<Map<String, dynamic>> addDuty(
+    String building,
+    String date,
+    String startTime,
+    String endTime,
+    String maxScholars,
+    String message,
+  ) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
     var url = Uri.parse('$baseUrl/employees/duties/create');
@@ -42,14 +49,14 @@ class DutyServices implements DutyRepository {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({
-          'building': profDuty.building,
-          'date': profDuty.date,
-          'start_time': profDuty.startTime,
-          'end_time': profDuty.endTime,
-          'max_scholars': profDuty.maxScholars,
-          'message': profDuty.message
+          'building': building,
+          'date': date,
+          'start_time': startTime,
+          'end_time': endTime,
+          'max_scholars': maxScholars,
+          'message': message
         }));
-    return {'statusCode': response.statusCode};
+    return {'statusCode': response.statusCode, 'body': response.body};
   }
 
   @override

@@ -163,7 +163,7 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
                             String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
                             RegExp regExp = RegExp(pattern);
                             if (value == null || value.isEmpty) {
-                              return null;
+                              return 'Please enter a time';
                             } else if (!regExp.hasMatch(value)) {
                               return 'Enter a valid time in 24-hour format (HH:mm)';
                             }

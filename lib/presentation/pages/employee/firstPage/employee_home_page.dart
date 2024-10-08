@@ -218,6 +218,10 @@ class EmployeeHomePage extends StatelessWidget {
                   log('The error is: ${state.error}');
                 }
               },
+              buildWhen: (previous, current) =>
+                  (current is PostedDutiesLoadingState &&
+                      previous is PostedDutiesInitial) ||
+                  current is PostedDutiesSuccessState,
               builder: (context, state) {
                 if (state is PostedDutiesLoadingState) {
                   return SliverToBoxAdapter(
@@ -261,7 +265,7 @@ class EmployeeHomePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final duty = reversedList[index];
                           return FadeInRight(
-                            duration: const Duration(milliseconds: 700),
+                            duration: const Duration(seconds: 1),
                             child: GestureDetector(
                               onTap: () {
                                 Navigator.push(

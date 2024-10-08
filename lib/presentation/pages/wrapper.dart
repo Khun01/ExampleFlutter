@@ -100,6 +100,9 @@ class _WrapperState extends State<Wrapper> {
         listeners: [
           BlocListener<AddDutyBloc, AddDutyState>(
               bloc: addDutyBloc,
+              listenWhen: (previous, current) =>
+                  current is AddDutySuccessState ||
+                  current is AddDutyLoadingState,
               listener: (context, state) {
                 if (state is AddDutySuccessState) {
                   showDialog(
@@ -107,6 +110,9 @@ class _WrapperState extends State<Wrapper> {
                     builder: (context) =>
                         const AddDeleteDutySuccessDialog(blocUse: 'AddDuty'),
                   );
+                  context
+                      .read<PostedDutiesBloc>()
+                      .add(FetchDuty());
                 } else if (state is AddDutyFailedState) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));

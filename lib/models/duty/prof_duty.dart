@@ -19,25 +19,26 @@ class ProfDuty {
 
   ProfDuty(
       {this.id,
-       this.building,
-       this.date,
-       this.startTime,
-       this.endTime,
-       this.duration,
-       this.message,
-       this.maxScholars,
-       this.currentScholars,
-       this.isLocked,
-       this.dutyStatus,
-       this.isCompleted,
-       this.profId,
-       this.profProfile,
-       this.students});
+      this.building,
+      this.date,
+      this.startTime,
+      this.endTime,
+      this.duration,
+      this.message,
+      this.maxScholars,
+      this.currentScholars,
+      this.isLocked,
+      this.dutyStatus,
+      this.isCompleted,
+      this.profId,
+      this.profProfile,
+      this.students});
 
   factory ProfDuty.fromJson(Map<String, dynamic> json) {
     var acceptedStudentsJson = json['accepted_students'] as List;
-    List<Students> studentsList =
-        acceptedStudentsJson.map((studentJson) => Students.fromJson(studentJson)).toList();
+    List<Students> studentsList = acceptedStudentsJson
+        .map((studentJson) => Students.fromJson(studentJson))
+        .toList();
 
     return ProfDuty(
       id: json['duty']['id'] ?? '',
@@ -52,7 +53,7 @@ class ProfDuty {
       isLocked: json['duty']['is_locked'] ?? '',
       dutyStatus: json['duty']['duty_status'] ?? '',
       isCompleted: json['duty']['is_completed'] ?? '',
-      profProfile: json['profile_img'],
+      profProfile: json['profile_img'] ?? '',
       students: studentsList,
     );
   }
@@ -62,5 +63,10 @@ class ProfDuty {
 
   String _formatTime(String time) {
     return time.substring(0, 5);
+  }
+
+  @override
+  String toString() {
+    return 'ProfDuty(building: $building, date: $date, startTime: $startTime, endTime: $endTime, maxScholars: $maxScholars, message: $message)';
   }
 }
