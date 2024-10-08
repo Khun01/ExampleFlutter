@@ -9,12 +9,13 @@ import 'package:help_isko/presentation/bloc/employee/requestForDuties/showReques
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
-import 'package:help_isko/presentation/cards/announcement_card.dart';
+import 'package:help_isko/presentation/cards/shared/announcement_card.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
-import 'package:help_isko/presentation/cards/recent_activity_card.dart';
+import 'package:help_isko/presentation/cards/shared/recent_activity_card.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/student_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_recent_activity_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/presentation/widgets/studentDutyHours/my_duty_hours.dart';
@@ -29,7 +30,7 @@ class StudentHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
     final PageController pageController = PageController();
-    
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -109,12 +110,10 @@ class StudentHomePage extends StatelessWidget {
                                         });
                                   },
                                   child: FadeInRight(
-                                    duration:
-                                        const Duration(milliseconds: 700),
+                                    duration: const Duration(milliseconds: 700),
                                     child: AnnouncementCard(
                                         heading: state
-                                            .announcement[actualIndex]
-                                            .heading,
+                                            .announcement[actualIndex].heading,
                                         description: state
                                             .announcement[actualIndex]
                                             .description,
@@ -215,6 +214,10 @@ class StudentHomePage extends StatelessWidget {
               child: SizedBox(
                 height: 174,
                 child: BlocBuilder<RequestedDutiesBloc, RequestedDutiesState>(
+                  buildWhen: (previous, current) =>
+                      (current is RequestedDutiesFetchLoadingState &&
+                          previous is RequestedDutiesInitial) ||
+                      current is RequestedDutiesFetchSuccessState,
                   builder: (context, state) {
                     switch (state.runtimeType) {
                       case RequestedDutiesFetchLoadingState:
@@ -257,14 +260,14 @@ class StudentHomePage extends StatelessWidget {
                                 return FadeInRight(
                                   duration: const Duration(milliseconds: 700),
                                   child: Container(
-                                    margin:
-                                        const EdgeInsets.only(top: 8),
+                                    margin: const EdgeInsets.only(top: 8),
                                     child: BlocProvider(
                                       create: (_) =>
                                           context.read<RequestForDutiesBloc>(),
                                       child: PostedDutiesHome(
                                           id: request.id,
-                                          profile: request.employeeProfile ?? '',
+                                          profile:
+                                              request.employeeProfile ?? '',
                                           date: request.date,
                                           building: request.employeeName,
                                           message: request.message,
@@ -339,9 +342,13 @@ class StudentHomePage extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is RecentActivitiesLoadingState) {
-                  return const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return const MyRecentActivityLoadingIndicator();
+                      },
+                      childCount: 15,
+                    ),
                   );
                 } else if (state is RecentActivitiesSuccessState) {
                   if (state.recentActivities.isEmpty) {

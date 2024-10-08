@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/cards/message_card/chat_list_card.dart';
+import 'package:help_isko/presentation/cards/shared/message_card/chat_list_card.dart';
 import 'package:ionicons/ionicons.dart';
 
 class MessengerPage extends StatefulWidget {

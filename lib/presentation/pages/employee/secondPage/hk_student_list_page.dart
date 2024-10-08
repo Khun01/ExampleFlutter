@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/students/show/show_hk_students_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
-import 'package:help_isko/presentation/cards/students_card.dart';
+import 'package:help_isko/presentation/cards/shared/students_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/api_repositories.dart';

@@ -8,13 +8,14 @@ import 'package:help_isko/presentation/bloc/shared/announcement/announcement_blo
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
-import 'package:help_isko/presentation/cards/announcement_card.dart';
+import 'package:help_isko/presentation/cards/shared/announcement_card.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
-import 'package:help_isko/presentation/cards/recent_activity_card.dart';
+import 'package:help_isko/presentation/cards/shared/recent_activity_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/posted_duties_see_all_page.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_recent_activity_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -374,11 +375,19 @@ class EmployeeHomePage extends StatelessWidget {
                   log('The error in recent activity is: ${state.error}');
                 }
               },
+              buildWhen: (previous, current) =>
+                  (current is RecentActivitiesLoadingState &&
+                      previous is RecentActivitiesInitial) ||
+                  current is RecentActivitiesSuccessState,
               builder: (context, state) {
                 if (state is RecentActivitiesLoadingState) {
-                  return const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return const MyRecentActivityLoadingIndicator();
+                      },
+                      childCount: 15,
+                    ),
                   );
                 } else if (state is RecentActivitiesSuccessState) {
                   if (state.recentActivities.isEmpty) {
@@ -412,26 +421,11 @@ class EmployeeHomePage extends StatelessWidget {
                               begin: const Offset(0, -0.1),
                               end: Offset.zero,
                             ).animate(animation),
-                            child: GestureDetector(
-                              onTap: () {
-                                // recentActivity.duty != null
-                                //     ? Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               PostedDutyInfoPage(
-                                //                   profDuty:
-                                //                       recentActivity.duty!),
-                                //         ),
-                                //       )
-                                //     : null;
-                              },
-                              child: RecentActivityCard(
-                                  title: recentActivity.title,
-                                  description: recentActivity.description,
-                                  message: recentActivity.message,
-                                  date: recentActivity.date),
-                            ),
+                            child: RecentActivityCard(
+                                title: recentActivity.title,
+                                description: recentActivity.description,
+                                message: recentActivity.message,
+                                date: recentActivity.date),
                           ),
                         );
                       },

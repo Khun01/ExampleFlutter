@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/models/duty/students.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
-import 'package:help_isko/presentation/cards/students_card.dart';
+import 'package:help_isko/presentation/cards/shared/students_card.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/student_info_page.dart';
 
 class DutyDetailsStudent extends StatelessWidget {

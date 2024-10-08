@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/student/dutiespage/duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/student/request_duty_student_card.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
 class StudentDutiesPage extends StatelessWidget {
@@ -92,15 +93,18 @@ class StudentDutiesPage extends StatelessWidget {
                 }
               },
               buildWhen: (previous, current) =>
-                  current is DutiesFetchLoading ||
+                  (current is DutiesFetchLoading &&
+                      previous is DutiesInitial) ||
                   current is DutiesFetchSuccess,
               builder: (context, state) {
                 switch (state.runtimeType) {
                   case DutiesFetchLoading:
-                    return const SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Center(
-                        child: CircularProgressIndicator(),
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return const MyPostedDutiesSeeAllLoadingIndicator();
+                        },
+                        childCount: 15,
                       ),
                     );
                   case DutiesFetchSuccess:
