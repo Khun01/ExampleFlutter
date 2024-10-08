@@ -156,26 +156,30 @@ class RequirementsRenewFormPage extends StatelessWidget {
             height: 50,
             child: TextFormField(
               decoration: InputDecoration(
-                  hintStyle: GoogleFonts.nunito(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0x803B3B3B)),
-                  fillColor: const Color(0x306BB577),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide:
-                        const BorderSide(color: Colors.transparent, width: 1.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                    borderSide:
-                        const BorderSide(color: Colors.transparent, width: 1.0),
-                  ),
-                  suffixIcon: const Icon(Icons.picture_in_picture_rounded)),
+                hintStyle: GoogleFonts.nunito(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0x803B3B3B)),
+                fillColor: const Color(0x306BB577),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                  borderSide:
+                      const BorderSide(color: Colors.transparent, width: 1.0),
+                ),
+                suffixIcon: const Icon(
+                  Icons.add_photo_alternate,
+                  color: Color(0xFF6BB577),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 8),
