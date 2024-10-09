@@ -56,22 +56,26 @@ class RequestedDutiesStudentSeeAllCard extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: const Color(0xFFA3D9A5),
                       borderRadius: BorderRadius.circular(500)),
-                  child: ClipOval(
-                    child: profile != ''
-                        ? Image.network(
+                  child: profile != ''
+                      ? ClipOval(
+                          child: Image.network(
                             '$profileUrl$profile',
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
-                                    margin: const EdgeInsets.all(12),
-                                    child: const Icon(Icons.person, size: 10)),
-                          )
-                        : Image.asset(
-                            'assets/images/profile_clicked.png',
-                            width: 5,
-                            height: 5,
+                              margin: const EdgeInsets.all(12),
+                              child: const ImageIcon(
+                                AssetImage('assets/images/profile_clicked.png'),
+                              ),
+                            ),
                           ),
-                  ),
+                        )
+                      : Container(
+                          margin: const EdgeInsets.all(14),
+                          child: Image.asset(
+                            'assets/images/profile_clicked.png',
+                          ),
+                        ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
