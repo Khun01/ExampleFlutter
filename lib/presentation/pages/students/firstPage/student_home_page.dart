@@ -217,7 +217,8 @@ class StudentHomePage extends StatelessWidget {
                   buildWhen: (previous, current) =>
                       (current is RequestedDutiesFetchLoadingState &&
                           previous is RequestedDutiesInitial) ||
-                      current is RequestedDutiesFetchSuccessState,
+                      current is RequestedDutiesFetchSuccessState ||
+                      current is RequestedDutiesFetchFailedState,
                   builder: (context, state) {
                     switch (state.runtimeType) {
                       case RequestedDutiesFetchLoadingState:
