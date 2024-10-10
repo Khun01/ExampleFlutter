@@ -128,7 +128,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                       ? const Color(0xFFE5BA03)
                       : dutyStatus == 'active'
                           ? const Color(0xFF6BB577)
-                          : dutyStatus == 'on-going'
+                          : dutyStatus == 'ongoing' 
                               ? const Color(0xFF26A1F4)
                               : dutyStatus == 'cancelled'
                                   ? const Color(0xFFF44336)
@@ -144,7 +144,7 @@ class PostedDutiesSeeAllCard extends StatelessWidget {
                       ? 'Pending'
                       : dutyStatus == 'active'
                           ? 'Active'
-                          : dutyStatus == 'on-going'
+                          : dutyStatus == 'ongoing'
                               ? 'On-going'
                               : dutyStatus == 'cancelled'
                                   ? 'Cancelled'

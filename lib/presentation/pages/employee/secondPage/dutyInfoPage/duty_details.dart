@@ -340,9 +340,12 @@ class _DutyDetailsState extends State<DutyDetails> {
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B)),
                     )
-                  : widget.profDuty.dutyStatus == 'active'
+                  : widget.profDuty.dutyStatus == 'active' ||
+                          widget.profDuty.dutyStatus == 'ongoing'
                       ? Text(
-                          'This duty is already active.',
+                          widget.profDuty.dutyStatus == 'ongoing'
+                              ? 'This duty is already on going.'
+                              : 'This duty is already active.',
                           style: GoogleFonts.nunito(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
