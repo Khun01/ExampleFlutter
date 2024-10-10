@@ -28,9 +28,6 @@ class ApiRepositories {
       }),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
-    _pusher.pusherConnect();
-    _pusher.subscribeChannel(responseData['user']['user_id']);
-
     return {
       'statusCode': response.statusCode,
       'data': responseData,
@@ -47,8 +44,6 @@ class ApiRepositories {
       }),
     );
     final Map<String, dynamic> responseData = jsonDecode(response.body);
-    _pusher.pusherConnect();
-    _pusher.subscribeChannel(responseData['user']['user_id']);
     return {
       'statusCode': response.statusCode,
       'data': responseData,
@@ -183,7 +178,8 @@ class ApiRepositories {
       Uri.parse('$baseUrl/duty/recent-activities'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}'
+        'Authorization':
+            'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}'
       },
     );
     if (response.statusCode == 200) {
@@ -229,10 +225,7 @@ class ApiRepositories {
           'Authorization': 'Bearer $token'
         },
         body: jsonEncode({"comment": comment}));
-    return {
-      'statusCode': response.statusCode,
-      'body': response.body
-    };
+    return {'statusCode': response.statusCode, 'body': response.body};
   }
 
   // ------------------- Notification --------------------//

@@ -34,7 +34,7 @@ class MyFormState extends State<MyForm> {
     super.initState();
     obscureText = widget.obscureText;
     _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
+      if (_focusNode.hasFocus) {
         setState(() {
           _showError = true;
         });
@@ -59,12 +59,7 @@ class MyFormState extends State<MyForm> {
     return TextFormField(
       focusNode: _focusNode,
       obscureText: obscureText,
-      onChanged: (value) {
-        setState(() {
-          _showError = value.isEmpty;
-        });
-        widget.onChanged(value);
-      },
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
           labelText: widget.labelText,
           errorText: _showError ? widget.errorText : null,
