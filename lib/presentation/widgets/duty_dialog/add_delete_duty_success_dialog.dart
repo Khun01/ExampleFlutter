@@ -52,7 +52,9 @@ class AddDeleteDutySuccessDialog extends StatelessWidget {
                         ? 'Your new duty has been successfully created and saved.'
                         : blocUse == 'updateDuty'
                             ? 'Your duty has been successfully edited and saved.'
-                            : 'Your duty has been successfully deleted.',
+                            : blocUse == 'Renewal'
+                                ? 'You have successfully submitted your renewal form'
+                                : 'Your duty has been successfully deleted.',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.nunito(
                         fontSize: 14, color: const Color(0xFF3B3B3B)),
@@ -62,11 +64,17 @@ class AddDeleteDutySuccessDialog extends StatelessWidget {
                       onPressed: () {
                         blocUse == 'AddDuty'
                             ? Navigator.pop(context)
-                            : Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const Wrapper(role: 'Employee')));
+                            : blocUse == 'Renewal'
+                                ? Navigator.pushReplacement(
+                                    context,
+                                    (MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Wrapper(role: 'Student'))))
+                                : Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Wrapper(role: 'Employee')));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6BB577)),

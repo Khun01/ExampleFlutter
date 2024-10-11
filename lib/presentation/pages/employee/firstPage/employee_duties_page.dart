@@ -23,6 +23,10 @@ class EmployeeDutiesPage extends StatelessWidget {
           log('The error in request for duty is: ${state.error}');
         }
       },
+      buildWhen: (previous, current) =>
+          (current is RequestForDutiesLoadingState &&
+              previous is RequestForDutiesInitial) ||
+          current is RequestForDutiesSuccessState,
       builder: (context, state) {
         Widget body;
         if (state is RequestForDutiesLoadingState) {

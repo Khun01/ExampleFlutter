@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/student/requested_duties_student_see_all_card.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentSeeAllPage extends StatelessWidget {
@@ -75,7 +76,21 @@ class StudentSeeAllPage extends StatelessWidget {
               },
             ),
             BlocConsumer<RequestedDutiesBloc, RequestedDutiesState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is RequestedDutiesCancelLoadingState) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) =>
+                          const MyCircularProgressIndicator());
+                } else if (state is RequestedDutiesCancelSuccessState) {
+                  Navigator.pop(context);
+                }
+              },
+              buildWhen: (previous, current) =>
+                  (current is RequestedDutiesFetchLoadingState &&
+                      previous is RequestedDutiesInitial) ||
+                  current is RequestedDutiesFetchSuccessState,
               builder: (context, state) {
                 switch (state.runtimeType) {
                   case RequestedDutiesFetchLoadingState:
@@ -122,7 +137,7 @@ class StudentSeeAllPage extends StatelessWidget {
                                 value: context.read<RequestedDutiesBloc>(),
                                 child: RequestedDutiesStudentSeeAllCard(
                                   id: duty.id,
-                                  profile: duty.employeeProfile?? '',
+                                  profile: duty.employeeProfile ?? '',
                                   date: duty.date,
                                   employeeName: duty.employeeName,
                                   building: duty.building,

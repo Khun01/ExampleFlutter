@@ -21,7 +21,7 @@ class RequestedDutiesBloc
       RequestedDutiesFetch event, Emitter<RequestedDutiesState> emit) async {
     emit(RequestedDutiesFetchLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       final requestedDuties =
           await requestedDutiesRepository.getRequestedDuties();
       emit(RequestedDutiesFetchSuccessState(requestedDuties: requestedDuties));
