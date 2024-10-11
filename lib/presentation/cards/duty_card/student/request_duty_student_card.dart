@@ -65,14 +65,19 @@ class RequestDutyStudentCard extends StatelessWidget {
                                 ? Image.network(
                                     '$profileUrl$profile',
                                     fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.person, size: 10),
+                                    errorBuilder: (context, error,
+                                            stackTrace) =>
+                                        Container(
+                                            margin: const EdgeInsets.all(12),
+                                            child: const Icon(Icons.person,
+                                                size: 10)),
                                   )
-                                : Image.asset(
-                                    'assets/images/profile_clicked.png',
-                                    width: 5,
-                                    height: 5,
+                                : Container(
+                                    margin: const EdgeInsets.all(12),
+                                    child: const ImageIcon(
+                                      AssetImage(
+                                          'assets/images/profile_clicked.png'),
+                                    ),
                                   ),
                           ),
                         ),

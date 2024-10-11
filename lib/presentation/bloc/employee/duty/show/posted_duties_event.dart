@@ -9,4 +9,8 @@ sealed class PostedDutiesEvent extends Equatable {
 
 class FetchDuty extends PostedDutiesEvent{}
 
-class RefetchDuty extends PostedDutiesEvent{}
+class RefetchDuty extends PostedDutiesEvent{
+  final List<ProfDuty> profDuty;
+
+  const RefetchDuty({required this.profDuty});
+}

@@ -102,7 +102,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             if (statusCode == 200) {
               final String token = responseData['token'];
               final String name = responseData['name'];
-
+  
               final Map<String, dynamic> user = responseData['user'];
               final String id = user['id'].toString();
               final String firstName = user['first_name'];
@@ -125,7 +125,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 employeeToken: token,
                 fullName: name,
               );
-
+              _pusher.pusherConnect();
+              _pusher.subscribeChannel(user['user_id']);
               log('Response data: $user');
               emit(state.copyWith(isSuccess: true, isSubmitting: false));
             } else {
@@ -227,7 +228,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 relation: relation,
                 emergencyContactNumber: emergencyContactNumber,
               );
-
+              _pusher.pusherConnect();
+              _pusher.subscribeChannel(user['user_id']);
               log('Response data: $user');
               emit(state.copyWith(isSuccess: true, isSubmitting: false));
             } else {
@@ -263,7 +265,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         ));
       }
     } else {
-      emit(state.copyWith(failureMessage: 'Please put your account first'));
+      emit(state.copyWith(
+        failureMessage: 'Please put your account first',
+        hasFailed: true,
+        isSubmitting: false,
+      ));
     }
   }
 

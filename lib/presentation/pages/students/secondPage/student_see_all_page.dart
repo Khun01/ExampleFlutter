@@ -122,7 +122,7 @@ class StudentSeeAllPage extends StatelessWidget {
                                 value: context.read<RequestedDutiesBloc>(),
                                 child: RequestedDutiesStudentSeeAllCard(
                                   id: duty.id,
-                                  profile: duty.employeeProfile!,
+                                  profile: duty.employeeProfile?? '',
                                   date: duty.date,
                                   employeeName: duty.employeeName,
                                   building: duty.building,

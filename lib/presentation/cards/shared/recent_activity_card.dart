@@ -22,9 +22,9 @@ class RecentActivityCard extends StatelessWidget {
           CircleAvatar(
             radius: 28,
             backgroundColor: const Color(0xFFA3D9A5),
-            child: title == 'Created'
+            child: title == 'Created' || title == 'Requested'
                 ? Image.asset('assets/images/duty_dialog_images/checked.png')
-                : title == 'Deleted'
+                : title == 'Deleted' || title == 'Rejected'
                     ? Image.asset('assets/images/duty_dialog_images/delete.png')
                     : title == 'Updated'
                         ? Image.asset(

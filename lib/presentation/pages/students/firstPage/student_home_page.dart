@@ -1,17 +1,21 @@
 import 'dart:developer';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
-import 'package:help_isko/presentation/cards/announcement_card.dart';
+import 'package:help_isko/presentation/cards/shared/announcement_card.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
+import 'package:help_isko/presentation/cards/shared/recent_activity_card.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/student_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_recent_activity_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_announcemet_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 import 'package:help_isko/presentation/widgets/studentDutyHours/my_duty_hours.dart';
@@ -24,7 +28,9 @@ class StudentHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
     final PageController pageController = PageController();
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -104,12 +110,10 @@ class StudentHomePage extends StatelessWidget {
                                         });
                                   },
                                   child: FadeInRight(
-                                    duration:
-                                        const Duration(milliseconds: 700),
+                                    duration: const Duration(milliseconds: 700),
                                     child: AnnouncementCard(
                                         heading: state
-                                            .announcement[actualIndex]
-                                            .heading,
+                                            .announcement[actualIndex].heading,
                                         description: state
                                             .announcement[actualIndex]
                                             .description,
@@ -210,6 +214,11 @@ class StudentHomePage extends StatelessWidget {
               child: SizedBox(
                 height: 174,
                 child: BlocBuilder<RequestedDutiesBloc, RequestedDutiesState>(
+                  buildWhen: (previous, current) =>
+                      (current is RequestedDutiesFetchLoadingState &&
+                          previous is RequestedDutiesInitial) ||
+                      current is RequestedDutiesFetchSuccessState ||
+                      current is RequestedDutiesFetchFailedState,
                   builder: (context, state) {
                     switch (state.runtimeType) {
                       case RequestedDutiesFetchLoadingState:
@@ -252,14 +261,14 @@ class StudentHomePage extends StatelessWidget {
                                 return FadeInRight(
                                   duration: const Duration(milliseconds: 700),
                                   child: Container(
-                                    margin:
-                                        const EdgeInsets.only(top: 8),
+                                    margin: const EdgeInsets.only(top: 8),
                                     child: BlocProvider(
                                       create: (_) =>
                                           context.read<RequestForDutiesBloc>(),
                                       child: PostedDutiesHome(
                                           id: request.id,
-                                          profile: request.employeeProfile,
+                                          profile:
+                                              request.employeeProfile ?? '',
                                           date: request.date,
                                           building: request.employeeName,
                                           message: request.message,
@@ -324,6 +333,105 @@ class StudentHomePage extends StatelessWidget {
                 );
               },
             ),
+            BlocConsumer<RecentActivitiesBloc, RecentActivitiesState>(
+              listener: (context, state) {
+                if (state is RecentActivitiesFailedState) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(state.error)));
+                  log('The error in recent activity is: ${state.error}');
+                }
+              },
+              builder: (context, state) {
+                if (state is RecentActivitiesLoadingState) {
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        return const MyRecentActivityLoadingIndicator();
+                      },
+                      childCount: 15,
+                    ),
+                  );
+                } else if (state is RecentActivitiesSuccessState) {
+                  if (state.recentActivities.isEmpty) {
+                    return SliverFillRemaining(
+                      hasScrollBody: false,
+                      child: Center(
+                        child: Text(
+                          'Your activity log is empty!',
+                          style: GoogleFonts.nunito(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF3B3B3B),
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return LiveSliverList(
+                      controller: scrollController,
+                      showItemDuration: const Duration(milliseconds: 300),
+                      itemCount: state.recentActivities.length,
+                      itemBuilder: (context, index, animation) {
+                        final recentActivity = state.recentActivities[index];
+                        return FadeTransition(
+                          opacity: Tween<double>(
+                            begin: 0,
+                            end: 1,
+                          ).animate(animation),
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0, -0.1),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: GestureDetector(
+                              onTap: () {
+                                // recentActivity.duty != null
+                                //     ? Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               PostedDutyInfoPage(
+                                //                   profDuty:
+                                //                       recentActivity.duty!),
+                                //         ),
+                                //       )
+                                //     : null;
+                              },
+                              child: RecentActivityCard(
+                                  title: recentActivity.title,
+                                  description: recentActivity.description,
+                                  message: recentActivity.message,
+                                  date: recentActivity.date),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                } else if (state is RecentActivitiesFailedState) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        'Network error',
+                        style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B),
+                        ),
+                      ),
+                    ),
+                  );
+                } else {
+                  return SliverToBoxAdapter(
+                    child: Container(),
+                  );
+                }
+              },
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 77),
+            )
           ],
         ),
       ),

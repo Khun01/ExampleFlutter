@@ -58,21 +58,32 @@ class RequestForDutiesCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                      color: const Color(0xFFA3D9A5),
-                      borderRadius: BorderRadius.circular(500)),
-                  child: profile != ''
-                      ? ClipOval(
-                          child: Image.network(
-                            '$profileUrl$profile',
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.person, size: 40),
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    color: const Color(0xFFA3D9A5),
+                    borderRadius: BorderRadius.circular(500)),
+                child: profile != ''
+                    ? ClipOval(
+                        child: Image.network(
+                          '$profileUrl$profile',
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                            margin: const EdgeInsets.all(12),
+                            child: const ImageIcon(
+                              AssetImage('assets/images/profile_clicked.png'),
+                            ),
                           ),
-                        )
-                      : const Icon(Icons.person_rounded, size: 40)),
+                        ),
+                      )
+                    : Container(
+                        margin: const EdgeInsets.all(14),
+                        child: Image.asset(
+                          'assets/images/profile_clicked.png',
+                        ),
+                      ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(

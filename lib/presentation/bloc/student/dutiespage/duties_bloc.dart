@@ -23,6 +23,7 @@ class DutiesBloc extends Bloc<DutiesEvent, DutiesState> {
       DutiesAvailableFetch event, Emitter<DutiesState> emit) async {
     emit(DutiesFetchLoading());
     try {
+      await Future.delayed(const Duration(seconds: 2));
       final List<AvailableDuty> availableDuties =
           await availableDutiesRepository.getAvailableDuties();
       emit(DutiesFetchSuccess(availableDuties: availableDuties));
@@ -35,6 +36,7 @@ class DutiesBloc extends Bloc<DutiesEvent, DutiesState> {
       DutiesAcceptEvent event, Emitter<DutiesState> emit) async {
     emit(DutiesAcceptLoading());
     try {
+      await Future.delayed(const Duration(seconds: 2));
       final status = await availableDutiesRepository.acceptDuty(event.id);
       if (status) {
         emit(DutiesAcceptSuccess());

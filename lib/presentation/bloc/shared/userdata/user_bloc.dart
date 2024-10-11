@@ -19,6 +19,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final firstName = userData['firstName'] ?? 'N/A';
         final lastName = userData['lastName'] ?? 'N/A';
         final idNumber = userData['idNumber'] ?? 'N/A';
+        final contactNumber = userData['contactNumber'] ?? 'N/A';
         final college = userData['college'] ?? 'N/A';
         final course = userData['course'] ?? 'N/A';
         final department = userData['department'] ?? 'N/A';
@@ -29,23 +30,53 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final motherName = userData['motherName'] ?? 'N/A';
         final motherContactNumber = userData['motherContactNumber'] ?? 'N/A';
         final profileImg = userData['profileImg'] ?? 'N/A';
+
+        final emergencyPersonName = userData['emergencyPersonName'] ?? 'N/A';
+        final emergencyAddress = userData['emergencyAddress'] ?? 'N/A';
+        final relation = userData['relation'] ?? 'N/A';
+        final emergencyContactNumber = userData['emergencyContactNumber'] ?? 'N/A';
+
+        final currentAddress = userData['currentAddress'] ?? 'N/A';
+        final currentProvince = userData['currentProvince'] ?? 'N/A';
+        final currentCity = userData['currentCity'] ?? 'N/A';
+        final currentCountry = userData['currentCountry'] ?? 'N/A';
+
+        final permanentAddress = userData['permanentAddress'] ?? 'N/A';
+        final permanentProvince = userData['permanentProvince'] ?? 'N/A';
+        final permanentCity = userData['permanentCity'] ?? 'N/A';
+        final permanentCountry = userData['permanentCountry'] ?? 'N/A';
+
         emit(UserDataLoaded(
-            name: name,
-            token: token,
-            firstName: firstName,
-            lastName: lastName,
-            idNumber: idNumber,
-            college: college,
-            course: course,
-            department: department,
-            semester: semester,
-            learningModality: learningModality,
-            fatherName: fatherName,
-            fatherContactNumber: fatherContactNumber,
-            motherName: motherName,
-            motherContactNumber: motherContactNumber,
-            profile: profileImg));
-      }else if(event.role == 'Employee'){
+          name: name,
+          token: token,
+          firstName: firstName,
+          lastName: lastName,
+          idNumber: idNumber,
+          contactNumber: contactNumber,
+          college: college,
+          course: course,
+          department: department,
+          semester: semester,
+          learningModality: learningModality,
+          fatherName: fatherName,
+          fatherContactNumber: fatherContactNumber,
+          motherName: motherName,
+          motherContactNumber: motherContactNumber,
+          profile: profileImg,
+          emergencyPersonName: emergencyPersonName,
+          emergencyAddress: emergencyAddress,
+          relation: relation,
+          emergencyContactNumber: emergencyContactNumber,
+          currentAddress: currentAddress,
+          currentProvince: currentProvince,
+          currentCity: currentCity,
+          currentCountry: currentCountry,
+          permanentAddress: permanentAddress,
+          permanentProvince: permanentProvince,
+          permanentCity: permanentCity,
+          permanentCountry: permanentCountry,
+        ));
+      } else if (event.role == 'Employee') {
         final userData = await EmployeeStorage.getData();
         final name = userData['name'] ?? 'N/A';
         final token = userData['token'] ?? 'N/A';

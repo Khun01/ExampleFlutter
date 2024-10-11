@@ -18,7 +18,7 @@ class RequestedDuties {
     required this.time,
     required this.dutyStatus,
     required this.requestStatus,
-    required this.employeeProfile,
+    this.employeeProfile,
   });
 
   factory RequestedDuties.fromMap(Map<String, dynamic> map) {
@@ -31,7 +31,7 @@ class RequestedDuties {
       time: map['time'] as String,
       dutyStatus: map['duty_status'] as String,
       requestStatus: map['request_status'],
-      employeeProfile: map['employee_profile']['profile_img'] as String,
+      employeeProfile: map['employee_profile']['profile_img'] as String?,
     );
   }
 }

@@ -43,9 +43,8 @@ class ConversationListCard extends StatelessWidget {
               height: isCurrentUser ? 0 : 40,
               width: isCurrentUser ? 0 : 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFD1D1D1),
-                borderRadius: BorderRadius.circular(500)
-              ),
+                  color: const Color(0xFFD1D1D1),
+                  borderRadius: BorderRadius.circular(500)),
               child: ClipOval(
                 child: isCurrentUser
                     ? null
@@ -53,16 +52,18 @@ class ConversationListCard extends StatelessWidget {
                         ? Image.network(
                             '$profileUrl$profile',
                             errorBuilder: (context, error, stackTrace) =>
-                                Image.asset(
-                              'assets/images/profile_clicked.png',
-                              fit: BoxFit.cover,
-                              width: 30,
+                                Container(
+                              margin: const EdgeInsets.all(12),
+                              child: Image.asset(
+                                'assets/images/profile_clicked.png',
+                              ),
                             ),
                           )
-                        : Image.asset(
-                            'assets/images/profile_clicked.png',
-                            fit: BoxFit.cover,
-                            width: 30,
+                        : Container(
+                            margin: const EdgeInsets.all(14),
+                            child: Image.asset(
+                              'assets/images/profile_clicked.png',
+                            ),
                           ),
               ),
             ),

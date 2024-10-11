@@ -29,12 +29,6 @@ class PostedDutiesBloc extends Bloc<PostedDutiesEvent, PostedDutiesState> {
   }
 
   FutureOr<void> refetchDuty(RefetchDuty event, Emitter<PostedDutiesState> emit) async {
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-      final duty = await dutyRepository.fetchPostedDuties();
-      emit(PostedDutiesSuccessState(duty: duty));
-    } catch (e) {
-      emit(PostedDutiestFailedState(error: e.toString()));
-    }
+    emit(PostedDutiesSuccessState(duty: event.profDuty));
   }
 }

@@ -14,7 +14,7 @@ class NotificationLoadingState extends NotificationState {}
 class NotificationSuccessState extends NotificationState {
   final List<Notification> today;
   final List<Notification> yesterday;
-  final List<Notification> byDate;
+  final Map<String, List<Notification>> byDate;
 
   const NotificationSuccessState({
     required this.today,

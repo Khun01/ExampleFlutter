@@ -65,11 +65,19 @@ class PostedDutiesHome extends StatelessWidget {
                               '$profileUrl$profile',
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.person, size: 30),
+                                  Container(
+                                margin: const EdgeInsets.all(12),
+                                child: const ImageIcon(
+                                  AssetImage(
+                                      'assets/images/profile_clicked.png'),
+                                ),
+                              ),
                             )
-                          : Image.asset(
-                              'assets/images/profile_clicked.png',
-                              width: 20,
+                          : Container(
+                              margin: const EdgeInsets.all(12),
+                              child: const ImageIcon(
+                                AssetImage('assets/images/profile_clicked.png'),
+                              ),
                             ),
                     ),
                   ),

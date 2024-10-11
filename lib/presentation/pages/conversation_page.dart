@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
-import 'package:help_isko/presentation/cards/message_card/conversation_list_card.dart';
+import 'package:help_isko/presentation/cards/shared/message_card/conversation_list_card.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:uicons/uicons.dart';
@@ -247,20 +247,25 @@ class _ChatPageState extends State<ConversationPage> {
                                         borderRadius:
                                             BorderRadius.circular(500)),
                                     child: ClipOval(
-                                      child: widget.profile !=
-                                              ''
+                                      child: widget.profile != ''
                                           ? Image.network(
                                               '$profileUrl${widget.profile}',
                                               fit: BoxFit.cover,
                                               errorBuilder: (context, error,
                                                       stackTrace) =>
-                                                  const Icon(Icons.person,
-                                                      size: 10),
+                                                  Container(
+                                                margin:
+                                                    const EdgeInsets.all(14),
+                                                child: Image.asset(
+                                                  'assets/images/profile_clicked.png',
+                                                ),
+                                              ),
                                             )
-                                          : Image.asset(
-                                              'assets/images/profile_clicked.png',
-                                              width: 5,
-                                              height: 5,
+                                          : Container(
+                                              margin: const EdgeInsets.all(12),
+                                              child: Image.asset(
+                                                'assets/images/profile_clicked.png',
+                                              ),
                                             ),
                                     ),
                                   ),
