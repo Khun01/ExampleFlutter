@@ -28,6 +28,21 @@ class UserDataLoaded extends UserDataState {
   final String? motherName;
   final String? motherContactNumber;
 
+  final String? emergencyPersonName;
+  final String? emergencyContactNumber;
+  final String? emergencyAddress;
+  final String? relation;
+
+  final String? currentAddress;
+  final String? currentProvince;
+  final String? currentCountry;
+  final String? currentCity;
+
+  final String? permanentAddress;
+  final String? permanentProvince;
+  final String? permanentCountry;
+  final String? permanentCity;
+
   UserDataLoaded({
     this.profile,
     this.token,
@@ -46,6 +61,18 @@ class UserDataLoaded extends UserDataState {
     this.fatherContactNumber,
     this.motherName,
     this.motherContactNumber,
+    this.emergencyPersonName,
+    this.emergencyContactNumber,
+    this.emergencyAddress,
+    this.relation,
+    this.currentAddress,
+    this.currentProvince,
+    this.currentCountry,
+    this.currentCity,
+    this.permanentAddress,
+    this.permanentProvince,
+    this.permanentCountry,
+    this.permanentCity,
   });
 }
 

@@ -303,13 +303,96 @@ class StudentProfilePage extends StatelessWidget {
                             ),
                             const Divider(color: Color(0x303B3B3B)),
                             const SizedBox(height: 12),
-                            // Text(
-                            //   'Contact Details',
-                            //   style: GoogleFonts.nunito(
-                            //       fontSize: 20,
-                            //       fontWeight: FontWeight.bold,
-                            //       color: const Color(0xFF6BB577)),
-                            // ),
+                            Text(
+                              'Contact Details',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
+                            ),
+                            const SizedBox(height: 6),
+                            // para sa email ito
+                            MyProfilePageText(
+                              title1: "Email",
+                              body1: state.fatherName ?? 'N/A',
+                              title2: "Student Mobile No.",
+                              body2: state.contactNumber ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            MyProfilePageText(
+                              title1: "Father's Mobile No.",
+                              body1: state.fatherContactNumber ?? 'N/A',
+                              title2: "Mother's Contact No.",
+                              body2: state.motherContactNumber ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Emergency Person Contact Details',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
+                            ),
+                            const SizedBox(height: 6),
+                            MyProfilePageText(
+                              title1: "Person Name",
+                              body1: state.emergencyPersonName ?? 'N/A',
+                              title2: "Relation",
+                              body2: state.relation ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            MyProfilePageText(
+                              title1: "Address",
+                              body1: state.emergencyAddress ?? 'N/A',
+                              title2: "Person's Mobile No.",
+                              body2: state.emergencyContactNumber ?? 'N/A',
+                            ),
+                            const Divider(color: Color(0x303B3B3B)),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Current Address',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
+                            ),
+                            const SizedBox(height: 6),
+                            MyProfilePageText(
+                              title1: "Address",
+                              body1: state.currentAddress ?? 'N/A',
+                              title2: "Country",
+                              body2: state.currentCountry ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            MyProfilePageText(
+                              title1: "Province",
+                              body1: state.currentProvince ?? 'N/A',
+                              title2: "City",
+                              body2: state.currentCity ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              'Permanent Address',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF6BB577)),
+                            ),
+                            const SizedBox(height: 6),
+                            MyProfilePageText(
+                              title1: "Address",
+                              body1: state.permanentAddress ?? 'N/A',
+                              title2: "Country",
+                              body2: state.permanentCountry ?? 'N/A',
+                            ),
+                            const SizedBox(height: 12),
+                            MyProfilePageText(
+                              title1: "Province",
+                              body1: state.permanentProvince ?? 'N/A',
+                              title2: "City",
+                              body2: state.permanentCity ?? 'N/A',
+                            ),
+                            const SizedBox(height: 86),
                           ],
                         ),
                       ),
