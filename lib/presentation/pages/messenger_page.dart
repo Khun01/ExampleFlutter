@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/cards/shared/message_card/chat_list_card.dart';
-import 'package:ionicons/ionicons.dart';
 
 class MessengerPage extends StatefulWidget {
   final String role;
@@ -54,12 +51,12 @@ class _MessengerPageState extends State<MessengerPage> {
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF3B3B3B)),
                             ),
-                            const Spacer(),
-                            GestureDetector(
-                                onTap: () {
-                                  log('The search button is clicked');
-                                },
-                                child: const Icon(Ionicons.search))
+                            // const Spacer(),
+                            // GestureDetector(
+                            //     onTap: () {
+                            //       log('The search button is clicked');
+                            //     },
+                            //     child: const Icon(Ionicons.search))
                           ],
                         )),
                   ),
