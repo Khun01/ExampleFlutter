@@ -50,7 +50,7 @@ class NotificationPage extends StatelessWidget {
                   child: Text(
                     'Today',
                     style: GoogleFonts.nunito(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: const Color(0xFF3B3B3B)),
                   ),
@@ -79,7 +79,7 @@ class NotificationPage extends StatelessWidget {
                 child: Text(
                   'Yesterday',
                   style: GoogleFonts.nunito(
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF3B3B3B)),
                 ),
@@ -101,35 +101,47 @@ class NotificationPage extends StatelessWidget {
               ),
             );
           }
-
-          // Earlier Notifications
           if (state.byDate.isNotEmpty) {
             slivers.add(
-              SliverToBoxAdapter(
-                child: Text(
-                  '',
-                  style: GoogleFonts.nunito(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF3B3B3B)
-                  ),
-                ),
-              ),
+              SliverToBoxAdapter(),
             );
-            slivers.add(
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final notification = state.byDate[index];
-                    return NotificationCard(
-                      title: notification.title,
-                      message: notification.message,
-                      date: notification.date,
-                    );
-                  },
-                  childCount: state.byDate.length,
-                ),
-              ),
+            slivers.addAll(
+              state.byDate.entries.map((entry) {
+                final dateKey = entry.key;
+                final notifications = entry.value;
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      if (index == 0) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 20, bottom: 8),
+                          child: Text(
+                            dateKey,
+                            style: GoogleFonts.nunito(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
+                          ),
+                        );
+                      } else {
+                        final notificationIndex = index - 1;
+                        if (notificationIndex < notifications.length) {
+                          final notification = notifications[notificationIndex];
+                          return NotificationCard(
+                            title: notification.title,
+                            message: notification.message,
+                            date: notification.date,
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }
+                    },
+                    childCount: notifications.length + 1,
+                  ),
+                );
+              }).toList(),
             );
           }
         } else if (state is NotificationFailedState) {
@@ -203,9 +215,6 @@ class NotificationPage extends StatelessWidget {
                   },
                 ),
                 ...slivers,
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 12),
-                )
               ],
             ),
           ),

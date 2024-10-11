@@ -59,8 +59,8 @@ class AddDutyBloc extends Bloc<AddDutyEvent, AddDutyState> {
         }
       } else {
         log('Failed to add duty: Response or duty object is null or invalid');
-        emit(const AddDutyFailedState(
-            error: 'Failed to add duty: Response or duty object is invalid'));
+        emit(AddDutyFailedState(
+            error: 'Failed to add duty: Response or duty object is invalid: ${response['statusCode']}'));
       }
     } catch (e) {
       log('Error when adding duty: $e');

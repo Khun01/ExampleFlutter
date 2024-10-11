@@ -37,7 +37,7 @@ class NotificationCard extends StatelessWidget {
             radius: 30,
             child: title == 'Duty Active!'
                 ? Image.asset('assets/images/notif/active_notif.png')
-                : title == 'Duty Completed!'
+                : title == 'Duty Completed!' || title == 'Duty Accepted!'
                     ? Image.asset(
                         'assets/images/duty_dialog_images/checked.png')
                     : title == 'Duty Ongoing'

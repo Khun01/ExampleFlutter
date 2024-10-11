@@ -24,7 +24,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(NotificationSuccessState(
         today: notification['today'] ?? [],
         yesterday: notification['yesterday'] ?? [],
-        byDate: notification['by_date'] ?? [],
+        byDate: notification['by_date'] ?? {},
       ));
     } catch (e) {
       emit(NotificationFailedState(error: e.toString()));

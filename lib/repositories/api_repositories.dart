@@ -229,17 +229,18 @@ class ApiRepositories {
   }
 
   // ------------------- Notification --------------------//
-  Future<Map<String, List<Notification>>> fetchNotification(String role) async {
+  Future<Map<String, dynamic>> fetchNotification(String role) async {
     final userDataStudent = await StudentStorage.getData();
     final userDataEmployee = await EmployeeStorage.getData();
     String? tokenEmployee = userDataEmployee['employeeToken'];
     String? tokenStudent = userDataStudent['studToken'];
+
     final response = await http.get(
       Uri.parse('$baseUrl/duty/notifications'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization':
-            'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}'
+            'Bearer ${role == 'Employee' ? tokenEmployee : tokenStudent}',
       },
     );
     if (response.statusCode == 200) {
@@ -247,16 +248,30 @@ class ApiRepositories {
       final today = (data['grouped_notifications']['today'] as List)
           .map((item) => Notification.fromJson(item))
           .toList();
-
       final yesterday = (data['grouped_notifications']['yesterday'] as List)
           .map((item) => Notification.fromJson(item))
           .toList();
+      final Map<String, List<Notification>> byDate = {};
+      final byDateData = data['grouped_notifications']['by_date'];
+      if (byDateData is Map<String, dynamic>) {
+        byDateData.forEach((date, notificationsList) {
+          if (notificationsList is List) {
+            byDate[date] = notificationsList
+                .map((item) => Notification.fromJson(item))
+                .toList();
+          } else {
+            log('No notifications found for date: $date');
+          }
+        });
+      } else {
+        log('Expected by_date to be a Map, but got: ${byDateData.runtimeType}');
+      }
 
-      final byDate = (data['grouped_notifications']['by_date'] as List)
-          .map((item) => Notification.fromJson(item))
-          .toList();
-
-      return {'today': today, 'yesterday': yesterday, 'by_date': byDate};
+      return {
+        'today': today,
+        'yesterday': yesterday,
+        'by_date': byDate,
+      };
     } else {
       throw Exception('Failed to load notification');
     }
