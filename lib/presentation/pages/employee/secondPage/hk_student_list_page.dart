@@ -95,6 +95,8 @@ class _HkStudentListPageState extends State<HkStudentListPage> {
                           profile: students.profile!,
                           studentNumber: students.studentNumber!,
                           targetUserId: students.studentId,
+                          activeDutyCount: students.activeDutyCount!,
+                          completedDutyCount: students.completedDutyCount!,
                         ),
                       )),
                 );

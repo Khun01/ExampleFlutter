@@ -219,7 +219,7 @@ class _AboutStudentState extends State<AboutStudent>
                               ),
                               const Spacer(),
                               Text(
-                                'Active Duty (5)',
+                                'Active Duty ${widget.students.activeDutyCount}',
                                 style: GoogleFonts.nunito(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,
@@ -250,7 +250,7 @@ class _AboutStudentState extends State<AboutStudent>
                               ),
                               const Spacer(),
                               Text(
-                                'Pending Duty (2)',
+                                'Completed Duty ${widget.students.completedDutyCount}',
                                 style: GoogleFonts.nunito(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 11,

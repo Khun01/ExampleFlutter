@@ -19,23 +19,26 @@ class DutyDetailsStudent extends StatelessWidget {
         final student = students[index];
         log('The stud is: ${student.name}');
         return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: context.read<MessageBloc>(),
-                      child: StudentInfoPage(students: student)),
-                ),
-              );
-            },
-            child: StudentsCard(
-              profile: student.profile!,
-              name: student.name!,
-              course: student.course!,
-              studentNumber: student.studentNumber.toString(),
-              targetUserId: student.studentId,
-            ));
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                    value: context.read<MessageBloc>(),
+                    child: StudentInfoPage(students: student)),
+              ),
+            );
+          },
+          child: StudentsCard(
+            profile: student.profile!,
+            name: student.name!,
+            course: student.course!,
+            studentNumber: student.studentNumber.toString(),
+            targetUserId: student.studentId,
+            activeDutyCount: student.activeDutyCount!,
+            completedDutyCount: student.completedDutyCount!,
+          ),
+        );
       },
     );
   }
