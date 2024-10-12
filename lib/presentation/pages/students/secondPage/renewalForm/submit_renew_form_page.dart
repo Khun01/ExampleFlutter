@@ -4,7 +4,13 @@ import 'package:help_isko/presentation/widgets/my_button.dart';
 
 class SubmitRenewFormPage extends StatelessWidget {
   final VoidCallback onNextStep;
-  const SubmitRenewFormPage({super.key, required this.onNextStep});
+  final VoidCallback onFirstStep;
+  final String text;
+  const SubmitRenewFormPage(
+      {super.key,
+      required this.onNextStep,
+      required this.onFirstStep,
+      required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +87,9 @@ class SubmitRenewFormPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          onFirstStep();
+                        },
                         child: const Icon(
                           Icons.edit,
                           color: Color(0xFF6BB577),
@@ -89,7 +97,7 @@ class SubmitRenewFormPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '00-0000-00000',
+                        text != '' ? text : '00-0000-00000',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),

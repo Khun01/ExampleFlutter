@@ -76,12 +76,16 @@ class NotificationPage extends StatelessWidget {
           if (state.yesterday.isNotEmpty) {
             slivers.add(
               SliverToBoxAdapter(
-                child: Text(
-                  'Yesterday',
-                  style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B)),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                  child: Text(
+                    'Yesterday',
+                    style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B)),
+                  ),
                 ),
               ),
             );
@@ -103,7 +107,7 @@ class NotificationPage extends StatelessWidget {
           }
           if (state.byDate.isNotEmpty) {
             slivers.add(
-              SliverToBoxAdapter(),
+              const SliverToBoxAdapter(),
             );
             slivers.addAll(
               state.byDate.entries.map((entry) {
