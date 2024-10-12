@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyProfilePageText extends StatelessWidget {
-  final String title1;
-  final String title2;
+  final String? title1;
+  final String? title2;
   final String? body1;
   final String? body2;
   const MyProfilePageText(
-      {super.key,
-      required this.title1,
-      required this.title2,
-      this.body1,
-      this.body2});
+      {super.key, this.title1, this.title2, this.body1, this.body2});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +18,7 @@ class MyProfilePageText extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title1,
+              title1 ?? 'N/A',
               style: GoogleFonts.nunito(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -46,14 +42,14 @@ class MyProfilePageText extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              title2,
+              title2 ?? '',
               style: GoogleFonts.nunito(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   color: const Color(0x803B3B3B)),
             ),
             Text(
-              body2 ?? 'N/A',
+              body2 ?? '',
               style: GoogleFonts.nunito(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,

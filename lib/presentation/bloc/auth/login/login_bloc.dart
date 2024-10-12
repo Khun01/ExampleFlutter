@@ -192,8 +192,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               final String emergencyPersonName = user['emergency_person_name'];
               final String emergencyAddress = user['emergency_address'];
               final String relation = user['relation'];
-              final String emergencyContactNumber =
-                  user['emergency_contact_number'];
+              final String emergencyContactNumber = user['emergency_contact_number'];
+
+              final String activeDuties = responseData['active_duties'].toString();
+              final String completedDuties = responseData['completed_duties'].toString();
+              final String totalDuties = responseData['total_duties'].toString();
 
               await StudentStorage.saveData(
                 id: id,
@@ -227,6 +230,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                 emergencyAddress: emergencyAddress,
                 relation: relation,
                 emergencyContactNumber: emergencyContactNumber,
+                activeDuties: activeDuties,
+                completedDuties: completedDuties,
+                totalDuty: totalDuties,
               );
               _pusher.pusherConnect();
               _pusher.subscribeChannel(user['user_id']);
