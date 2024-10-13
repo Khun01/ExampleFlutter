@@ -412,6 +412,11 @@ class StudentProfilePage extends StatelessWidget {
                             MyProfilePageText(
                               title1: "Total Duty",
                               body1: state.totalDutyCount ?? 'N/A',
+                            ),
+                            const SizedBox(height: 6),
+                            MyProfilePageText(
+                              title1: "Hours To Complete",
+                              body1: '${state.hoursToComplete ?? 'N/A'} hours',
                               title2: 'Duty Hours Remaining',
                               body2: '${state.dutyHoursRemaining ?? 'N/A'} hours',
                             ),

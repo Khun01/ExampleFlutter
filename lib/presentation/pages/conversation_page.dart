@@ -63,6 +63,7 @@ class _ChatPageState extends State<ConversationPage> {
   }
 
   Future<bool> _onBackPressed() async {
+    log("Back button pressed. Focus node has focus: ${focusNode.hasFocus}");
     if (focusNode.hasFocus) {
       focusNode.unfocus();
       return false;
@@ -186,9 +187,8 @@ class _ChatPageState extends State<ConversationPage> {
             );
             break;
         }
-        // ignore: deprecated_member_use
-        return WillPopScope(
-          onWillPop: () => _onBackPressed(),
+        return GestureDetector(
+          onTap: _onBackPressed,
           child: Scaffold(
             resizeToAvoidBottomInset: true,
             body: SafeArea(
