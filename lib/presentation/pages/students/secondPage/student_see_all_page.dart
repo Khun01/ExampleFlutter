@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/student/requested_duties_student_see_all_card.dart';
+import 'package:help_isko/presentation/pages/students/secondPage/requested_for_duties_info_page.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentSeeAllPage extends StatelessWidget {
@@ -75,7 +77,21 @@ class StudentSeeAllPage extends StatelessWidget {
               },
             ),
             BlocConsumer<RequestedDutiesBloc, RequestedDutiesState>(
-              listener: (context, state) {},
+              listener: (context, state) {
+                if (state is RequestedDutiesCancelLoadingState) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) =>
+                          const MyCircularProgressIndicator());
+                } else if (state is RequestedDutiesCancelSuccessState) {
+                  Navigator.pop(context);
+                }
+              },
+              buildWhen: (previous, current) =>
+                  (current is RequestedDutiesFetchLoadingState &&
+                      previous is RequestedDutiesInitial) ||
+                  current is RequestedDutiesFetchSuccessState,
               builder: (context, state) {
                 switch (state.runtimeType) {
                   case RequestedDutiesFetchLoadingState:
@@ -108,28 +124,42 @@ class StudentSeeAllPage extends StatelessWidget {
                         itemCount: state.requestedDuties.length,
                         itemBuilder: (context, index, animation) {
                           final duty = state.requestedDuties[index];
-                          return FadeTransition(
-                            opacity: Tween<double>(
-                              begin: 0,
-                              end: 1,
-                            ).animate(animation),
-                            child: SlideTransition(
-                              position: Tween<Offset>(
-                                begin: const Offset(0, -0.1),
-                                end: Offset.zero,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RequestedForDutiesInfoPage(
+                                        title: 'requested',
+                                    requestedDuties: duty,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: FadeTransition(
+                              opacity: Tween<double>(
+                                begin: 0,
+                                end: 1,
                               ).animate(animation),
-                              child: BlocProvider.value(
-                                value: context.read<RequestedDutiesBloc>(),
-                                child: RequestedDutiesStudentSeeAllCard(
-                                  id: duty.id,
-                                  profile: duty.employeeProfile?? '',
-                                  date: duty.date,
-                                  employeeName: duty.employeeName,
-                                  building: duty.building,
-                                  message: duty.message,
-                                  time: duty.time,
-                                  dutyStatus: duty.dutyStatus,
-                                  requestStatus: duty.requestStatus,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0, -0.1),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: BlocProvider.value(
+                                  value: context.read<RequestedDutiesBloc>(),
+                                  child: RequestedDutiesStudentSeeAllCard(
+                                    id: duty.id,
+                                    profile: duty.employeeProfile ?? '',
+                                    date: duty.date,
+                                    employeeName: duty.employeeName,
+                                    building: duty.building,
+                                    message: duty.message,
+                                    time: duty.time,
+                                    dutyStatus: duty.dutyStatus,
+                                    requestStatus: duty.requestStatus,
+                                  ),
                                 ),
                               ),
                             ),

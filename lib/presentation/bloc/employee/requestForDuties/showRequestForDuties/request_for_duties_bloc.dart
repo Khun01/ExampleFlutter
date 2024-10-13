@@ -17,7 +17,7 @@ class RequestForDutiesBloc extends Bloc<RequestForDutiesEvent, RequestForDutiesS
   FutureOr<void> fetchRequestForDutiesEvent(FetchRequestForDutiesEvent event, Emitter<RequestForDutiesState> emit) async{
     emit(RequestForDutiesLoadingState());
     try{
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
       final requestForDuty = await requestForDutyRepository.fetchRequestForDuties();
       emit(RequestForDutiesSuccessState(requestForDuty: requestForDuty));
     }catch(e){

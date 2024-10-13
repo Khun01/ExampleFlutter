@@ -54,6 +54,11 @@ class StudentStorage {
     String? relation,
     String? emergencyContactNumber,
 
+    String? activeDuties,
+    String? completedDuties,
+    String? totalDuty,
+    String? dutyHoursRemaining,
+
   }) async {
     await Future.wait([
       saveField('userId', id ?? ""),
@@ -92,6 +97,11 @@ class StudentStorage {
       saveField('emergencyAddress', emergencyAddress ?? ''),
       saveField('relation', relation ?? ''),
       saveField('emergencyContactNumber', emergencyContactNumber ?? ''),
+
+      saveField('activeDuties', activeDuties ?? ''),
+      saveField('completedDuties', completedDuties ?? ''),
+      saveField('totalDuty', totalDuty ?? ''),
+      saveField('dutyHoursRemaining', dutyHoursRemaining ?? '')
 
     ]);
   }
@@ -134,6 +144,11 @@ class StudentStorage {
       getField('emergencyAddress'),
       getField('relation'),
       getField('emergencyContactNumber'),
+
+      getField('activeDuties'),
+      getField('completedDuties'),
+      getField('totalDuty'),
+      getField('dutyHoursRemaining')
     ]);
 
     final data = {
@@ -174,6 +189,10 @@ class StudentStorage {
       'relation': userData[29],
       'emergencyContactNumber': userData[30],
 
+      'activeDuties' : userData[31],
+      'completedDuties': userData[32],
+      'totalDuty': userData[33],
+      'dutyHoursRemaining': userData[34],
     };
     return data;
   }
@@ -216,6 +235,11 @@ class StudentStorage {
       deleteField('emergencyAddress'),
       deleteField('relation'),
       deleteField('emergencyContactNumber'),
+
+      deleteField('activeDuties'),
+      deleteField('completedDuties'),
+      deleteField('totalDuty'),
+      deleteField('dutyHoursRemaining')
     ]);
   }
 }

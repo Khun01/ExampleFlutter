@@ -299,6 +299,9 @@ class _ChatPageState extends State<ConversationPage> {
                         },
                       ),
                       body,
+                      const SliverToBoxAdapter(
+                        child: SizedBox(height: 90),
+                      )
                     ],
                   ),
                   Positioned(

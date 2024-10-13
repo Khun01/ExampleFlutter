@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/student/dutiespage/duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/student/request_duty_student_card.dart';
+import 'package:help_isko/presentation/pages/students/secondPage/available_for_duties_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_app_bar.dart';
 
@@ -137,15 +138,28 @@ class StudentDutiesPage extends StatelessWidget {
                                   value: context.read<RequestedDutiesBloc>(),
                                 ),
                               ],
-                              child: RequestDutyStudentCard(
-                                role: 'Student',
-                                id: duties.id,
-                                profile: duties.employeeProfile ?? '',
-                                date: duties.date,
-                                building: duties.employeeName,
-                                message: duties.message,
-                                startTime: duties.startTime,
-                                endTime: duties.endTime,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AvailableForDutiesInfoPage(
+                                        availableDuty: duties,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: RequestDutyStudentCard(
+                                  role: 'Student',
+                                  id: duties.id,
+                                  profile: duties.employeeProfile ?? '',
+                                  date: duties.date,
+                                  building: duties.employeeName,
+                                  message: duties.message,
+                                  startTime: duties.startTime,
+                                  endTime: duties.endTime,
+                                ),
                               ),
                             );
                           },

@@ -12,6 +12,7 @@ import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/re
 import 'package:help_isko/presentation/cards/shared/announcement_card.dart';
 import 'package:help_isko/presentation/cards/duty_card/posted_duties_home.dart';
 import 'package:help_isko/presentation/cards/shared/recent_activity_card.dart';
+import 'package:help_isko/presentation/pages/students/secondPage/requested_for_duties_info_page.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/student_see_all_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_announcement_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_home_page_loading.dart';
@@ -260,20 +261,35 @@ class StudentHomePage extends StatelessWidget {
                                 final request = state.requestedDuties[index];
                                 return FadeInRight(
                                   duration: const Duration(milliseconds: 700),
-                                  child: Container(
-                                    margin: const EdgeInsets.only(top: 8),
-                                    child: BlocProvider(
-                                      create: (_) =>
-                                          context.read<RequestForDutiesBloc>(),
-                                      child: PostedDutiesHome(
-                                          id: request.id,
-                                          profile:
-                                              request.employeeProfile ?? '',
-                                          date: request.date,
-                                          building: request.employeeName,
-                                          message: request.message,
-                                          requestStatus: request.requestStatus,
-                                          dutyStatus: request.dutyStatus),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RequestedForDutiesInfoPage(
+                                            title: 'requested',
+                                            requestedDuties: request,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 8),
+                                      child: BlocProvider(
+                                        create: (_) => context
+                                            .read<RequestForDutiesBloc>(),
+                                        child: PostedDutiesHome(
+                                            id: request.id,
+                                            profile:
+                                                request.employeeProfile ?? '',
+                                            date: request.date,
+                                            building: request.employeeName,
+                                            message: request.message,
+                                            requestStatus:
+                                                request.requestStatus,
+                                            dutyStatus: request.dutyStatus),
+                                      ),
                                     ),
                                   ),
                                 );

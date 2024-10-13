@@ -46,6 +46,11 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final permanentCity = userData['permanentCity'] ?? 'N/A';
         final permanentCountry = userData['permanentCountry'] ?? 'N/A';
 
+        final activeDutyCount = userData['activeDuties'] ?? 'N/A';
+        final completedDutyCount = userData['completedDuties'] ?? 'N/A';
+        final totalDutyCount = userData['totalDuty'] ?? 'N/A';
+        final dutyHoursRemaining = userData['dutyHoursRemaining'] ?? 'N/A';
+
         emit(UserDataLoaded(
           name: name,
           token: token,
@@ -75,6 +80,10 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
           permanentProvince: permanentProvince,
           permanentCity: permanentCity,
           permanentCountry: permanentCountry,
+          activeDutyCount: activeDutyCount,
+          completedDutyCount: completedDutyCount,
+          totalDutyCount: totalDutyCount,
+          dutyHoursRemaining: dutyHoursRemaining
         ));
       } else if (event.role == 'Employee') {
         final userData = await EmployeeStorage.getData();

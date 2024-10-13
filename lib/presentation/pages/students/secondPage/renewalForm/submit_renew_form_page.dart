@@ -1,10 +1,38 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/renewal_form/renewal_form_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/renewal_form/renewal_form_event.dart';  
+import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/preview_renew_form_page.dart';
+
+import 'dart:io';
+// For the event
+
 
 class SubmitRenewFormPage extends StatelessWidget {
   final VoidCallback onNextStep;
-  const SubmitRenewFormPage({super.key, required this.onNextStep});
+  final VoidCallback onFirstStep;
+  
+  // Collect all required data
+  final String studentNumber;
+  final int attendedEvents;
+  final int sharedPosts;
+  final int dutyHours;
+  final String registrationFeePicture;
+  final String disbursementMethod; 
+
+  const SubmitRenewFormPage({
+    super.key,
+    required this.onNextStep,
+    required this.onFirstStep,
+    required this.studentNumber,
+    required this.attendedEvents,
+    required this.sharedPosts,
+    required this.dutyHours,
+    required this.registrationFeePicture,
+    required this.disbursementMethod,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -81,47 +109,54 @@ class SubmitRenewFormPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          onFirstStep();
+                        },
                         child: const Icon(
                           Icons.edit,
                           color: Color(0xFF6BB577),
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Override the student number
                       Text(
-                        '00-0000-00000',
+                        studentNumber != '' ? studentNumber : '00-0000-00000',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Override the duty hours
                       Text(
-                        'Total Hours',
+                        dutyHours.toString(),
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Override the shared posts
                       Text(
-                        '1',
+                        sharedPosts.toString(),
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Override attended events
                       Text(
-                        '1',
+                        attendedEvents.toString(),
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
                         ),
                       ),
                       const SizedBox(height: 8),
+                      // Override the registration fee picture (just the filename)
                       Text(
-                        '1',
+                        registrationFeePicture,
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
@@ -183,7 +218,7 @@ class SubmitRenewFormPage extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'ORF',
+                      disbursementMethod,
                       style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -195,12 +230,71 @@ class SubmitRenewFormPage extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          MyButton(
-            onTap: () {
-              onNextStep();
-            },
-            buttonText: 'Submit',
-          )
+        MyButton(
+  onTap: () async {
+    // Convert the file paths to File objects only if a valid image is selected
+    File? registrationFeePictureFile;
+    File? disbursementMethodFile;
+
+    // Commented out for now due to emulator limitations
+    /*
+    if (registrationFeePicture.isNotEmpty && registrationFeePicture != 'No image selected') {
+      registrationFeePictureFile = File(registrationFeePicture);
+    }
+
+    if (disbursementMethod.isNotEmpty && disbursementMethod != 'No image selected') {
+      disbursementMethodFile = File(disbursementMethod);
+    }
+    */
+
+    // Dispatch the event to submit the form
+    context.read<RenewalFormBloc>().add(
+      SubmitRenewalFormEvent(
+        studentNumber: studentNumber,
+        attendedEvents: attendedEvents,
+        sharedPosts: sharedPosts,
+        dutyHours: dutyHours,
+        registrationFeePicture: registrationFeePictureFile,  // Can be null for now
+        disbursementMethod: disbursementMethodFile,           // Can be null for now
+      ),
+    );
+
+    // Simulate a short delay
+    await Future.delayed(const Duration(seconds: 1));
+
+    try {
+      // Fetch the form from the backend
+      final fetchedForm = await context.read<RenewalFormBloc>().fetchSubmittedForm();
+
+      // Check if fetchedForm is not null and contains valid data
+      if (fetchedForm != null && fetchedForm.studentNumber != null) {
+        // Navigate to the PreviewRenewFormPage with fetched data
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PreviewRenewFormPage(
+              studentNumber: fetchedForm.studentNumber,
+              attendedEvents: fetchedForm.attendedEvents,
+              sharedPosts: fetchedForm.sharedPosts,
+              dutyHours: fetchedForm.dutyHours,
+              registrationFeePicture: fetchedForm.registrationFeePicture,
+            ),
+          ),
+        );
+      } else {
+        // Handle the error if the form is null or invalid
+        print("Fetched form or studentNumber is null");
+      }
+    } catch (e) {
+      // Handle the error when fetching the form
+      print('Error fetching form: $e');
+    }
+
+    // Move to the next step
+    onNextStep();
+  },
+  buttonText: 'Submit',
+)
         ],
       ),
     );

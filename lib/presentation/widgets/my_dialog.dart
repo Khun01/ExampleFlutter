@@ -60,40 +60,43 @@ class MyDialog extends StatelessWidget {
                       ),
                       const SizedBox(height: 24),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 40),
-                                side: const BorderSide(
-                                  color: Color(0xFF3B3B3B),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
+                            style: OutlinedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 40),
+                              side: const BorderSide(
+                                color: Color(0xFF3B3B3B),
                               ),
-                              onPressed: () {
-                                BlocProvider.of<LogoutBloc>(context)
-                                    .add(LogoutButtonPressed(role: role));
-                              },
-                              child: Text(
-                                'Yes',
-                                style: GoogleFonts.nunito(
-                                    color: const Color(0xFF3B3B3B)),
-                              )),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                            onPressed: () {
+                              BlocProvider.of<LogoutBloc>(context)
+                                  .add(LogoutButtonPressed(role: role));
+                            },
+                            child: Text(
+                              'Yes',
+                              style: GoogleFonts.nunito(
+                                  color: const Color(0xFF3B3B3B)),
+                            ),
+                          ),
+                          const SizedBox(width: 16),
                           ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6BB577),
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 40)),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'No',
-                                style: GoogleFonts.nunito(
-                                    color: const Color(0xFFFCFCFC)),
-                              ))
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF6BB577),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 40)),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              'No',
+                              style: GoogleFonts.nunito(
+                                  color: const Color(0xFFFCFCFC)),
+                            ),
+                          )
                         ],
                       )
                     ],

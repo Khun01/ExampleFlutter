@@ -4,7 +4,20 @@ import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_succe
 import 'package:help_isko/presentation/widgets/my_button.dart';
 
 class PreviewRenewFormPage extends StatelessWidget {
-  const PreviewRenewFormPage({super.key});
+  final String studentNumber;
+  final int attendedEvents;
+  final int sharedPosts;
+  final int dutyHours;
+  final String registrationFeePicture;
+
+  const PreviewRenewFormPage({
+    super.key,
+    required this.studentNumber,
+    required this.attendedEvents,
+    required this.sharedPosts,
+    required this.dutyHours,
+    required this.registrationFeePicture,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +97,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '00-0000-00000',
+                            studentNumber,
                             style: GoogleFonts.nunito(
                               fontSize: 14,
                               color: const Color(0xCC3B3B3B),
@@ -92,7 +105,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Total Hours',
+                            dutyHours.toString(),
                             style: GoogleFonts.nunito(
                               fontSize: 14,
                               color: const Color(0xCC3B3B3B),
@@ -100,7 +113,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '1',
+                            sharedPosts.toString(),
                             style: GoogleFonts.nunito(
                               fontSize: 14,
                               color: const Color(0xCC3B3B3B),
@@ -108,7 +121,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '1',
+                            attendedEvents.toString(),
                             style: GoogleFonts.nunito(
                               fontSize: 14,
                               color: const Color(0xCC3B3B3B),
@@ -116,7 +129,9 @@ class PreviewRenewFormPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '1',
+                            registrationFeePicture != ''
+                                ? registrationFeePicture
+                                : 'No image selected',
                             style: GoogleFonts.nunito(
                               fontSize: 14,
                               color: const Color(0xCC3B3B3B),
@@ -180,7 +195,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'ORF',
+                      'ORF', // Assuming the disbursement method
                       style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

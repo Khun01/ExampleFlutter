@@ -13,6 +13,8 @@ class StudentsCard extends StatelessWidget {
   final String course;
   final String studentNumber;
   final int targetUserId;
+  final int activeDutyCount;
+  final int completedDutyCount;
   const StudentsCard({
     super.key,
     required this.name,
@@ -20,6 +22,8 @@ class StudentsCard extends StatelessWidget {
     required this.profile,
     required this.studentNumber,
     required this.targetUserId,
+    required this.activeDutyCount,
+    required this.completedDutyCount,
   });
 
   @override
@@ -130,12 +134,12 @@ class StudentsCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Active duty - 1',
+                        'Active duty - $activeDutyCount',
                         style: GoogleFonts.nunito(
                             fontSize: 10, color: const Color(0xCC3B3B3B)),
                       ),
                       Text(
-                        'Pendgin duty - 1',
+                        'Completed duty - $completedDutyCount',
                         style: GoogleFonts.nunito(
                             fontSize: 10, color: const Color(0xCC3B3B3B)),
                       )

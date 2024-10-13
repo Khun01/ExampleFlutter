@@ -20,7 +20,7 @@ class PostedDutiesBloc extends Bloc<PostedDutiesEvent, PostedDutiesState> {
       FetchDuty event, Emitter<PostedDutiesState> emit) async {
     emit(PostedDutiesLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       final duty = await dutyRepository.fetchPostedDuties();
       emit(PostedDutiesSuccessState(duty: duty));
     } catch (e) {
