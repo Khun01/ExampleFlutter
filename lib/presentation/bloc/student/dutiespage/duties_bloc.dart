@@ -36,7 +36,7 @@ class DutiesBloc extends Bloc<DutiesEvent, DutiesState> {
       DutiesAcceptEvent event, Emitter<DutiesState> emit) async {
     emit(DutiesAcceptLoading());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       final status = await availableDutiesRepository.acceptDuty(event.id);
       if (status) {
         emit(DutiesAcceptSuccess());

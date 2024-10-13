@@ -34,7 +34,7 @@ class RequestedDutiesBloc
       Emitter<RequestedDutiesState> emit) async {
     emit(RequestedDutiesCancelLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       final status =
           await requestedDutiesRepository.cancelRequestedDuties(id: event.id);
 

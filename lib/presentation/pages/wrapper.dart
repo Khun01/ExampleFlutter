@@ -141,7 +141,19 @@ class _WrapperState extends State<Wrapper> {
           BlocListener<DutiesBloc, DutiesState>(
               bloc: dutiesBloc, listener: (context, state) {}),
           BlocListener<RequestedDutiesBloc, RequestedDutiesState>(
-              bloc: requestedDutiesBloc, listener: (context, state) {})
+            bloc: requestedDutiesBloc,
+            listener: (context, state) {
+              if (state is RequestedDutiesCancelLoadingState) {
+                showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) => const MyCircularProgressIndicator(),
+                );
+              }else if(state is RequestedDutiesCancelSuccessState){
+                Navigator.pop(context);
+              }
+            },
+          )
         ],
         child: BlocBuilder<DeclineStudentBloc, DeclineStudentState>(
           bloc: declineStudentBloc,
@@ -390,9 +402,7 @@ class _WrapperState extends State<Wrapper> {
                                         acceptStudentState
                                             is AcceptStudentLoadingState ||
                                         state is DeclineStudentLoadingState ||
-                                        dutiesState is DutiesAcceptLoading ||
-                                        requestedDuties
-                                            is RequestedDutiesCancelLoadingState) ...[
+                                        dutiesState is DutiesAcceptLoading) ...[
                                       Positioned(
                                         top: 0,
                                         left: 0,

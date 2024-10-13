@@ -72,10 +72,10 @@ class StudentDutiesPage extends StatelessWidget {
                   current is DutiesFetchFailed,
               listener: (context, state) {
                 if (state is DutiesAcceptSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    content: Text('Successfully Requested'),
-                    duration: Duration(seconds: 2),
-                  ));
+                  // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  //   content: Text('Successfully Requested'),
+                  //   duration: Duration(seconds: 2),
+                  // ));
                   context.read<DutiesBloc>().add(DutiesAvailableFetch());
                 }
                 if (state is DutiesAcceptFailed) {
@@ -143,9 +143,11 @@ class StudentDutiesPage extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          AvailableForDutiesInfoPage(
-                                        availableDuty: duties,
+                                      builder: (_) => BlocProvider.value(
+                                        value: context.read<DutiesBloc>(),
+                                        child: AvailableForDutiesInfoPage(
+                                          availableDuty: duties,
+                                        ),
                                       ),
                                     ),
                                   );

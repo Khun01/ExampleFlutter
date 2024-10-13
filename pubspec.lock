@@ -579,7 +579,7 @@ packages:
   pusher_client:
     dependency: "direct main"
     description:
-      path: "C:\\Users\\user\\Desktop\\FlutterProjects\\pusher_client"
+      path: "/Applications/BJFolder/Help_Isko_Projects/pusher_client"
       relative: false
     source: path
     version: "2.0.0"
