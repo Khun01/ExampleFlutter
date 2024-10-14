@@ -5,17 +5,17 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/data/comment.dart';
-import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetch_comment_bloc.dart';
-import 'package:help_isko/repositories/api_repositories.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchComment/fetch_comment_bloc.dart';
+import 'package:help_isko/repositories/employee/comment_repository.dart';
 
 part 'add_comment_event.dart';
 part 'add_comment_state.dart';
 
 class AddCommentBloc extends Bloc<AddCommentEvent, AddCommentState> {
-  final ApiRepositories apiRepositories;
+  final CommentRepository commentRepository;
   final FetchCommentBloc fetchCommentBloc;
   AddCommentBloc(
-      {required this.apiRepositories, required this.fetchCommentBloc})
+      {required this.commentRepository, required this.fetchCommentBloc})
       : super(AddCommentInitial()) {
     on<AddCommentClickedEvent>(addCommentClickedEvent);
   }
@@ -25,7 +25,7 @@ class AddCommentBloc extends Bloc<AddCommentEvent, AddCommentState> {
     emit(AddCommentLoadingState());
     try {
       final response =
-          await apiRepositories.addComment(event.addComment, event.studId);
+          await commentRepository.addComment(event.addComment, event.studId);
       final responseBody = jsonDecode(response['body']);
       String comment = responseBody['comment'];
       Comment newComment = Comment(

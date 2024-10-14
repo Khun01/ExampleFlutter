@@ -5,11 +5,13 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/employee/comment/add/add_comment_bloc.dart';
-import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetch_comment_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/add/addComment/add_comment_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/add/addRating/add_rating_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchComment/fetch_comment_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchRating/fetch_rating_bloc.dart';
 import 'package:help_isko/presentation/cards/comment_card.dart';
-import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/services/employee/comment_services.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:uicons/uicons.dart';
@@ -27,6 +29,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
   final GlobalKey<FormState> _formKeyComment = GlobalKey<FormState>();
   final scrollController = ScrollController();
   FocusNode focusNode = FocusNode();
+  double selectedRating = 0.0;
 
   @override
   void initState() {
@@ -60,22 +63,27 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
 
   @override
   Widget build(BuildContext context) {
-    // final FetchCommentBloc fetchCommentBloc =
-    //     FetchCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl))
-    //       ..add(FetchCommentsEvent(id: widget.id));
-    // final AddCommentBloc addCommentBloc =
-    //     AddCommentBloc(apiRepositories: ApiRepositories(apiUrl: baseUrl));
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => FetchCommentBloc(
-              apiRepositories: ApiRepositories(apiUrl: baseUrl))
+              commentRepository: CommentServices(baseUrl: baseUrl))
             ..add(FetchCommentsEvent(id: widget.id)),
         ),
         BlocProvider(
-            create: (context) => AddCommentBloc(
-                apiRepositories: ApiRepositories(apiUrl: baseUrl),
-                fetchCommentBloc: context.read<FetchCommentBloc>())),
+          create: (context) => AddCommentBloc(
+              commentRepository: CommentServices(baseUrl: baseUrl),
+              fetchCommentBloc: context.read<FetchCommentBloc>()),
+        ),
+        BlocProvider(
+          create: (context) => AddRatingBloc(
+              commentRepository: CommentServices(baseUrl: baseUrl)),
+        ),
+        BlocProvider(
+          create: (context) => FetchRatingBloc(
+              commentRepository: CommentServices(baseUrl: baseUrl))
+            ..add(FetchRatingsEvent(id: widget.id)),
+        ),
       ],
       child: Scaffold(
         body: Stack(
@@ -83,275 +91,411 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
             CustomScrollView(
               controller: scrollController,
               slivers: [
-                SliverLayoutBuilder(
-                  builder: (BuildContext context, constraints) {
-                    final scrolledFirst = constraints.scrollOffset > 0;
-                    return SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      expandedHeight: 426,
-                      collapsedHeight: 272,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      flexibleSpace: AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.only(
-                            top: scrolledFirst ? 16 : 48,
-                            left: 16,
-                            right: 16,
-                            bottom: 16),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            border: const Border(
-                                bottom: BorderSide(color: Color(0x1A3B3B3B)))),
-                        child: SingleChildScrollView(
-                          child: Stack(
-                            children: [
-                              AnimatedPositioned(
-                                duration: const Duration(milliseconds: 300),
-                                top: scrolledFirst ? 32 : 136,
-                                left: scrolledFirst ? 16 : 0,
-                                right: 0,
-                                child: Column(
+                BlocConsumer<FetchRatingBloc, FetchRatingState>(
+                  listener: (context, state) {
+                    if (state is FetchRatingFailedState) {
+                      log('The error in fetching rating is: ${state.error}');
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(state.error)));
+                    }
+                  },
+                  builder: (context, state) {
+                    if (state is FetchRatingFailedState) {
+                      return SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(
+                          child: Text(
+                            'Network Error',
+                            style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
+                          ),
+                        ),
+                      );
+                    } else if (state is FetchRatingSuccessState) {
+                      return SliverLayoutBuilder(
+                        builder: (BuildContext context, constraints) {
+                          final scrolledFirst = constraints.scrollOffset > 0;
+                          return SliverAppBar(
+                            automaticallyImplyLeading: false,
+                            expandedHeight: 426,
+                            collapsedHeight: 272,
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            flexibleSpace: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.only(
+                                  top: scrolledFirst ? 16 : 48,
+                                  left: 16,
+                                  right: 16,
+                                  bottom: 16),
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  border: const Border(
+                                      bottom: BorderSide(
+                                          color: Color(0x1A3B3B3B)))),
+                              child: SingleChildScrollView(
+                                child: Stack(
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: List.generate(
-                                        5,
-                                        (index) {
-                                          return AnimatedSize(
+                                    AnimatedPositioned(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      top: scrolledFirst ? 32 : 136,
+                                      left: scrolledFirst ? 16 : 0,
+                                      right: 0,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: List.generate(
+                                              5,
+                                              (index) {
+                                                return AnimatedSize(
+                                                  duration: const Duration(
+                                                      milliseconds: 300),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        if (selectedRating ==
+                                                            index + 0.5) {
+                                                          selectedRating =
+                                                              index + 1;
+                                                        } else if (selectedRating ==
+                                                            index + 1) {
+                                                          selectedRating =
+                                                              index + 0.5;
+                                                        } else {
+                                                          selectedRating =
+                                                              index + 1;
+                                                        }
+                                                      });
+                                                      context
+                                                          .read<AddRatingBloc>()
+                                                          .add(AddRatingClickedEvent(
+                                                              context.read<
+                                                                  FetchRatingBloc>(),
+                                                              addRating:
+                                                                  index + 1,
+                                                              studId:
+                                                                  widget.id));
+                                                    },
+                                                    child: Container(
+                                                      margin: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 2),
+                                                      child: Builder(
+                                                        builder: (context) {
+                                                          if (index ==
+                                                                  state.rating
+                                                                      .averageRating
+                                                                      ?.floor() &&
+                                                              state.rating
+                                                                      .averageRating !=
+                                                                  null &&
+                                                              state.rating.averageRating! %
+                                                                      1 !=
+                                                                  0) {
+                                                            return Icon(
+                                                              Ionicons
+                                                                  .star_half,
+                                                              color:
+                                                                  Colors.amber,
+                                                              size:
+                                                                  scrolledFirst
+                                                                      ? 30
+                                                                      : 40,
+                                                            );
+                                                          } else {
+                                                            return Icon(
+                                                              index.toDouble() <
+                                                                          (state.rating.averageRating ??
+                                                                              0.0) ||
+                                                                      index <
+                                                                          selectedRating
+                                                                  ? Ionicons
+                                                                      .star
+                                                                  : Ionicons
+                                                                      .star_outline,
+                                                              color:
+                                                                  Colors.amber,
+                                                              size:
+                                                                  scrolledFirst
+                                                                      ? 30
+                                                                      : 40,
+                                                            );
+                                                          }
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    AnimatedPositioned(
+                                      top: scrolledFirst ? 68 : 180,
+                                      left: scrolledFirst ? -20 : 0,
+                                      right: scrolledFirst ? 0 : 0,
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      child: Center(
+                                        child: Text(
+                                          'Based on ${state.rating.totalUser ?? 0} reviews',
+                                          style: GoogleFonts.nunito(
+                                              fontSize: 12,
+                                              color: const Color(0xCC3B3B3B)),
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      children: [
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: AnimatedAlign(
+                                            alignment: scrolledFirst
+                                                ? Alignment.centerLeft
+                                                : Alignment.topCenter,
                                             duration: const Duration(
                                                 milliseconds: 300),
-                                            child: Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 2),
-                                              child: Icon(
-                                                Ionicons.star_outline,
-                                                color: Colors.amber,
-                                                size: scrolledFirst ? 30 : 40,
+                                            child: AnimatedDefaultTextStyle(
+                                              style: GoogleFonts.nunito(
+                                                  fontSize:
+                                                      scrolledFirst ? 16 : 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      const Color(0xCC3B3B3B)),
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              child:
+                                                  const Text('Overall Rating'),
+                                            ),
+                                          ),
+                                        ),
+                                        AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          padding: EdgeInsets.only(
+                                              top: scrolledFirst ? 0 : 16),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: AnimatedAlign(
+                                            alignment: scrolledFirst
+                                                ? Alignment.centerLeft
+                                                : Alignment.topCenter,
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            child: AnimatedDefaultTextStyle(
+                                              style: GoogleFonts.nunito(
+                                                  fontSize:
+                                                      scrolledFirst ? 56 : 64,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      const Color(0xCC3B3B3B)),
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              child: Text(
+                                                  '${state.rating.averageRating}'),
+                                            ),
+                                          ),
+                                        ),
+                                        AnimatedContainer(
+                                            duration: const Duration(
+                                                milliseconds: 300),
+                                            height: scrolledFirst ? 16 : 100),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                'Excellent',
+                                                style: GoogleFonts.nunito(
+                                                    fontSize: 12,
+                                                    color: const Color(
+                                                        0x803B3B3B)),
                                               ),
                                             ),
-                                          );
-                                        },
-                                      ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              flex: 3,
+                                              child: LinearPercentIndicator(
+                                                lineHeight: 10,
+                                                percent:
+                                                    (state.rating.excellent ??
+                                                            0.0) /
+                                                        100,
+                                                animation: true,
+                                                animationDuration: 2000,
+                                                progressColor:
+                                                    const Color(0xFF6ABF69),
+                                                backgroundColor:
+                                                    const Color(0xFFD9D9D9),
+                                                barRadius:
+                                                    const Radius.circular(20),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                'Good',
+                                                style: GoogleFonts.nunito(
+                                                    fontSize: 12,
+                                                    color: const Color(
+                                                        0x803B3B3B)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              flex: 3,
+                                              child: LinearPercentIndicator(
+                                                lineHeight: 10,
+                                                percent:
+                                                    (state.rating.good ?? 0.0) /
+                                                        100,
+                                                animation: true,
+                                                animationDuration: 2000,
+                                                progressColor:
+                                                    const Color(0xFFA3C79A),
+                                                backgroundColor:
+                                                    const Color(0xFFD9D9D9),
+                                                barRadius:
+                                                    const Radius.circular(20),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                'Average',
+                                                style: GoogleFonts.nunito(
+                                                    fontSize: 12,
+                                                    color: const Color(
+                                                        0x803B3B3B)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              flex: 3,
+                                              child: LinearPercentIndicator(
+                                                lineHeight: 10,
+                                                percent:
+                                                    (state.rating.average ??
+                                                            0.0) /
+                                                        100,
+                                                animation: true,
+                                                animationDuration: 2000,
+                                                progressColor:
+                                                    const Color(0xFFD8D47F),
+                                                backgroundColor:
+                                                    const Color(0xFFD9D9D9),
+                                                barRadius:
+                                                    const Radius.circular(20),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                'Below average',
+                                                style: GoogleFonts.nunito(
+                                                    fontSize: 12,
+                                                    color: const Color(
+                                                        0x803B3B3B)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              flex: 3,
+                                              child: LinearPercentIndicator(
+                                                lineHeight: 10,
+                                                percent: (state.rating
+                                                            .belowAverage ??
+                                                        0.0) /
+                                                    100,
+                                                animation: true,
+                                                animationDuration: 2000,
+                                                progressColor:
+                                                    const Color(0xFFE3B878),
+                                                backgroundColor:
+                                                    const Color(0xFFD9D9D9),
+                                                barRadius:
+                                                    const Radius.circular(20),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                'Poor',
+                                                style: GoogleFonts.nunito(
+                                                    fontSize: 12,
+                                                    color: const Color(
+                                                        0x803B3B3B)),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 16),
+                                            Expanded(
+                                              flex: 3,
+                                              child: LinearPercentIndicator(
+                                                lineHeight: 10,
+                                                percent:
+                                                    (state.rating.poor ?? 0.0) /
+                                                        100,
+                                                animation: true,
+                                                animationDuration: 2000,
+                                                progressColor:
+                                                    const Color(0xFFE08C85),
+                                                backgroundColor:
+                                                    const Color(0xFFD9D9D9),
+                                                barRadius:
+                                                    const Radius.circular(20),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              AnimatedPositioned(
-                                top: scrolledFirst ? 68 : 180,
-                                left: scrolledFirst ? -20 : 0,
-                                right: scrolledFirst ? 0 : 0,
-                                duration: const Duration(milliseconds: 300),
-                                child: Center(
-                                  child: Text(
-                                    'Based on 23 reviews',
-                                    style: GoogleFonts.nunito(
-                                        fontSize: 12,
-                                        color: const Color(0xCC3B3B3B)),
-                                  ),
-                                ),
-                              ),
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: AnimatedAlign(
-                                      alignment: scrolledFirst
-                                          ? Alignment.centerLeft
-                                          : Alignment.topCenter,
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      child: AnimatedDefaultTextStyle(
-                                        style: GoogleFonts.nunito(
-                                            fontSize: scrolledFirst ? 16 : 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xCC3B3B3B)),
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        child: const Text('Overall Rating'),
-                                      ),
-                                    ),
-                                  ),
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 300),
-                                    padding: EdgeInsets.only(
-                                        top: scrolledFirst ? 0 : 16),
-                                    width: MediaQuery.of(context).size.width,
-                                    child: AnimatedAlign(
-                                      alignment: scrolledFirst
-                                          ? Alignment.centerLeft
-                                          : Alignment.topCenter,
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      child: AnimatedDefaultTextStyle(
-                                        style: GoogleFonts.nunito(
-                                            fontSize: scrolledFirst ? 56 : 64,
-                                            fontWeight: FontWeight.bold,
-                                            color: const Color(0xCC3B3B3B)),
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        child: const Text('4.3'),
-                                      ),
-                                    ),
-                                  ),
-                                  AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 300),
-                                      height: scrolledFirst ? 16 : 100),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          'Excellent',
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              color: const Color(0x803B3B3B)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 3,
-                                        child: LinearPercentIndicator(
-                                          lineHeight: 10,
-                                          percent: 0.9,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor:
-                                              const Color(0xFF6ABF69),
-                                          backgroundColor:
-                                              const Color(0xFFD9D9D9),
-                                          barRadius: const Radius.circular(20),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          'Good',
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              color: const Color(0x803B3B3B)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 3,
-                                        child: LinearPercentIndicator(
-                                          lineHeight: 10,
-                                          percent: 0.7,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor:
-                                              const Color(0xFFA3C79A),
-                                          backgroundColor:
-                                              const Color(0xFFD9D9D9),
-                                          barRadius: const Radius.circular(20),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          'Average',
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              color: const Color(0x803B3B3B)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 3,
-                                        child: LinearPercentIndicator(
-                                          lineHeight: 10,
-                                          percent: 0.5,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor:
-                                              const Color(0xFFD8D47F),
-                                          backgroundColor:
-                                              const Color(0xFFD9D9D9),
-                                          barRadius: const Radius.circular(20),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          'Below average',
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              color: const Color(0x803B3B3B)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 3,
-                                        child: LinearPercentIndicator(
-                                          lineHeight: 10,
-                                          percent: 0.3,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor:
-                                              const Color(0xFFE3B878),
-                                          backgroundColor:
-                                              const Color(0xFFD9D9D9),
-                                          barRadius: const Radius.circular(20),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Text(
-                                          'Poor',
-                                          style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              color: const Color(0x803B3B3B)),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        flex: 3,
-                                        child: LinearPercentIndicator(
-                                          lineHeight: 10,
-                                          percent: 0.1,
-                                          animation: true,
-                                          animationDuration: 2000,
-                                          progressColor:
-                                              const Color(0xFFE08C85),
-                                          backgroundColor:
-                                              const Color(0xFFD9D9D9),
-                                          barRadius: const Radius.circular(20),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                            ),
+                          );
+                        },
+                      );
+                    } else if (state is FetchRatingLoadingState) {
+                      return const SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    } else {
+                      return const SliverToBoxAdapter(
+                        child: SizedBox.shrink(),
+                      );
+                    }
                   },
                 ),
                 SliverToBoxAdapter(
@@ -416,7 +560,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                   end: Offset.zero,
                                 ).animate(animation),
                                 child: CommentCard(
-                                  comment: comment.comment!,
+                                  comment: comment.comment ?? '',
                                   firstName: comment.commenterFirstName!,
                                   lastName: comment.commenterLastName!,
                                   time: comment.formattedTime,

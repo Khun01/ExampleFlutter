@@ -11,8 +11,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class AboutStudent extends StatefulWidget {
   final Students students;
-  final double percent;
-  const AboutStudent({super.key, required this.students, this.percent = 84.4});
+  const AboutStudent({super.key, required this.students});
 
   @override
   State<AboutStudent> createState() => _AboutStudentState();
@@ -21,7 +20,8 @@ class AboutStudent extends StatefulWidget {
 class _AboutStudentState extends State<AboutStudent>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  late Animation<int> animation;
+  late Animation<double> animation;
+  var percentage = 0.0;
 
   @override
   void initState() {
@@ -29,13 +29,11 @@ class _AboutStudentState extends State<AboutStudent>
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 3));
 
-    animation =
-        IntTween(begin: 0, end: widget.percent.toInt()).animate(controller)
-          ..addListener(() {
-            setState(() {});
-          });
-
-    controller.forward();
+    animation = Tween<double>(begin: 0, end: 0).animate(controller)
+      ..addListener(() {
+        setState(() {});
+      });
+    controller.reset();
   }
 
   @override
@@ -46,6 +44,9 @@ class _AboutStudentState extends State<AboutStudent>
 
   @override
   Widget build(BuildContext context) {
+    percentage = widget.students.percentage;
+    animation = Tween<double>(begin: 0, end: percentage).animate(controller);
+    controller.forward();
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -140,11 +141,29 @@ class _AboutStudentState extends State<AboutStudent>
                           const SizedBox(height: 2),
                           Row(
                             children: List.generate(5, (index) {
-                              return const Icon(
-                                Ionicons.star_outline,
-                                color: Colors.amber,
-                                size: 15,
-                              );
+                              return Builder(builder: (context) {
+                                if (index ==
+                                        widget.students.averageRating
+                                            ?.floor() &&
+                                    widget.students.averageRating != null &&
+                                    widget.students.averageRating! % 1 != 0) {
+                                  return const Icon(
+                                    Icons.star_half,
+                                    color: Colors.amber,
+                                    size: 15,
+                                  );
+                                } else {
+                                  return Icon(
+                                    index.toDouble() <
+                                            (widget.students.averageRating ??
+                                                0.0)
+                                        ? Icons.star
+                                        : Icons.star_outline,
+                                    color: Colors.amber,
+                                    size: 15,
+                                  );
+                                }
+                              });
                             }),
                           ),
                         ],
@@ -175,12 +194,10 @@ class _AboutStudentState extends State<AboutStudent>
                                 lineWidth: 6,
                                 backgroundColor: const Color(0xFFD9D9D9),
                                 progressColor: const Color(0xFF6BB577),
-                                animation: true,
-                                animationDuration: 3000,
-                                percent: widget.percent / 100,
+                                percent: animation.value / 100,
                                 circularStrokeCap: CircularStrokeCap.round,
                                 center: Text(
-                                  '${animation.value}%',
+                                  '${(animation.value).toStringAsFixed(2)}%',
                                   style: GoogleFonts.nunito(
                                       fontSize: 10,
                                       color: const Color(0xCC3B3B3B)),
@@ -382,6 +399,62 @@ class _AboutStudentState extends State<AboutStudent>
                             ),
                             Text(
                               widget.students.semester!,
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                color: const Color(0xCC3B3B3B),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 8),
+                const Divider(),
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Duty hours',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3B3B3B)),
+                            ),
+                            Text(
+                              '${widget.students.hoursToComplete ?? ''} Hours',
+                              style: GoogleFonts.nunito(
+                                fontSize: 14,
+                                color: const Color(0xCC3B3B3B),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Remaining hours',
+                              style: GoogleFonts.nunito(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3B3B3B)),
+                            ),
+                            Text(
+                              '${widget.students.remainingHours ?? ''} Hours',
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),

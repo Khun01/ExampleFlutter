@@ -8,7 +8,6 @@ import 'package:help_isko/presentation/bloc/employee/requestForDuties/showReques
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/cards/duty_card/student/requested_duties_student_see_all_card.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/requested_for_duties_info_page.dart';
-import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:ionicons/ionicons.dart';
 
 class StudentSeeAllPage extends StatelessWidget {
@@ -77,17 +76,7 @@ class StudentSeeAllPage extends StatelessWidget {
               },
             ),
             BlocConsumer<RequestedDutiesBloc, RequestedDutiesState>(
-              listener: (context, state) {
-                if (state is RequestedDutiesCancelLoadingState) {
-                  showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) =>
-                          const MyCircularProgressIndicator());
-                } else if (state is RequestedDutiesCancelSuccessState) {
-                  Navigator.pop(context);
-                }
-              },
+              listener: (context, state) {},
               buildWhen: (previous, current) =>
                   (current is RequestedDutiesFetchLoadingState &&
                       previous is RequestedDutiesInitial) ||
@@ -111,9 +100,10 @@ class StudentSeeAllPage extends StatelessWidget {
                           child: Text(
                             'You did not request for any duties yet.',
                             style: GoogleFonts.nunito(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF3B3B3B)),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
                           ),
                         ),
                       );
@@ -129,10 +119,12 @@ class StudentSeeAllPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      RequestedForDutiesInfoPage(
-                                        title: 'requested',
-                                    requestedDuties: duty,
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<RequestedDutiesBloc>(),
+                                    child: RequestedForDutiesInfoPage(
+                                      title: 'requested',
+                                      requestedDuties: duty,
+                                    ),
                                   ),
                                 ),
                               );
@@ -147,19 +139,16 @@ class StudentSeeAllPage extends StatelessWidget {
                                   begin: const Offset(0, -0.1),
                                   end: Offset.zero,
                                 ).animate(animation),
-                                child: BlocProvider.value(
-                                  value: context.read<RequestedDutiesBloc>(),
-                                  child: RequestedDutiesStudentSeeAllCard(
-                                    id: duty.id,
-                                    profile: duty.employeeProfile ?? '',
-                                    date: duty.date,
-                                    employeeName: duty.employeeName,
-                                    building: duty.building,
-                                    message: duty.message,
-                                    time: duty.time,
-                                    dutyStatus: duty.dutyStatus,
-                                    requestStatus: duty.requestStatus,
-                                  ),
+                                child: RequestedDutiesStudentSeeAllCard(
+                                  id: duty.id,
+                                  profile: duty.employeeProfile ?? '',
+                                  date: duty.date,
+                                  employeeName: duty.employeeName,
+                                  building: duty.building,
+                                  message: duty.message,
+                                  time: duty.time,
+                                  dutyStatus: duty.dutyStatus,
+                                  requestStatus: duty.requestStatus,
                                 ),
                               ),
                             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/repositories/global.dart';
-import 'package:ionicons/ionicons.dart';
 
 class CommentCard extends StatelessWidget {
   final String comment;
@@ -84,15 +83,6 @@ class CommentCard extends StatelessWidget {
                       ),
                     )
                   ],
-                ),
-                Row(
-                  children: List.generate(5, (index) {
-                    return const Icon(
-                      Ionicons.star_outline,
-                      color: Colors.amber,
-                      size: 15,
-                    );
-                  }),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.65,

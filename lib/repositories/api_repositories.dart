@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:help_isko/models/data/announcement.dart';
-import 'package:help_isko/models/data/comment.dart';
 import 'package:help_isko/models/data/notification.dart';
 import 'package:help_isko/models/data/recent_activities.dart';
 import 'package:help_isko/models/duty/students.dart';
@@ -193,39 +192,6 @@ class ApiRepositories {
       log('The status code is: ${response.statusCode}');
       throw Exception('Failed to load duties');
     }
-  }
-
-  // ------------------- COMMENT --------------------//
-  Future<List<Comment>> fetchComment(String studentId) async {
-    final userData = await EmployeeStorage.getData();
-    String? token = userData['employeeToken'];
-    final response = await http.get(
-      Uri.parse('$baseUrl/feedback/index/$studentId'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-    );
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-      List<dynamic> commentList = jsonResponse['feedbacks'];
-      return commentList.map((comment) => Comment.fromJson(comment)).toList();
-    } else {
-      throw Exception('Failed to load feedbacks');
-    }
-  }
-
-  Future<Map<String, dynamic>> addComment(String comment, String studId) async {
-    final userData = await EmployeeStorage.getData();
-    String? token = userData['employeeToken'];
-    var url = Uri.parse('$baseUrl/feedback/$studId');
-    final response = await http.post(url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: jsonEncode({"comment": comment}));
-    return {'statusCode': response.statusCode, 'body': response.body};
   }
 
   // ------------------- Notification --------------------//

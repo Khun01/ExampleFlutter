@@ -10,6 +10,10 @@ class Students {
   String? status;
   int? activeDutyCount;
   int? completedDutyCount;
+  String? hoursToComplete;
+  String? remainingHours;
+  double percentage;
+  double? averageRating;
 
   Students({
     required this.studentId,
@@ -23,6 +27,10 @@ class Students {
     this.status,
     this.activeDutyCount,
     this.completedDutyCount,
+    this.hoursToComplete,
+    this.remainingHours,
+    this.percentage = 0.0,
+    this.averageRating = 0.0,
   });
 
   factory Students.fromJson(Map<String, dynamic> json) {
@@ -38,6 +46,10 @@ class Students {
       status: json['request_status'] ?? '',
       activeDutyCount: json['active_duty_count'] ?? '0',
       completedDutyCount: json['completed_duty_count'] ?? '0',
+      hoursToComplete: json['hours_to_complete'] ?? '',
+      remainingHours: json['remaining_hours'] ?? '',
+      percentage: (json['percentage'] is num) ? (json['percentage'] as num).toDouble() : 0.0,
+      averageRating: (json['average_rating'] is num) ? (json['average_rating'] as num).toDouble() : 0.0,
     );
   }
 }

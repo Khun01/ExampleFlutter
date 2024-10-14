@@ -58,6 +58,7 @@ class StudentStorage {
     String? completedDuties,
     String? totalDuty,
     String? dutyHoursRemaining,
+    String? hoursToComplete,
 
   }) async {
     await Future.wait([
@@ -101,8 +102,8 @@ class StudentStorage {
       saveField('activeDuties', activeDuties ?? ''),
       saveField('completedDuties', completedDuties ?? ''),
       saveField('totalDuty', totalDuty ?? ''),
-      saveField('dutyHoursRemaining', dutyHoursRemaining ?? '')
-
+      saveField('dutyHoursRemaining', dutyHoursRemaining ?? ''),
+      saveField('hoursToComplete', hoursToComplete ?? '')
     ]);
   }
 
@@ -148,7 +149,8 @@ class StudentStorage {
       getField('activeDuties'),
       getField('completedDuties'),
       getField('totalDuty'),
-      getField('dutyHoursRemaining')
+      getField('dutyHoursRemaining'),
+      getField('hoursToComplete')
     ]);
 
     final data = {
@@ -193,6 +195,7 @@ class StudentStorage {
       'completedDuties': userData[32],
       'totalDuty': userData[33],
       'dutyHoursRemaining': userData[34],
+      'hoursToComplete': userData[35],
     };
     return data;
   }
@@ -239,7 +242,8 @@ class StudentStorage {
       deleteField('activeDuties'),
       deleteField('completedDuties'),
       deleteField('totalDuty'),
-      deleteField('dutyHoursRemaining')
+      deleteField('dutyHoursRemaining'),
+      deleteField('hoursToComplete')
     ]);
   }
 }

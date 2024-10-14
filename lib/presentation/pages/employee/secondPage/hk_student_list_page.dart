@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +34,7 @@ class _HkStudentListPageState extends State<HkStudentListPage> {
         if (state is ShowHkStudentsFailedState) {
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text(state.error)));
+          log("the error in fetching students is: ${state.error}");
         }
       },
       builder: (context, state) {
@@ -97,6 +100,7 @@ class _HkStudentListPageState extends State<HkStudentListPage> {
                           targetUserId: students.studentId,
                           activeDutyCount: students.activeDutyCount!,
                           completedDutyCount: students.completedDutyCount!,
+                          averageRating: students.averageRating!,
                         ),
                       )),
                 );

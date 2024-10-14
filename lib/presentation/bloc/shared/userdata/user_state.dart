@@ -42,10 +42,12 @@ class UserDataLoaded extends UserDataState {
   final String? permanentProvince;
   final String? permanentCountry;
   final String? permanentCity;
+
   final String? activeDutyCount;
   final String? completedDutyCount;
   final String? totalDutyCount;
   final String? dutyHoursRemaining;
+  final String? hoursToComplete;
 
   UserDataLoaded({
     this.profile,
@@ -81,6 +83,7 @@ class UserDataLoaded extends UserDataState {
     this.completedDutyCount,
     this.totalDutyCount,
     this.dutyHoursRemaining,
+    this.hoursToComplete
   });
 }
 

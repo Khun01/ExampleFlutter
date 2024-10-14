@@ -24,17 +24,17 @@ import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_succe
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_bottom_dialog.dart';
 import 'package:help_isko/presentation/pages/students/firstPage/student_home_page.dart';
+import 'package:help_isko/presentation/widgets/my_messsage_icon.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/repositories/messenger_repositories.dart';
 import 'package:help_isko/repositories/student/dutiespage/available_duties_repository.dart';
 import 'package:help_isko/repositories/student/homepage/requested_duties_repository.dart';
-import 'package:help_isko/services/duty/duty_services.dart';
-import 'package:help_isko/services/duty/request_for_duties_services.dart';
+import 'package:help_isko/services/employee/duty/duty_services.dart';
+import 'package:help_isko/services/employee/duty/request_for_duties_services.dart';
 import 'package:help_isko/services/messenger_service.dart';
 import 'package:help_isko/services/student/dutiespage/available_duties_service.dart';
 import 'package:help_isko/services/student/homepage/requested_duties_service.dart';
-import 'package:ionicons/ionicons.dart';
 
 class Wrapper extends StatefulWidget {
   final String role;
@@ -141,7 +141,19 @@ class _WrapperState extends State<Wrapper> {
           BlocListener<DutiesBloc, DutiesState>(
               bloc: dutiesBloc, listener: (context, state) {}),
           BlocListener<RequestedDutiesBloc, RequestedDutiesState>(
-              bloc: requestedDutiesBloc, listener: (context, state) {})
+            bloc: requestedDutiesBloc,
+            listener: (context, state) {
+              if (state is RequestedDutiesCancelLoadingState) {
+                showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) => const MyCircularProgressIndicator(),
+                );
+              }else if(state is RequestedDutiesCancelSuccessState){
+                Navigator.pop(context);
+              }
+            },
+          )
         ],
         child: BlocBuilder<DeclineStudentBloc, DeclineStudentState>(
           bloc: declineStudentBloc,
@@ -284,15 +296,9 @@ class _WrapperState extends State<Wrapper> {
                                                         'assets/images/duties.png')),
                                               ),
                                               BottomNavigationBarItem(
-                                                label: 'Message',
-                                                icon: selectedIndex == 2
-                                                    ? const Icon(
-                                                        Ionicons
-                                                            .chatbubble_ellipses,
-                                                        color:
-                                                            Color(0xFF6BB577))
-                                                    : const Icon(Ionicons
-                                                        .chatbubble_ellipses_outline),
+                                                icon: GestureDetector(
+                                                  child: MyMesssageIcon(selectedIndex: selectedIndex))  ,
+                                                label: 'Message'  
                                               ),
                                               BottomNavigationBarItem(
                                                 label: 'Profile',
@@ -390,9 +396,7 @@ class _WrapperState extends State<Wrapper> {
                                         acceptStudentState
                                             is AcceptStudentLoadingState ||
                                         state is DeclineStudentLoadingState ||
-                                        dutiesState is DutiesAcceptLoading ||
-                                        requestedDuties
-                                            is RequestedDutiesCancelLoadingState) ...[
+                                        dutiesState is DutiesAcceptLoading) ...[
                                       Positioned(
                                         top: 0,
                                         left: 0,

@@ -9,7 +9,7 @@ import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/du
 import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_success_dialog.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
-import 'package:help_isko/services/duty/duty_services.dart';
+import 'package:help_isko/services/employee/duty/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
 class PostedDutyInfoPage extends StatelessWidget {

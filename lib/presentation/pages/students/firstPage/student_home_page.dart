@@ -5,7 +5,6 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/announcement/announcement_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
@@ -194,9 +193,11 @@ class StudentHomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                  value: context.read<RequestedDutiesBloc>(),
-                                  child: const StudentSeeAllPage())),
+                            builder: (_) => BlocProvider.value(
+                              value: context.read<RequestedDutiesBloc>(),
+                              child: const StudentSeeAllPage(),
+                            ),
+                          ),
                         );
                       },
                       child: Text(
@@ -266,29 +267,27 @@ class StudentHomePage extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              RequestedForDutiesInfoPage(
-                                            title: 'requested',
-                                            requestedDuties: request,
+                                          builder: (_) => BlocProvider.value(
+                                            value: context
+                                                .read<RequestedDutiesBloc>(),
+                                            child: RequestedForDutiesInfoPage(
+                                              title: 'requested',
+                                              requestedDuties: request,
+                                            ),
                                           ),
                                         ),
                                       );
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.only(top: 8),
-                                      child: BlocProvider(
-                                        create: (_) => context
-                                            .read<RequestForDutiesBloc>(),
-                                        child: PostedDutiesHome(
-                                            id: request.id,
-                                            profile:
-                                                request.employeeProfile ?? '',
-                                            date: request.date,
-                                            building: request.employeeName,
-                                            message: request.message,
-                                            requestStatus:
-                                                request.requestStatus,
-                                            dutyStatus: request.dutyStatus),
+                                      child: PostedDutiesHome(
+                                        id: request.id,
+                                        profile: request.employeeProfile ?? '',
+                                        date: request.date,
+                                        building: request.employeeName,
+                                        message: request.message,
+                                        requestStatus: request.requestStatus,
+                                        dutyStatus: request.dutyStatus,
                                       ),
                                     ),
                                   ),

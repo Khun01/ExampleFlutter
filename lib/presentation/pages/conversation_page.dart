@@ -53,7 +53,7 @@ class _ChatPageState extends State<ConversationPage> {
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        double scrollFactor = Platform.isAndroid ? 2.5 : 1.5;
+        double scrollFactor = Platform.isAndroid ? 2.5 : 1;
         final position =
             _scrollController.position.maxScrollExtent * scrollFactor;
         _scrollController.animateTo(position,
@@ -63,6 +63,7 @@ class _ChatPageState extends State<ConversationPage> {
   }
 
   Future<bool> _onBackPressed() async {
+    log("Back button pressed. Focus node has focus: ${focusNode.hasFocus}");
     if (focusNode.hasFocus) {
       focusNode.unfocus();
       return false;
@@ -110,31 +111,32 @@ class _ChatPageState extends State<ConversationPage> {
             final successState = state as MessageFetchSuccessChatState;
             if (successState.chats.isEmpty) {
               body = SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/no_chat.png'),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No Message, yet',
-                          style: GoogleFonts.nunito(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF3B3B3B)),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Send a message to get the conversation started and connect with them.',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.nunito(
-                              fontSize: 14, color: const Color(0xCC3B3B3B)),
-                        )
-                      ],
-                    ),
-                  ));
+                hasScrollBody: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/no_chat.png'),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No Message, yet',
+                        style: GoogleFonts.nunito(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF3B3B3B)),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Send a message to get the conversation started and connect with them.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.nunito(
+                            fontSize: 14, color: const Color(0xCC3B3B3B)),
+                      )
+                    ],
+                  ),
+                ),
+              );
             } else {
               body = SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -185,124 +187,123 @@ class _ChatPageState extends State<ConversationPage> {
             );
             break;
         }
-        // ignore: deprecated_member_use
-        return WillPopScope(
-          onWillPop: () => _onBackPressed(),
+        return GestureDetector(
+          onTap: _onBackPressed,
           child: Scaffold(
             resizeToAvoidBottomInset: true,
             body: SafeArea(
               child: Stack(
                 children: [
-                  CustomScrollView(
-                    controller: _scrollController,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    slivers: [
-                      SliverLayoutBuilder(
-                        builder: (context, constraints) {
-                          final scrolled = constraints.scrollOffset > 0;
-                          return SliverAppBar(
-                            pinned: true,
-                            automaticallyImplyLeading: false,
-                            collapsedHeight: 70,
-                            flexibleSpace: AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              padding:
-                                  const EdgeInsets.only(left: 16, right: 16),
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                boxShadow: scrolled
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          offset: const Offset(0.0, 10.0),
-                                          blurRadius: 10.0,
-                                          spreadRadius: -6.0,
-                                        )
-                                      ]
-                                    : [],
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0x1AA3D9A5),
-                                      borderRadius: BorderRadius.circular(20),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 90),
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      slivers: [
+                        SliverLayoutBuilder(
+                          builder: (context, constraints) {
+                            final scrolled = constraints.scrollOffset > 0;
+                            return SliverAppBar(
+                              pinned: true,
+                              automaticallyImplyLeading: false,
+                              collapsedHeight: 70,
+                              flexibleSpace: AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  boxShadow: scrolled
+                                      ? [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(0.2),
+                                            offset: const Offset(0.0, 10.0),
+                                            blurRadius: 10.0,
+                                            spreadRadius: -6.0,
+                                          )
+                                        ]
+                                      : [],
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0x1AA3D9A5),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Icon(
+                                            Ionicons.chevron_back_outline),
+                                      ),
                                     ),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Icon(
-                                          Ionicons.chevron_back_outline),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xFFA3D9A5),
-                                        borderRadius:
-                                            BorderRadius.circular(500)),
-                                    child: ClipOval(
-                                      child: widget.profile != ''
-                                          ? Image.network(
-                                              '$profileUrl${widget.profile}',
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (context, error,
-                                                      stackTrace) =>
-                                                  Container(
-                                                margin:
-                                                    const EdgeInsets.all(14),
+                                    const SizedBox(width: 12),
+                                    Container(
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFFA3D9A5),
+                                          borderRadius:
+                                              BorderRadius.circular(500)),
+                                      child: ClipOval(
+                                        child: widget.profile != ''
+                                            ? Image.network(
+                                                '$profileUrl${widget.profile}',
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
+                                                    Container(
+                                                  margin:
+                                                      const EdgeInsets.all(14),
+                                                  child: Image.asset(
+                                                    'assets/images/profile_clicked.png',
+                                                  ),
+                                                ),
+                                              )
+                                            : Container(
+                                                margin: const EdgeInsets.all(12),
                                                 child: Image.asset(
                                                   'assets/images/profile_clicked.png',
                                                 ),
                                               ),
-                                            )
-                                          : Container(
-                                              margin: const EdgeInsets.all(12),
-                                              child: Image.asset(
-                                                'assets/images/profile_clicked.png',
-                                              ),
-                                            ),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        widget.name,
-                                        style: GoogleFonts.nunito(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          widget.name,
+                                          style: GoogleFonts.nunito(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: const Color(0xFF3B3B3B),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        widget.schoolId,
-                                        style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          color: const Color(0xFF3B3B3B),
+                                        Text(
+                                          widget.schoolId,
+                                          style: GoogleFonts.nunito(
+                                            fontSize: 12,
+                                            color: const Color(0xFF3B3B3B),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      ),
-                      body,
-                      const SliverToBoxAdapter(
-                        child: SizedBox(height: 90),
-                      )
-                    ],
+                            );
+                          },
+                        ),
+                        body,
+                      ],
+                    ),
                   ),
                   Positioned(
                     bottom: 0,

@@ -7,7 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
-import 'package:help_isko/services/duty/duty_services.dart';
+import 'package:help_isko/services/employee/duty/duty_services.dart';
 
 part 'add_duty_event.dart';
 part 'add_duty_state.dart';

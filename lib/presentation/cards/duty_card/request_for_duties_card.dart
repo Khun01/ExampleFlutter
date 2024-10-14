@@ -22,6 +22,7 @@ class RequestForDutiesCard extends StatelessWidget {
   final String message;
   final int? studentId;
   final String? studentNumber;
+  final double? averageRating;
   const RequestForDutiesCard(
       {super.key,
       this.dutyId,
@@ -33,7 +34,8 @@ class RequestForDutiesCard extends StatelessWidget {
       required this.date,
       required this.message,
       this.studentId,
-      this.studentNumber});
+      this.studentNumber,
+      this.averageRating});
 
   @override
   Widget build(BuildContext context) {
@@ -121,13 +123,27 @@ class RequestForDutiesCard extends StatelessWidget {
                     ),
                     Row(
                       children: List.generate(5, (index) {
-                        return const Icon(
-                          Ionicons.star_outline,
-                          color: Colors.amber,
-                          size: 15,
-                        );
+                        return Builder(builder: (context) {
+                          if (index == averageRating?.floor() &&
+                              averageRating != null &&
+                              averageRating! % 1 != 0) {
+                            return const Icon(
+                              Icons.star_half,
+                              color: Colors.amber,
+                              size: 15,
+                            );
+                          } else {
+                            return Icon(
+                              index.toDouble() < (averageRating ?? 0.0)
+                                  ? Icons.star
+                                  : Icons.star_outline,
+                              color: Colors.amber,
+                              size: 15,
+                            );
+                          }
+                        });
                       }),
-                    )
+                    ),
                   ],
                 ),
               ),

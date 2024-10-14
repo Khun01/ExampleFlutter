@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:help_isko/models/duty/prof_duty.dart';
-import 'package:help_isko/repositories/duty/duty_repository.dart';
+import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:http/http.dart' as http;
 
