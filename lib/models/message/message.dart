@@ -7,12 +7,14 @@ class Message {
   int sender_id;
   int receiver_id;
   String created_at;
+  int readStatus;
   Message({
     required this.id,
     required this.message,
     required this.sender_id,
     required this.receiver_id,
     required this.created_at,
+    required this.readStatus
   });
 
   factory Message.fromMap(Map<String, dynamic> map) {
@@ -25,6 +27,7 @@ class Message {
       sender_id: map['sender_id'] as int,
       receiver_id: map['receiver_id'] as int,
       created_at: formattedTime,
+      readStatus: map['read_status'] as int
     );
   }
 }

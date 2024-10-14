@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,6 +58,7 @@ class _ChatListCardState extends State<ChatListCard> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state.errorMessage),
           ));
+          log('The error in message is: ${state.errorMessage}');
         }
         if (state is MessageNavigatetoChatState) {
           Navigator.push(
@@ -72,7 +75,12 @@ class _ChatListCardState extends State<ChatListCard> {
                 ),
               ),
             ),
-          );
+          ).then((_) {
+            // ignore: use_build_context_synchronously
+            context
+                .read<MessageBloc>()
+                .add(MessageFetchEvent(role: widget.role));
+          });
         }
       },
       buildWhen: (previous, current) =>
@@ -184,7 +192,18 @@ class _ChatListCardState extends State<ChatListCard> {
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.nunito(
                                               fontSize: 12,
-                                              color: const Color(0xCC3B3B3B)),
+                                              fontWeight: state
+                                                          .existingChats[index]
+                                                          .message
+                                                          .readStatus ==
+                                                      1
+                                                  ? FontWeight.normal
+                                                  : FontWeight.bold,
+                                              color: state.existingChats[index]
+                                                          .message.readStatus ==
+                                                      1
+                                                  ? const Color(0xCC3B3B3B)
+                                                  : const Color(0xFF3B3B3B)),
                                         ),
                                       ),
                                       const SizedBox(width: 12),

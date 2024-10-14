@@ -4,14 +4,19 @@ import 'package:ionicons/ionicons.dart';
 
 class MyMesssageIcon extends StatefulWidget {
   final int selectedIndex;
-  const MyMesssageIcon({super.key, required this.selectedIndex});
+  final int unreadCount; // Add this parameter
+
+  const MyMesssageIcon({
+    super.key,
+    required this.selectedIndex,
+    required this.unreadCount, // Require this parameter
+  });
 
   @override
   State<MyMesssageIcon> createState() => _MyMesssageIconState();
 }
 
 class _MyMesssageIconState extends State<MyMesssageIcon> {
-  int number = 10;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -28,7 +33,7 @@ class _MyMesssageIconState extends State<MyMesssageIcon> {
         Positioned(
           right: -4,
           top: -4,
-          child: number == 0 || widget.selectedIndex == 2
+          child: widget.unreadCount == 0 || widget.selectedIndex == 2
               ? Container()
               : Container(
                   padding: const EdgeInsets.all(2),
@@ -42,10 +47,10 @@ class _MyMesssageIconState extends State<MyMesssageIcon> {
                   ),
                   child: Center(
                     child: Text(
-                      number.toString(),
+                      widget.unreadCount.toString(),
                       style: GoogleFonts.nunito(
                         fontSize: 8,
-                        color: const Color(0xFFFCFCFC)
+                        color: const Color(0xFFFCFCFC),
                       ),
                     ),
                   ),

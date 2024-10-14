@@ -33,7 +33,7 @@ class _ExamplePageState extends State<ExamplePage> {
                     numberCounter = 0;
                   });
                 },
-                child: MyMesssageIcon(selectedIndex: 1),
+                // child: MyMesssageIcon(selectedIndex: 1),
               ),
               const SizedBox(height: 50),
               IconButton(
