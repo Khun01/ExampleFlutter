@@ -1,174 +1,268 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/student/renewal/renewal_form/renewal_form_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/renewal/renewal_form/renewal_form_event.dart';
+import 'package:help_isko/presentation/bloc/student/renewal/renewal_form/renewal_form_state.dart';
 import 'package:help_isko/presentation/widgets/duty_dialog/add_delete_duty_success_dialog.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 
 class PreviewRenewFormPage extends StatelessWidget {
-  final String studentNumber;
-  final int attendedEvents;
-  final int sharedPosts;
+  final String studNumber;
+  final int attendEvent;
+  final int sharedPost;
   final int dutyHours;
-  final String registrationFeePicture;
-
-  const PreviewRenewFormPage({
-    super.key,
-    required this.studentNumber,
-    required this.attendedEvents,
-    required this.sharedPosts,
-    required this.dutyHours,
-    required this.registrationFeePicture,
-  });
+  final String? registrationFeePic;
+  const PreviewRenewFormPage(
+      {super.key,
+      required this.studNumber,
+      required this.attendEvent,
+      required this.sharedPost,
+      required this.dutyHours,
+      required this.registrationFeePic});
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Scrollable content
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(screenWidth * 0.03),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0x303B3B3B)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Information Summary',
-                              style: GoogleFonts.nunito(
-                                fontSize: screenWidth * 0.045,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF3B3B3B),
-                              ),
-                            ),
-                            SizedBox(height: screenHeight * 0.02),
-                            // Each row with label and value in the same line
-                            _buildInfoRow('Student Number', studentNumber, context),
-                            _buildInfoRow('Duty Hours', dutyHours.toString(), context),
-                            _buildInfoRow('Shared Posts', sharedPosts.toString(), context),
-                            _buildInfoRow('Attended Event', attendedEvents.toString(), context),
-                            _buildInfoRow('Registration Fee Picture',
-                                registrationFeePicture.isNotEmpty ? registrationFeePicture : 'No image selected', context),
-                          ],
-                        ),
+    return BlocConsumer<RenewalFormBloc, RenewalFormState>(
+      listener: (context, state) {
+        if (state is RenewalFormSuccess) {
+          Navigator.pop(context);
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) =>
+                const AddDeleteDutySuccessDialog(blocUse: 'Renewal'),
+          );
+        } else if (state is RenewalFormLoading) {
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => const MyCircularProgressIndicator(),
+          );
+        } else if (state is RenewalFormFailure) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0x303B3B3B)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Information Summary',
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B),
                       ),
-                      SizedBox(height: screenHeight * 0.02),
-                      Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.01),
-                        child: Text(
-                          'Please confirm and submit your form',
-                          style: GoogleFonts.nunito(
-                            fontSize: screenWidth * 0.045,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF3B3B3B),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Student number',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Duty Hours',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Shared Posts',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Attended Event',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Registration Fee Picture',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.01),
-                        child: Text(
-                          'Please select your preferred scholarship disbursement method.',
-                          style: GoogleFonts.nunito(
-                            fontSize: screenWidth * 0.04,
-                            color: const Color(0x803B3B3B),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.015),
-                      Container(
-                        padding: EdgeInsets.all(screenWidth * 0.03),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0x303B3B3B)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.cast_for_education_rounded,
-                              color: Color(0xFF6BB577),
-                              size: 30,
-                            ),
-                            SizedBox(width: screenWidth * 0.02),
-                            Text(
-                              'ORF',
-                              style: GoogleFonts.nunito(
-                                fontSize: screenWidth * 0.045,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF6BB577),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                studNumber != '' ? studNumber : '00-0000-00000',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                              const SizedBox(height: 8),
+                              Text(
+                                dutyHours != 0
+                                    ? dutyHours.toString()
+                                    : 'Total Hours',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                sharedPost != 0
+                                    ? sharedPost.toString()
+                                    : 'Shared Post',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                attendEvent != 0
+                                    ? attendEvent.toString()
+                                    : 'Attended Event',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  color: const Color(0xCC3B3B3B),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  registrationFeePic != ''
+                                      ? registrationFeePic!
+                                      : 'Registration Fee Picture',
+                                  maxLines: 1,
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 14,
+                                    color: const Color(0xCC3B3B3B),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: Text(
+                  'Please confirm and submit your form',
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF3B3B3B),
                   ),
                 ),
               ),
-            ),
-            // Fixed button at the bottom
-            Padding(
-              padding: EdgeInsets.all(screenWidth * 0.04),
-              child: MyButton(
+              Padding(
+                padding: const EdgeInsets.only(left: 4),
+                child: Text(
+                  'Please select your preferred scholarship disbursement method.',
+                  style: GoogleFonts.nunito(
+                    fontSize: 14,
+                    color: const Color(0x803B3B3B),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 130,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: const Color(0x303B3B3B)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Disbursement',
+                      style: GoogleFonts.nunito(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B)),
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.cast_for_education_rounded,
+                          color: Color(0xFF6BB577),
+                          size: 30,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'ORF',
+                          style: GoogleFonts.nunito(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF6BB577)),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              const Spacer(),
+              MyButton(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const AddDeleteDutySuccessDialog(blocUse: 'Renewal'),
-                  );
+                  context.read<RenewalFormBloc>().add(
+                        SubmitRenewalFormEvent(
+                            studentNumber: studNumber,
+                            attendedEvents: attendEvent,
+                            sharedPosts: sharedPost,
+                            dutyHours: dutyHours,
+                            registrationFeePicture: registrationFeePic),
+                      );
                 },
                 buttonText: 'Submit',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value, BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              label,
-              style: GoogleFonts.nunito(
-                fontSize: screenWidth * 0.04,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xCC3B3B3B),
-              ),
-            ),
+              )
+            ],
           ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: GoogleFonts.nunito(
-                fontSize: screenWidth * 0.04,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF3B3B3B),
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

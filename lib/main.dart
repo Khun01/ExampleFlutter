@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:help_isko/presentation/pages/example_page.dart';
 import 'package:help_isko/presentation/pages/splash_screen.dart';
 
 void main() {

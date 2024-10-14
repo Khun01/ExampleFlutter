@@ -1,4 +1,4 @@
-import 'dart:io';  // Import for File
+import 'dart:io'; // Import for File
 import 'package:equatable/equatable.dart';
 
 abstract class RenewalFormEvent extends Equatable {
@@ -12,16 +12,16 @@ class SubmitRenewalFormEvent extends RenewalFormEvent {
   final String studentNumber;
   final int attendedEvents;
   final int sharedPosts;
-  final File? registrationFeePicture;  // Nullable File
-  final File? disbursementMethod;  // Nullable File
+  final String? registrationFeePicture;
+  final File? disbursementMethod;
   final int dutyHours;
 
   const SubmitRenewalFormEvent({
     required this.studentNumber,
     required this.attendedEvents,
     required this.sharedPosts,
-    this.registrationFeePicture,  // Optional
-    this.disbursementMethod,  // Optional
+    this.registrationFeePicture,
+    this.disbursementMethod,
     required this.dutyHours,
   });
 
@@ -30,15 +30,14 @@ class SubmitRenewalFormEvent extends RenewalFormEvent {
         studentNumber,
         attendedEvents,
         sharedPosts,
-        registrationFeePicture ?? '',  // Use empty string if null
-        disbursementMethod ?? '',  // Use empty string if null
+        registrationFeePicture ?? '',
+        disbursementMethod ?? '',
         dutyHours,
       ];
 }
 
-// Add the event for fetching the submitted form
 class FetchSubmittedFormEvent extends RenewalFormEvent {
-  final String formId;  // Identifier for the submitted form
+  final String formId;
 
   const FetchSubmittedFormEvent({required this.formId});
 
