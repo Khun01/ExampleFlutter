@@ -93,6 +93,7 @@ class EmployeeDutiesPage extends StatelessWidget {
                       message: requestForDuty.message,
                       studentId: requestForDuty.studentData.studentId,
                       studentNumber: requestForDuty.studentData.studentNumber,
+                      averageRating: requestForDuty.studentData.averageRating,
                     ),
                   ),
                 );

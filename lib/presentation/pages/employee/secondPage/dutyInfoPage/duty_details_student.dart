@@ -37,6 +37,7 @@ class DutyDetailsStudent extends StatelessWidget {
             targetUserId: student.studentId,
             activeDutyCount: student.activeDutyCount!,
             completedDutyCount: student.completedDutyCount!,
+            averageRating: student.averageRating!,
           ),
         );
       },

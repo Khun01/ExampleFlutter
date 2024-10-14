@@ -15,6 +15,7 @@ class StudentsCard extends StatelessWidget {
   final int targetUserId;
   final int activeDutyCount;
   final int completedDutyCount;
+  final double? averageRating;
   const StudentsCard({
     super.key,
     required this.name,
@@ -24,6 +25,7 @@ class StudentsCard extends StatelessWidget {
     required this.targetUserId,
     required this.activeDutyCount,
     required this.completedDutyCount,
+    required this.averageRating,
   });
 
   @override
@@ -120,11 +122,25 @@ class StudentsCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Row(
                   children: List.generate(5, (index) {
-                    return const Icon(
-                      Icons.star_outline,
-                      color: Colors.amber,
-                      size: 15,
-                    );
+                    return Builder(builder: (context) {
+                      if (index == averageRating?.floor() &&
+                          averageRating != null &&
+                          averageRating! % 1 != 0) {
+                        return const Icon(
+                          Icons.star_half,
+                          color: Colors.amber,
+                          size: 15,
+                        );
+                      } else {
+                        return Icon(
+                          index.toDouble() < (averageRating ?? 0.0)
+                              ? Icons.star
+                              : Icons.star_outline,
+                          color: Colors.amber,
+                          size: 15,
+                        );
+                      }
+                    });
                   }),
                 ),
                 const SizedBox(height: 2),

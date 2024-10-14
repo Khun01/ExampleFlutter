@@ -141,11 +141,29 @@ class _AboutStudentState extends State<AboutStudent>
                           const SizedBox(height: 2),
                           Row(
                             children: List.generate(5, (index) {
-                              return const Icon(
-                                Ionicons.star_outline,
-                                color: Colors.amber,
-                                size: 15,
-                              );
+                              return Builder(builder: (context) {
+                                if (index ==
+                                        widget.students.averageRating
+                                            ?.floor() &&
+                                    widget.students.averageRating != null &&
+                                    widget.students.averageRating! % 1 != 0) {
+                                  return const Icon(
+                                    Icons.star_half,
+                                    color: Colors.amber,
+                                    size: 15,
+                                  );
+                                } else {
+                                  return Icon(
+                                    index.toDouble() <
+                                            (widget.students.averageRating ??
+                                                0.0)
+                                        ? Icons.star
+                                        : Icons.star_outline,
+                                    color: Colors.amber,
+                                    size: 15,
+                                  );
+                                }
+                              });
                             }),
                           ),
                         ],
@@ -412,7 +430,7 @@ class _AboutStudentState extends State<AboutStudent>
                                   color: const Color(0xFF3B3B3B)),
                             ),
                             Text(
-                              '${widget.students.hoursToComplete?? ''} Hours',
+                              '${widget.students.hoursToComplete ?? ''} Hours',
                               style: GoogleFonts.nunito(
                                 fontSize: 14,
                                 color: const Color(0xCC3B3B3B),

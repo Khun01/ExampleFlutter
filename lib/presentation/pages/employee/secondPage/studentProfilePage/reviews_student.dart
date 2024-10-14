@@ -29,7 +29,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
   final GlobalKey<FormState> _formKeyComment = GlobalKey<FormState>();
   final scrollController = ScrollController();
   FocusNode focusNode = FocusNode();
-  int selectedRating = 0;
+  double selectedRating = 0.0;
 
   @override
   void initState() {
@@ -160,8 +160,18 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       setState(() {
-                                                        selectedRating =
-                                                            index + 1;
+                                                        if (selectedRating ==
+                                                            index + 0.5) {
+                                                          selectedRating =
+                                                              index + 1;
+                                                        } else if (selectedRating ==
+                                                            index + 1) {
+                                                          selectedRating =
+                                                              index + 0.5;
+                                                        } else {
+                                                          selectedRating =
+                                                              index + 1;
+                                                        }
                                                       });
                                                       context
                                                           .read<AddRatingBloc>()
