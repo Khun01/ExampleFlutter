@@ -10,7 +10,8 @@ sealed class AddRatingEvent extends Equatable {
 class AddRatingClickedEvent extends AddRatingEvent{
   final int addRating;
   final String studId;
-  final FetchRatingBloc fetchRatingBloc;
 
-  const AddRatingClickedEvent(this.fetchRatingBloc, {required this.addRating, required this.studId});
+  const AddRatingClickedEvent({required this.addRating, required this.studId});
 }
+
+class AddRatingResetEvent extends AddRatingEvent{}

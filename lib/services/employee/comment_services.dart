@@ -27,7 +27,7 @@ class CommentServices implements CommentRepository {
   }
 
   @override
-  Future<Map<String, dynamic>> addRatings(String ratings, String studId) async {
+  Future<Map<String, dynamic>> addRatings(int ratings, String studId) async {
     final userData = await EmployeeStorage.getData();
     String? token = userData['employeeToken'];
     var url = Uri.parse('$baseUrl/feedback/$studId/rating');

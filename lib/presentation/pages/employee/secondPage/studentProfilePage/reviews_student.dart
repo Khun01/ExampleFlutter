@@ -10,9 +10,9 @@ import 'package:help_isko/presentation/bloc/employee/comment/add/addRating/add_r
 import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchComment/fetch_comment_bloc.dart';
 import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchRating/fetch_rating_bloc.dart';
 import 'package:help_isko/presentation/cards/comment_card.dart';
+import 'package:help_isko/presentation/widgets/my_rating_dialog.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/employee/comment_services.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:uicons/uicons.dart';
 
@@ -29,7 +29,6 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
   final GlobalKey<FormState> _formKeyComment = GlobalKey<FormState>();
   final scrollController = ScrollController();
   FocusNode focusNode = FocusNode();
-  double selectedRating = 0.0;
 
   @override
   void initState() {
@@ -63,6 +62,11 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
 
   @override
   Widget build(BuildContext context) {
+    final AddRatingBloc addRatingBloc =
+        AddRatingBloc(commentRepository: CommentServices(baseUrl: baseUrl));
+    final FetchRatingBloc fetchRatingBloc =
+        FetchRatingBloc(commentRepository: CommentServices(baseUrl: baseUrl))
+          ..add(FetchRatingsEvent(id: widget.id));
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -75,15 +79,8 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
               commentRepository: CommentServices(baseUrl: baseUrl),
               fetchCommentBloc: context.read<FetchCommentBloc>()),
         ),
-        BlocProvider(
-          create: (context) => AddRatingBloc(
-              commentRepository: CommentServices(baseUrl: baseUrl)),
-        ),
-        BlocProvider(
-          create: (context) => FetchRatingBloc(
-              commentRepository: CommentServices(baseUrl: baseUrl))
-            ..add(FetchRatingsEvent(id: widget.id)),
-        ),
+        BlocProvider(create: (context) => addRatingBloc),
+        BlocProvider(create: (context) => fetchRatingBloc),
       ],
       child: Scaffold(
         body: Stack(
@@ -144,7 +141,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                       duration:
                                           const Duration(milliseconds: 300),
                                       top: scrolledFirst ? 32 : 136,
-                                      left: scrolledFirst ? 16 : 0,
+                                      left: scrolledFirst ? 70 : 0,
                                       right: 0,
                                       child: Column(
                                         children: [
@@ -157,79 +154,47 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                                 return AnimatedSize(
                                                   duration: const Duration(
                                                       milliseconds: 300),
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        if (selectedRating ==
-                                                            index + 0.5) {
-                                                          selectedRating =
-                                                              index + 1;
-                                                        } else if (selectedRating ==
-                                                            index + 1) {
-                                                          selectedRating =
-                                                              index + 0.5;
+                                                  child: Container(
+                                                    margin: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 2),
+                                                    child: Builder(
+                                                      builder: (context) {
+                                                        if (index ==
+                                                                state.rating
+                                                                    .averageRating
+                                                                    ?.floor() &&
+                                                            state.rating
+                                                                    .averageRating !=
+                                                                null &&
+                                                            state.rating.averageRating! %
+                                                                    1 !=
+                                                                0) {
+                                                          return Icon(
+                                                            Icons
+                                                                .star_half_rounded,
+                                                            color: Colors.amber,
+                                                            size: scrolledFirst
+                                                                ? 40
+                                                                : 50,
+                                                          );
                                                         } else {
-                                                          selectedRating =
-                                                              index + 1;
+                                                          return Icon(
+                                                            index.toDouble() <
+                                                                    (state.rating
+                                                                            .averageRating ??
+                                                                        0.0)
+                                                                ? Icons
+                                                                    .star_rounded
+                                                                : Icons
+                                                                    .star_border_rounded,
+                                                            color: Colors.amber,
+                                                            size: scrolledFirst
+                                                                ? 40
+                                                                : 50,
+                                                          );
                                                         }
-                                                      });
-                                                      context
-                                                          .read<AddRatingBloc>()
-                                                          .add(AddRatingClickedEvent(
-                                                              context.read<
-                                                                  FetchRatingBloc>(),
-                                                              addRating:
-                                                                  index + 1,
-                                                              studId:
-                                                                  widget.id));
-                                                    },
-                                                    child: Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 2),
-                                                      child: Builder(
-                                                        builder: (context) {
-                                                          if (index ==
-                                                                  state.rating
-                                                                      .averageRating
-                                                                      ?.floor() &&
-                                                              state.rating
-                                                                      .averageRating !=
-                                                                  null &&
-                                                              state.rating.averageRating! %
-                                                                      1 !=
-                                                                  0) {
-                                                            return Icon(
-                                                              Ionicons
-                                                                  .star_half,
-                                                              color:
-                                                                  Colors.amber,
-                                                              size:
-                                                                  scrolledFirst
-                                                                      ? 30
-                                                                      : 40,
-                                                            );
-                                                          } else {
-                                                            return Icon(
-                                                              index.toDouble() <
-                                                                          (state.rating.averageRating ??
-                                                                              0.0) ||
-                                                                      index <
-                                                                          selectedRating
-                                                                  ? Ionicons
-                                                                      .star
-                                                                  : Ionicons
-                                                                      .star_outline,
-                                                              color:
-                                                                  Colors.amber,
-                                                              size:
-                                                                  scrolledFirst
-                                                                      ? 30
-                                                                      : 40,
-                                                            );
-                                                          }
-                                                        },
-                                                      ),
+                                                      },
                                                     ),
                                                   ),
                                                 );
@@ -240,7 +205,7 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                                       ),
                                     ),
                                     AnimatedPositioned(
-                                      top: scrolledFirst ? 68 : 180,
+                                      top: scrolledFirst ? 68 : 190,
                                       left: scrolledFirst ? -20 : 0,
                                       right: scrolledFirst ? 0 : 0,
                                       duration:
@@ -595,6 +560,50 @@ class _ReviewsStudentState extends State<ReviewsStudent> {
                   child: SizedBox(height: 106),
                 )
               ],
+            ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: addRatingBloc,
+                        ),
+                        BlocProvider.value(
+                          value: fetchRatingBloc,
+                        ),
+                      ],
+                      child: MyRatingDialog(id: widget.id),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFCFCFC),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0x303B3B3B)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(0.0, 10.0),
+                        blurRadius: 10.0,
+                        spreadRadius: -6.0,
+                      )
+                    ],
+                  ),
+                  child: const Icon(
+                    Icons.star_rounded,
+                    size: 35,
+                    color: Color(0xFFFFD872),
+                  ),
+                ),
+              ),
             ),
             BlocConsumer<AddCommentBloc, AddCommentState>(
               listenWhen: (previous, current) =>
