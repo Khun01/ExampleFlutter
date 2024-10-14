@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
-import 'package:help_isko/repositories/duty/request_for_duty_repository.dart';
+import 'package:help_isko/repositories/employee/duty/request_for_duty_repository.dart';
 
 part 'decline_student_event.dart';
 part 'decline_student_state.dart';

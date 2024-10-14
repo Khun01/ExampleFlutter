@@ -8,7 +8,7 @@ import 'package:help_isko/presentation/cards/duty_card/posted_duties_see_all_car
 import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/posted_duty_info_page.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_posted_duties_see_all_loading_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
-import 'package:help_isko/services/duty/duty_services.dart';
+import 'package:help_isko/services/employee/duty/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
 class PostedDutiesSeeAllPage extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/duty/request_for_duties.dart';
-import 'package:help_isko/repositories/duty/request_for_duty_repository.dart';
+import 'package:help_isko/repositories/employee/duty/request_for_duty_repository.dart';
 
 part 'request_for_duties_event.dart';
 part 'request_for_duties_state.dart';
