@@ -21,7 +21,6 @@ class RenewFormPage extends StatefulWidget {
 }
 
 class _RenewFormPageState extends State<RenewFormPage> {
-  // Variables to store multiple form values
   String? studentNumber;
   int? attendedEvents;
   int? sharedPosts;
@@ -48,6 +47,10 @@ class _RenewFormPageState extends State<RenewFormPage> {
   Widget build(BuildContext context) {
     final ImagePickerBloc imagePickerBloc = ImagePickerBloc(ImagePicker());
 
+    // Get the screen height and width using MediaQuery
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -73,16 +76,21 @@ class _RenewFormPageState extends State<RenewFormPage> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.02,
+                    left: screenWidth * 0.04,
+                    right: screenWidth * 0.04,
+                  ),
                   child: Stack(
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: EdgeInsets.all(screenWidth * 0.03),
                           decoration: BoxDecoration(
-                              color: const Color(0x1AA3D9A5),
-                              borderRadius: BorderRadius.circular(20)),
+                            color: const Color(0x1AA3D9A5),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pop(context);
@@ -100,40 +108,37 @@ class _RenewFormPageState extends State<RenewFormPage> {
                           child: Text(
                             "Renewal Form",
                             style: GoogleFonts.nunito(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF3B3B3B)),
+                              fontSize: screenHeight * 0.025,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
                           ),
                         ),
                       )
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02),
                 EasyStepper(
                   activeStep: activeStep,
-                  stepRadius: 28,
-                  lineStyle: const LineStyle(
-                    lineLength: 50,
-                    lineType: LineType.normal,
+                  stepRadius: screenWidth * 0.07,
+                  lineStyle: LineStyle(
+                    lineLength: screenWidth * 0.1,
                     lineThickness: 3,
-                    lineSpace: 1,
-                    lineWidth: 10,
-                    unreachedLineType: LineType.normal,
-                    unreachedLineColor: Color(0x306BB577),
-                    finishedLineColor: Color(0xFF6BB577),
-                    activeLineColor: Color(0xFF6BB577),
+                    unreachedLineColor: const Color(0x306BB577),
+                    finishedLineColor: const Color(0xFF6BB577),
+                    activeLineColor: const Color(0xFF6BB577),
                   ),
                   stepShape: StepShape.circle,
                   stepBorderRadius: 15,
                   borderThickness: 2,
-                  internalPadding: 10,
+                  internalPadding: screenHeight * 0.01,
                   unreachedStepBackgroundColor: const Color(0x306BB577),
                   unreachedStepBorderColor: const Color(0x306BB577),
                   unreachedStepBorderType: BorderType.normal,
-                  padding: const EdgeInsetsDirectional.symmetric(
-                    horizontal: 30,
-                    vertical: 20,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenWidth * 0.1,
+                    vertical: screenHeight * 0.03,
                   ),
                   finishedStepBorderColor: const Color(0xFF6BB577),
                   finishedStepTextColor: const Color(0xFF6BB577),
@@ -157,7 +162,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                               : Text(
                                   '1',
                                   style: GoogleFonts.nunito(
-                                    fontSize: 16,
+                                    fontSize: screenHeight * 0.02,
                                     fontWeight: FontWeight.bold,
                                     color: const Color(0xFFFCFCFC),
                                   ),
@@ -168,7 +173,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                         'Requirements',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.nunito(
-                          fontSize: 14,
+                          fontSize: screenHeight * 0.018,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B),
                         ),
@@ -188,7 +193,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                               : Text(
                                   '2',
                                   style: GoogleFonts.nunito(
-                                    fontSize: 16,
+                                    fontSize: screenHeight * 0.02,
                                     fontWeight: FontWeight.bold,
                                     color: const Color(0xFFFCFCFC),
                                   ),
@@ -199,7 +204,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                         'Submit',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.nunito(
-                          fontSize: 14,
+                          fontSize: screenHeight * 0.018,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B),
                         ),
@@ -219,7 +224,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                               : Text(
                                   '3',
                                   style: GoogleFonts.nunito(
-                                    fontSize: 16,
+                                    fontSize: screenHeight * 0.02,
                                     fontWeight: FontWeight.bold,
                                     color: const Color(0xFFFCFCFC),
                                   ),
@@ -230,7 +235,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                         'Preview',
                         textAlign: TextAlign.center,
                         style: GoogleFonts.nunito(
-                          fontSize: 14,
+                          fontSize: screenHeight * 0.018,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B),
                         ),
@@ -263,8 +268,8 @@ class _RenewFormPageState extends State<RenewFormPage> {
                       : activeStep == 1
                           ? SubmitRenewFormPage(
                               onNextStep: nextStep,
-                              onFirstStep: goToFirstStep,  // Call the method to go back to the first step
-                              studentNumber: studentNumber ?? '', // Provide defaults for each field if they are null
+                              onFirstStep: goToFirstStep,
+                              studentNumber: studentNumber ?? '',
                               attendedEvents: attendedEvents ?? 0,
                               sharedPosts: sharedPosts ?? 0,
                               dutyHours: dutyHours ?? 0,
@@ -278,7 +283,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
                               dutyHours: dutyHours ?? 0,
                               registrationFeePicture: registrationFeePicture ?? '',
                             ),
-                )
+                ),
               ],
             ),
           ),

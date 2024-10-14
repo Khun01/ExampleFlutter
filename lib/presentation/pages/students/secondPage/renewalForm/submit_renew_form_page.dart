@@ -1,26 +1,23 @@
- import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/renewal_form/renewal_form_bloc.dart';
-import 'package:help_isko/presentation/bloc/student/renewal_form/renewal_form_event.dart';  
+import 'package:help_isko/presentation/bloc/student/renewal_form/renewal_form_event.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/preview_renew_form_page.dart';
 
-import 'dart:io';
-// For the event
-
-
-class SubmitRenewFormPage extends StatelessWidget {
+class SubmitRenewFormPage extends StatefulWidget {
   final VoidCallback onNextStep;
   final VoidCallback onFirstStep;
-  
-  // Collect all required data
+
+  // Form fields passed from the previous page
   final String studentNumber;
   final int attendedEvents;
   final int sharedPosts;
   final int dutyHours;
-  final String registrationFeePicture;
-  final String disbursementMethod; 
+  final String registrationFeePicture; // This will be the path of the selected image from Requirements page
+  final String disbursementMethod;
 
   const SubmitRenewFormPage({
     super.key,
@@ -35,266 +32,209 @@ class SubmitRenewFormPage extends StatelessWidget {
   });
 
   @override
+  _SubmitRenewFormPageState createState() => _SubmitRenewFormPageState();
+}
+
+class _SubmitRenewFormPageState extends State<SubmitRenewFormPage> {
+  File? registrationFeePictureFile;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load the image that was selected in the Requirements Page
+    if (widget.registrationFeePicture.isNotEmpty) {
+      registrationFeePictureFile = File(widget.registrationFeePicture);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+      child: ListView(
         children: [
+          // Form Summary Section
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: EdgeInsets.all(screenWidth * 0.04),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               border: Border.all(color: const Color(0x303B3B3B)),
             ),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Information Summary',
-                        style: GoogleFonts.nunito(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF3B3B3B),
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Information Summary',
+                      style: GoogleFonts.nunito(
+                        fontSize: screenWidth * 0.045,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Student number',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Duty Hours',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Shared Posts',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Attended Event',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Registration Fee Picture',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                    // Pencil Icon - Goes back to Requirements Page
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: widget.onFirstStep, // Navigate back to Requirements Page
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          onFirstStep();
-                        },
-                        child: const Icon(
-                          Icons.edit,
-                          color: Color(0xFF6BB577),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Override the student number
-                      Text(
-                        studentNumber != '' ? studentNumber : '00-0000-00000',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Override the duty hours
-                      Text(
-                        dutyHours.toString(),
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Override the shared posts
-                      Text(
-                        sharedPosts.toString(),
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Override attended events
-                      Text(
-                        attendedEvents.toString(),
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      // Override the registration fee picture (just the filename)
-                      Text(
-                        registrationFeePicture,
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                SizedBox(height: screenHeight * 0.01),
+                _buildInfoRow(context, 'Student Number', widget.studentNumber.isNotEmpty ? widget.studentNumber : '00-0000-00000'),
+                _buildInfoRow(context, 'Duty Hours', widget.dutyHours.toString()),
+                _buildInfoRow(context, 'Shared Posts', widget.sharedPosts.toString()),
+                _buildInfoRow(context, 'Attended Events', widget.attendedEvents.toString()),
+                _buildInfoRow(context, 'Registration Fee Picture', registrationFeePictureFile?.path ?? 'No image selected'),
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: screenHeight * 0.02),
           Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: EdgeInsets.only(left: screenWidth * 0.01),
             child: Text(
               'Please confirm and submit your form',
               style: GoogleFonts.nunito(
-                fontSize: 16,
+                fontSize: screenWidth * 0.045,
                 fontWeight: FontWeight.bold,
                 color: const Color(0xFF3B3B3B),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: EdgeInsets.only(left: screenWidth * 0.01),
             child: Text(
               'Please select your preferred scholarship disbursement method.',
               style: GoogleFonts.nunito(
-                fontSize: 14,
+                fontSize: screenWidth * 0.035,
                 color: const Color(0x803B3B3B),
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          Container(
-            height: 130,
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0x303B3B3B)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Disbursement',
-                  style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B)),
+          SizedBox(height: screenHeight * 0.02),
+          _buildDisbursementMethodContainer(context, screenWidth, screenHeight),
+          SizedBox(height: screenHeight * 0.02),
+          
+          // Submit Button
+          MyButton(
+            onTap: () async {
+              // Dispatch the event to submit the form with the registration fee picture
+              context.read<RenewalFormBloc>().add(
+                SubmitRenewalFormEvent(
+                  studentNumber: widget.studentNumber,
+                  attendedEvents: widget.attendedEvents,
+                  sharedPosts: widget.sharedPosts,
+                  dutyHours: widget.dutyHours,
+                  registrationFeePicture: registrationFeePictureFile,  // File object to submit
+                  disbursementMethod: null,           // No image picker here
                 ),
-                const Spacer(),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.cast_for_education_rounded,
-                      color: Color(0xFF6BB577),
-                      size: 30,
+              );
+
+              await Future.delayed(const Duration(seconds: 1));
+
+              try {
+                final fetchedForm = await context.read<RenewalFormBloc>().fetchSubmittedForm();
+
+                if (fetchedForm != null && fetchedForm.studentNumber != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PreviewRenewFormPage(
+                        studentNumber: fetchedForm.studentNumber,
+                        attendedEvents: fetchedForm.attendedEvents,
+                        sharedPosts: fetchedForm.sharedPosts,
+                        dutyHours: fetchedForm.dutyHours,
+                        registrationFeePicture: fetchedForm.registrationFeePicture,
+                      ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      disbursementMethod,
-                      style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF6BB577)),
-                    )
-                  ],
-                )
-              ],
+                  );
+                } else {
+                  print("Fetched form or studentNumber is null");
+                }
+              } catch (e) {
+                print('Error fetching form: $e');
+              }
+
+              widget.onNextStep();
+            },
+            buttonText: 'Submit',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(BuildContext context, String label, String value) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.nunito(
+              fontSize: screenWidth * 0.035,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xCC3B3B3B),
+            ),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.nunito(
+              fontSize: screenWidth * 0.035,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF3B3B3B),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDisbursementMethodContainer(BuildContext context, double screenWidth, double screenHeight) {
+    return Container(
+      height: screenHeight * 0.15,
+      padding: EdgeInsets.all(screenWidth * 0.03),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0x303B3B3B)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Disbursement',
+            style: GoogleFonts.nunito(
+              fontSize: screenWidth * 0.045,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF3B3B3B),
             ),
           ),
           const Spacer(),
-        MyButton(
-  onTap: () async {
-    // Convert the file paths to File objects only if a valid image is selected
-    File? registrationFeePictureFile;
-    File? disbursementMethodFile;
-
-    // Commented out for now due to emulator limitations
-    /*
-    if (registrationFeePicture.isNotEmpty && registrationFeePicture != 'No image selected') {
-      registrationFeePictureFile = File(registrationFeePicture);
-    }
-
-    if (disbursementMethod.isNotEmpty && disbursementMethod != 'No image selected') {
-      disbursementMethodFile = File(disbursementMethod);
-    }
-    */
-
-    // Dispatch the event to submit the form
-    context.read<RenewalFormBloc>().add(
-      SubmitRenewalFormEvent(
-        studentNumber: studentNumber,
-        attendedEvents: attendedEvents,
-        sharedPosts: sharedPosts,
-        dutyHours: dutyHours,
-        registrationFeePicture: registrationFeePictureFile,  // Can be null for now
-        disbursementMethod: disbursementMethodFile,           // Can be null for now
-      ),
-    );
-
-    // Simulate a short delay
-    await Future.delayed(const Duration(seconds: 1));
-
-    try {
-      // Fetch the form from the backend
-      final fetchedForm = await context.read<RenewalFormBloc>().fetchSubmittedForm();
-
-      // Check if fetchedForm is not null and contains valid data
-      if (fetchedForm != null && fetchedForm.studentNumber != null) {
-        // Navigate to the PreviewRenewFormPage with fetched data
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PreviewRenewFormPage(
-              studentNumber: fetchedForm.studentNumber,
-              attendedEvents: fetchedForm.attendedEvents,
-              sharedPosts: fetchedForm.sharedPosts,
-              dutyHours: fetchedForm.dutyHours,
-              registrationFeePicture: fetchedForm.registrationFeePicture,
-            ),
+          Row(
+            children: [
+              const Icon(
+                Icons.cast_for_education_rounded,
+                color: Color(0xFF6BB577),
+                size: 30,
+              ),
+              SizedBox(width: screenWidth * 0.02),
+              Text(
+                widget.disbursementMethod,
+                style: GoogleFonts.nunito(
+                  fontSize: screenWidth * 0.035,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF6BB577),
+                ),
+              ),
+            ],
           ),
-        );
-      } else {
-        // Handle the error if the form is null or invalid
-        print("Fetched form or studentNumber is null");
-      }
-    } catch (e) {
-      // Handle the error when fetching the form
-      print('Error fetching form: $e');
-    }
-
-    // Move to the next step
-    onNextStep();
-  },
-  buttonText: 'Submit',
-)
         ],
       ),
     );
