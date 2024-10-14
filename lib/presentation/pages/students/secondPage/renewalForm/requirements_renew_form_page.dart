@@ -351,25 +351,25 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
                             const SizedBox(height: 8),
                             Form(
                               key: _dutyHours,
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: dutyHours,
-                                style: GoogleFonts.nunito(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF3B3B3B),
-                                ),
+                              child: DropdownButtonFormField<String>(
+                                value: dutyHours.text.isNotEmpty
+                                    ? dutyHours.text
+                                    : null,
+                                onChanged: (newValue) {
+                                  dutyHours.text = newValue ?? '';
+                                },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter your duty hours';
+                                    return 'Please select your duty hours';
                                   }
                                   return null;
                                 },
                                 decoration: InputDecoration(
                                   hintStyle: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0x803B3B3B)),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0x803B3B3B),
+                                  ),
                                   fillColor: const Color(0x306BB577),
                                   filled: true,
                                   border: OutlineInputBorder(
@@ -386,6 +386,14 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
                                         color: Colors.transparent, width: 1.0),
                                   ),
                                 ),
+                                items: const [
+                                  DropdownMenuItem(
+                                      value: '25', child: Text('HK 25')),
+                                  DropdownMenuItem(
+                                      value: '50', child: Text('HK 50')),
+                                  DropdownMenuItem(
+                                      value: '75', child: Text('HK 75')),
+                                ],
                               ),
                             ),
                           ],
