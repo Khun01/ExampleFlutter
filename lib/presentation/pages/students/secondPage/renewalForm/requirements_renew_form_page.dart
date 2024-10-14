@@ -38,7 +38,7 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
   late TextEditingController studNumberController;
   late TextEditingController attendedEventsController;
   late TextEditingController sharedPostsController;
-  late TextEditingController dutyHoursController;
+  int? selectedDutyHour;
 
   String imageUrl = '';
   bool showScrollIndicator = false;
@@ -47,9 +47,9 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
   void initState() {
     super.initState();
     studNumberController = TextEditingController(text: widget.initialStudentNumber ?? '');
-    attendedEventsController = TextEditingController(); // Empty by default
-    sharedPostsController = TextEditingController(); // Empty by default
-    dutyHoursController = TextEditingController(); // Empty by default
+    attendedEventsController = TextEditingController();
+    sharedPostsController = TextEditingController();  // Add Shared Posts controller
+    selectedDutyHour = widget.initialDutyHours ?? 25;  // Default to HK 25-50
     imageUrl = widget.initialRegistrationFeePicture ?? 'No image selected';
   }
 
@@ -57,8 +57,7 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
   void dispose() {
     studNumberController.dispose();
     attendedEventsController.dispose();
-    sharedPostsController.dispose();
-    dutyHoursController.dispose();
+    sharedPostsController.dispose();  // Dispose sharedPostsController
     super.dispose();
   }
 
@@ -71,7 +70,7 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
       listener: (context, state) {
         if (state is ImagePickerSuccess) {
           setState(() {
-            imageUrl = state.imageUrl; // Capture the image URL from ImagePickerBloc
+            imageUrl = state.imageUrl;
           });
         } else if (state is ImagePickerError) {
           imageUrl = state.error;
@@ -111,30 +110,22 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
                   SizedBox(height: screenHeight * 0.02),
                   _buildInputSection(context, 'Student Number', studNumberController, '00-0000-00000'),
                   SizedBox(height: screenHeight * 0.01),
-                  _buildInputSection(context, 'Attended Event', attendedEventsController, ''),
+                  _buildInputSection(context, 'Attended Events', attendedEventsController, ''), // Attended Events field
+                  SizedBox(height: screenHeight * 0.01),
+                  _buildInputSection(context, 'Shared Posts', sharedPostsController, ''), // Add Shared Posts input field
                   SizedBox(height: screenHeight * 0.01),
                   _buildRegistrationFeePictureSection(context),
                   SizedBox(height: screenHeight * 0.01),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildInputSection(context, 'Shared Post', sharedPostsController, ''),
-                      ),
-                      SizedBox(width: screenWidth * 0.02),
-                      Expanded(
-                        child: _buildInputSection(context, 'Duty Hours', dutyHoursController, ''),
-                      ),
-                    ],
-                  ),
+                  _buildDropdownDutyHours(context),  // Add Dropdown for duty hours
                   SizedBox(height: screenHeight * 0.02),
                   MyButton(
                     onTap: () {
                       widget.onNextStep(
                         studNumberController.text,
                         int.parse(attendedEventsController.text.isNotEmpty ? attendedEventsController.text : '0'),
-                        int.parse(sharedPostsController.text.isNotEmpty ? sharedPostsController.text : '0'),
-                        int.parse(dutyHoursController.text.isNotEmpty ? dutyHoursController.text : '0'),
-                        imageUrl, // Pass the image URL to the next step
+                        int.parse(sharedPostsController.text.isNotEmpty ? sharedPostsController.text : '0'),  // Add Shared Posts to onNextStep
+                        selectedDutyHour ?? 25,
+                        imageUrl,
                       );
                     },
                     buttonText: 'Confirm and Continue',
@@ -159,6 +150,54 @@ class _RequirementsRenewFormPageState extends State<RequirementsRenewFormPage> {
           ],
         );
       },
+    );
+  }
+
+  // Dropdown for Duty Hours
+  Widget _buildDropdownDutyHours(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: screenWidth * 0.01),
+          child: Text(
+            'Duty Hours',
+            style: GoogleFonts.nunito(
+              fontSize: screenWidth * 0.035,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF3B3B3B),
+            ),
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.01),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+          decoration: BoxDecoration(
+            color: const Color(0x306BB577),
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: DropdownButtonFormField<int>(
+            value: selectedDutyHour,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+            ),
+            items: [
+              DropdownMenuItem(child: Text("HK25-50 REQUIRED DUTY HOURS"), value: 25),
+              DropdownMenuItem(child: Text("HK50-90 REQUIRED DUTY HOURS"), value: 50),
+              DropdownMenuItem(child: Text("HK75-120 REQUIRED DUTY HOURS"), value: 75),
+            ],
+            onChanged: (int? newValue) {
+              setState(() {
+                selectedDutyHour = newValue;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 
