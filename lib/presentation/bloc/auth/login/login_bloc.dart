@@ -240,7 +240,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               );
               _pusher.pusherConnect();
               _pusher.subscribeChannel(user['user_id']);
-              log('Response data: $user');
+              log('Response data: $responseData');
               emit(state.copyWith(isSuccess: true, isSubmitting: false));
             } else {
               String errorMessage;

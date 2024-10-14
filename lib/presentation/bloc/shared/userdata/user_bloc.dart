@@ -49,7 +49,8 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
         final activeDutyCount = userData['activeDuties'] ?? 'N/A';
         final completedDutyCount = userData['completedDuties'] ?? 'N/A';
         final totalDutyCount = userData['totalDuty'] ?? 'N/A';
-        final dutyHoursRemaining = userData['hoursToComplete'] ?? 'N/A';
+        final dutyHoursRemaining = userData['dutyHoursRemaining'] ?? 'N/A';
+        final hoursToComplete = userData['hoursToComplete'] ?? 'N/A';
 
         emit(UserDataLoaded(
           name: name,
@@ -84,7 +85,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
           completedDutyCount: completedDutyCount,
           totalDutyCount: totalDutyCount,
           dutyHoursRemaining: dutyHoursRemaining,
-          hoursToComplete: dutyHoursRemaining,
+          hoursToComplete: hoursToComplete,
         ));
       } else if (event.role == 'Employee') {
         final userData = await EmployeeStorage.getData();

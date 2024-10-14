@@ -44,24 +44,24 @@ class _SplashScreenState extends State<SplashScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     Future.delayed(const Duration(seconds: 4), () {
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 500),
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const LandingPage(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0, -1);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-            var tween =
-                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-            var offsetAnimation = animation.drive(tween);
-            return SlideTransition(
-              position: offsetAnimation,
-              child: child,
-            );
-          })
-        // MaterialPageRoute(builder: (context) => const LandingPage())
+      Navigator.of(context).pushReplacement(PageRouteBuilder(
+              transitionDuration: const Duration(milliseconds: 500),
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const LandingPage(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(0, -1);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+                return SlideTransition(
+                  position: offsetAnimation,
+                  child: child,
+                );
+              })
+          // MaterialPageRoute(builder: (context) => const LandingPage())
           );
     });
   }
@@ -87,13 +87,7 @@ class _SplashScreenState extends State<SplashScreen>
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
-                    gradient: const RadialGradient(
-                      center: Alignment.center,
-                      colors: [
-                        Color(0xFFA3D9A5),
-                        Color(0xFF6BB577),
-                      ],
-                    ),
+                    color: const Color(0xFFFCFCFC),
                     borderRadius: _scaleAnimationBg.value < 1
                         ? BorderRadius.circular(5000)
                         : BorderRadius.zero),
@@ -102,18 +96,20 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Stack(
                     children: [
                       Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Image.asset('assets/images/phinma_logo.png',)),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/boaf_logo.png',
+                            height: 350,
+                          ),
+                        ),
+                      ),
                       Positioned(
                         bottom: 80,
                         right: 0,
                         left: 0,
                         child: Center(
                           child: Text(
-                            'PHINMA EDUCATION',
+                            'BOAF',
                             style: GoogleFonts.abhayaLibre(
                               fontSize: 30,
                               fontWeight: FontWeight.w500,
