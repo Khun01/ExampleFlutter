@@ -47,13 +47,19 @@ dependencies:
   animate_do: ^3.3.4
   uicons: ^1.0.1
   pusher_client:
-    path: /Applications/BJFolder/Help_Isko_Projects/pusher_client
+    path: C:/Users/user/Desktop/FlutterProjects/pusher_client
   intl: ^0.18.0
   auto_animated: ^3.2.0
   percent_indicator: ^4.2.3
   easy_stepper: ^0.8.5+1
   image_picker: ^1.1.2
   permission_handler: ^11.3.1
+#   flutter_launcher_icons: ^0.14.1
+
+# flutter_launcher_icons:
+#   android: true
+#   ios: true
+#   image_path: "assets/images/icon_logo.jpg"
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +71,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon_logo.jpg"
+  min_sdk_android: 21
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/icon_logo.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -78,6 +93,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/icon_logo.jpg
     - assets/images/
     - assets/images/duty_dialog_images/
     - assets/images/notif/
