@@ -293,31 +293,41 @@ class RequestedForDutiesInfoPage extends StatelessWidget {
                             RequestedDutyCancelEvent(id: requestedDuties.id));
                       }
                     },
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: requestedDuties.dutyStatus == 'active'
-                            ? const Color(0xFF6BB577)
-                            : requestedDuties.dutyStatus == 'ongoing'
-                                ? const Color(0xFF26A1F4)
-                                : const Color(0xFFF44336),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          requestedDuties.dutyStatus == 'active'
-                              ? 'Active'
-                              : requestedDuties.dutyStatus == 'ongoing'
-                                  ? 'On Going'
-                                  : 'Cancel',
-                          style: GoogleFonts.nunito(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFFFCFCFC)),
-                        ),
-                      ),
-                    ),
+                    child: requestedDuties.dutyStatus == 'active'
+                        ? SizedBox(
+                          height: 50,
+                          child: Center(
+                              child: Text(
+                                'This duty is already active.',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF3B3B3B)
+                                ),
+                              ),
+                            ),
+                        )
+                        : Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: requestedDuties.dutyStatus == 'ongoing'
+                                  ? const Color(0xFF26A1F4)
+                                  : const Color(0xFFF44336),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                requestedDuties.dutyStatus == 'ongoing'
+                                    ? 'On Going'
+                                    : 'Cancel',
+                                style: GoogleFonts.nunito(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFFFCFCFC)),
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),

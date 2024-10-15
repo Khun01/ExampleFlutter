@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/student/renewal_form.dart';
 
 abstract class RenewalFormState extends Equatable {
   const RenewalFormState();
@@ -12,14 +11,7 @@ class RenewalFormInitial extends RenewalFormState {}
 
 class RenewalFormLoading extends RenewalFormState {}
 
-class RenewalFormSuccess extends RenewalFormState {
-  final RenewalForm renewalForm;
-
-  const RenewalFormSuccess(this.renewalForm);
-
-  @override
-  List<Object?> get props => [renewalForm];
-}
+class RenewalFormSuccess extends RenewalFormState {}
 
 class RenewalFormFailure extends RenewalFormState {
   final String error;

@@ -1,4 +1,3 @@
-import 'package:help_isko/models/student/renewal_form.dart';
 import 'package:help_isko/services/student/homepage/renewal_form_service.dart';
 
 class RenewalFormRepository {
@@ -6,7 +5,7 @@ class RenewalFormRepository {
 
   RenewalFormRepository({required this.renewalFormService});
 
-  Future<RenewalForm> submitRenewalForm({
+  Future<Map<String, dynamic>> submitRenewalForm({
     required String studentNumber,
     required int attendedEvents,
     required int sharedPosts,

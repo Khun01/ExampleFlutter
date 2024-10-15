@@ -42,10 +42,13 @@ class NotificationCard extends StatelessWidget {
                         'assets/images/duty_dialog_images/checked.png')
                     : title == 'Duty Ongoing'
                         ? Image.asset('assets/images/notif/ongoing_notif.png')
-                        : title == 'nished Duty!'
+                        : title == 'Finished Duty!'
                             ? Image.asset(
                                 'assets/images/notif/unfinished_notif.png')
-                            : null,
+                            : title == 'Someone commented about you!'
+                                ? Image.asset(
+                                    'assets/images/notif/commented_notif.png')
+                                : null,
           ),
           const SizedBox(width: 8),
           Expanded(
