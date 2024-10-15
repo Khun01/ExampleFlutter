@@ -20,8 +20,8 @@ class ExistingChat {
     );
   }
 
-  @override
-  String toString(){
-    return 'UnreadMessagesCount: $unreadMessagesCount';
-  }
+  // @override
+  // String toString(){
+  //   return 'UnreadMessagesCount: $unreadMessagesCount';
+  // }
 }

@@ -179,6 +179,7 @@ class MessageBloc extends Bloc<MessageEvent, MessageState> {
             updatedChats, currentState.currentUserId));
       }
     } catch (e) {
+      log('the error in sending message is: ${e.toString()}');
       log('error');
     }
   }

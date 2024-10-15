@@ -55,9 +55,9 @@ class _ChatListCardState extends State<ChatListCard> {
         });
 
         if (state is MessageExisitingChatsFetchFailedState) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.errorMessage),
-          ));
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   content: Text(state.errorMessage),
+          // ));
           log('The error in message is: ${state.errorMessage}');
         }
         if (state is MessageNavigatetoChatState) {
@@ -191,19 +191,36 @@ class _ChatListCardState extends State<ChatListCard> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              fontWeight: state
-                                                          .existingChats[index]
-                                                          .message
-                                                          .readStatus ==
-                                                      1
-                                                  ? FontWeight.normal
-                                                  : FontWeight.bold,
-                                              color: state.existingChats[index]
-                                                          .message.readStatus ==
-                                                      1
-                                                  ? const Color(0xCC3B3B3B)
-                                                  : const Color(0xFF3B3B3B)),
+                                            fontSize: 12,
+                                            fontWeight: state
+                                                            .existingChats[
+                                                                index]
+                                                            .message
+                                                            .readStatus ==
+                                                        1 ||
+                                                    state.currentUserId !=
+                                                        state
+                                                            .existingChats[
+                                                                index]
+                                                            .message
+                                                            .receiver_id
+                                                ? FontWeight.normal
+                                                : FontWeight.bold,
+                                            color: state
+                                                            .existingChats[
+                                                                index]
+                                                            .message
+                                                            .readStatus ==
+                                                        1 ||
+                                                    state.currentUserId !=
+                                                        state
+                                                            .existingChats[
+                                                                index]
+                                                            .message
+                                                            .receiver_id
+                                                ? const Color(0xCC3B3B3B)
+                                                : const Color(0xFF3B3B3B),
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 12),

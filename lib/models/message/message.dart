@@ -27,7 +27,7 @@ class Message {
       sender_id: map['sender_id'] as int,
       receiver_id: map['receiver_id'] as int,
       created_at: formattedTime,
-      readStatus: map['read_status'] as int
+      readStatus: map['read_status'] ?? 0
     );
   }
 }

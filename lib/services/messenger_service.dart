@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:help_isko/models/message/existing_chat.dart';
 import 'package:help_isko/models/message/message.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -36,7 +35,6 @@ class MessengerService {
 
         final List<ExistingChat> existingChats =
             existingChatsJson.map((e) => ExistingChat.fromMap(e)).toList();
-        log('The message info is: $existingChats');
         return existingChats;
       } else {
         throw Exception('status code ${response.statusCode}');

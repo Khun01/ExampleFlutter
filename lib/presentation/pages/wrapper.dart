@@ -296,32 +296,40 @@ class _WrapperState extends State<Wrapper> {
                                                         'assets/images/duties.png')),
                                               ),
                                               BottomNavigationBarItem(
-                                                  icon: BlocBuilder<MessageBloc,
-                                                      MessageState>(
-                                                    builder: (context, state) {
-                                                      int unreadMessagesCount =
-                                                          0;
-                                                      if (state
-                                                          is MessageExisitingChatsFetchSuccessState) {
-                                                        unreadMessagesCount =
-                                                            state.existingChats
-                                                                .fold(
-                                                          0,
-                                                          (sum, chat) =>
-                                                              sum +
-                                                              (chat.unreadMessagesCount ??
-                                                                  0),
-                                                        );
-                                                      }
-                                                      return MyMesssageIcon(
-                                                        selectedIndex:
-                                                            selectedIndex,
-                                                        unreadCount:
-                                                            unreadMessagesCount,
-                                                      );
-                                                    },
+                                                icon: BlocProvider.value(
+                                                  value: messengerBloc,
+                                                  child: MyMesssageIcon(
+                                                    selectedIndex:
+                                                        selectedIndex,
                                                   ),
-                                                  label: 'Message'),
+                                                ),
+                                                label: 'Message',
+                                                // icon: BlocBuilder<MessageBloc,
+                                                //     MessageState>(
+                                                //   builder: (context, state) {
+                                                //     int unreadMessagesCount = 0;
+                                                //     if (state
+                                                //         is MessageExisitingChatsFetchSuccessState) {
+                                                // unreadMessagesCount =
+                                                //     state.existingChats
+                                                //         .fold(
+                                                //   0,
+                                                //   (sum, chat) =>
+                                                //       sum +
+                                                //       (chat.unreadMessagesCount ??
+                                                //           0),
+                                                // );
+                                                //     }
+                                                //     return MyMesssageIcon(
+                                                //       selectedIndex:
+                                                //           selectedIndex,
+                                                //       unreadCount:
+                                                //           unreadMessagesCount,
+                                                //     );
+                                                //   },
+                                                // ),
+                                                // label: 'Message',
+                                              ),
                                               BottomNavigationBarItem(
                                                 label: 'Profile',
                                                 icon: selectedIndex == 3
