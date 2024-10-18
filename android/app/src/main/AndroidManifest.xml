@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
-        android:label="Help, Isko"
+        android:label="Help, isKo!"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:requestLegacyExternalStorage="true">

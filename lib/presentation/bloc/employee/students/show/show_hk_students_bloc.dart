@@ -17,7 +17,7 @@ class ShowHkStudentsBloc extends Bloc<ShowHkStudentsEvent, ShowHkStudentsState> 
   FutureOr<void> fetchHkStudentsEvent(FetchHkStudentsEvent event, Emitter<ShowHkStudentsState> emit) async{
     emit(ShowHkStudentsLoadingState());
     try{
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
       final students = await apiRepositories.fetchAllStudents();
       emit(ShowHkStudentsSuccessState(students: students));
     }catch(e){

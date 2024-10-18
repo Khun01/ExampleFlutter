@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
@@ -101,5 +102,31 @@ class DutyServices implements DutyRepository {
       'body': response.body,
       'headers': response.headers,
     };
+  }
+
+  @override
+  Future<List<CompletedDuty>> fetchCompletedDutyByStudent() async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/employees/duties/completed/today'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    log(response.body);
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> completedDutyStudent =
+          jsonResponse['duties']['students'];
+      return completedDutyStudent
+          .map((json) => CompletedDuty.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } else {
+      log('${response.statusCode}, ${response.body}');
+      log('The status code is: ${response.statusCode}');
+      throw Exception('Failed to load duties');
+    }
   }
 }

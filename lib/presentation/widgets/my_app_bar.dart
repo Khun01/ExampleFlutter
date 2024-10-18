@@ -7,6 +7,7 @@ import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/confirmedFinishedDuty/confirm_duty_page.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/hk_student_list_page.dart';
 import 'package:help_isko/presentation/pages/notification_page.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/renew_form_page.dart';
@@ -95,18 +96,37 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ? FadeInRight(
                             duration: const Duration(milliseconds: 700),
                             child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                        value: context.read<MessageBloc>(),
-                                        child: const HkStudentListPage(),
-                                      ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ConfirmDutyPage(),
+                                  ),
+                                );
+                              },
+                              child: Icon(UIcons.regularRounded.calendar_check),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                    const SizedBox(width: 16),
+                    role == 'Employee'
+                        ? FadeInRight(
+                            duration: const Duration(milliseconds: 700),
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: context.read<MessageBloc>(),
+                                      child: const HkStudentListPage(),
                                     ),
-                                  );
-                                },
-                                child: Icon(UIcons.regularRounded.users)))
+                                  ),
+                                );
+                              },
+                              child: Icon(UIcons.regularRounded.users),
+                            ),
+                          )
                         : FadeInRight(
                             duration: const Duration(milliseconds: 700),
                             child: GestureDetector(
@@ -137,8 +157,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           );
                         },
-                        child: Icon(UIcons.regularRounded.bell,
-                            color: const Color(0xFF3B3B3B)),
+                        child: Icon(
+                          UIcons.regularRounded.bell,
+                          color: const Color(0xFF3B3B3B),
+                        ),
                       ),
                     ),
                   ],

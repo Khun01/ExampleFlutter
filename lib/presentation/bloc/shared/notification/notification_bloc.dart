@@ -19,7 +19,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       FetchNotification event, Emitter<NotificationState> emit) async {
     emit(NotificationLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      // await Future.delayed(const Duration(seconds: 2));
       final notification = await apiRepositories.fetchNotification(event.role);
       emit(NotificationSuccessState(
         today: notification['today'] ?? [],

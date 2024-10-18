@@ -5,6 +5,7 @@ import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
+import 'package:help_isko/presentation/widgets/my_profile_page_text.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -231,51 +232,11 @@ class EmployeeProfilePage extends StatelessWidget {
                                   color: const Color(0xFF6BB577)),
                             ),
                             const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'Birthday',
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF3B3B3B),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    'Contact Number',
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF3B3B3B),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    state.birthday ?? "N/A",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      color: const Color(0xFF3B3B3B),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    state.contactNumber ?? "N/A",
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      color: const Color(0xFF3B3B3B),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            MyProfilePageText(
+                              title1: 'Birthday',
+                              body1: state.birthday ?? 'N/A',
+                              title2: 'Contact Number',
+                              body2: state.contactNumber ?? 'N/A',
                             ),
                             const SizedBox(height: 8),
                             const Divider(),
