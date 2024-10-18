@@ -118,12 +118,20 @@ class DutyServices implements DutyRepository {
     log(response.body);
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);
-      List dutiesJson = jsonData['duties'];
+      List dutiesJson = jsonData['duties']; // This line remains unchanged
+
       List<CompletedDuty> duties = dutiesJson
           .map((dutyJson) => CompletedDuty.fromJson(dutyJson))
           .toList();
 
       return duties;
+      // final jsonData = json.decode(response.body);
+      // List dutiesJson = jsonData['duties'];
+      // List<CompletedDuty> duties = dutiesJson
+      //     .map((dutyJson) => CompletedDuty.fromJson(dutyJson))
+      //     .toList();
+
+      // return duties;
     } else {
       log('${response.statusCode}, ${response.body}');
       log('The status code is: ${response.statusCode}');

@@ -6,7 +6,7 @@ class CompletedDuty {
   String? startTime;
   String? endTime;
   String? date;
-  List<Students>? students;
+  Students? student; 
 
   CompletedDuty({
     this.dutyId,
@@ -14,27 +14,28 @@ class CompletedDuty {
     this.startTime,
     this.endTime,
     this.date,
-    this.students,
+    this.student,
   });
 
   factory CompletedDuty.fromJson(Map<String, dynamic> json) {
-    var studentList = json['students'] as List<dynamic>?;
-    List<Students> studentsList = studentList != null 
-        ? studentList.map((student) => Students.fromJson(student)).toList()
-        : [];
+    var studentList =
+        json['students'] as List<dynamic>?;
+    Students? student = studentList != null && studentList.isNotEmpty
+        ? Students.fromJson(studentList[0])
+        : null;
 
     return CompletedDuty(
       dutyId: json['duty_id'] as int?,
-      building: json['building'] as String? ?? '',  
-      startTime: json['start_time'] as String? ?? '', 
-      endTime: json['end_time'] as String? ?? '', 
+      building: json['building'] as String? ?? '',
+      startTime: json['start_time'] as String? ?? '',
+      endTime: json['end_time'] as String? ?? '',
       date: json['date'] as String? ?? '',
-      students: studentsList,
+      student: student, // Use the parsed single student
     );
   }
 
   @override
   String toString() {
-    return 'CompletedDuty(building: $building, start time: $startTime, endTime: $endTime, date: $date, Students: $students)';
+    return 'CompletedDuty(building: $building, start time: $startTime, end time: $endTime, date: $date, student: $student)';
   }
 }

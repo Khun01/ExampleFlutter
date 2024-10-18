@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,39 +47,89 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
         builder: (context, state) {
           Widget body;
           if (state is CompletedDutyFailedState) {
-            body = SliverToBoxAdapter(child: Text(state.error));
+            body = SliverFillRemaining(
+              hasScrollBody: false,
+              child: Text(
+                state.error,
+                style: GoogleFonts.nunito(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF3B3B3B),
+                ),
+              ),
+            );
           } else if (state is CompletedDutySuccessState) {
-            // Filter the completed duties based on the selected day
             List<CompletedDuty> dutiesForSelectedDay = state.completedDuty
-                .where((duty) =>
-                    isSameDay(
-                        DateFormat('yyyy-MM-dd').parse(duty.date ?? ''),
-                        _selectedDay))
+                .where((completedDuty) => isSameDay(
+                    DateFormat('yyyy-MM-dd').parse(completedDuty.date ?? ''),
+                    _selectedDay))
                 .toList();
-
             if (dutiesForSelectedDay.isEmpty) {
-              body = const SliverToBoxAdapter(
-                child: Text('No completed duties for the selected day'),
+              body = SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: Text(
+                    'No completed duties for the selected day',
+                    style: GoogleFonts.nunito(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF3B3B3B),
+                    ),
+                  ),
+                ),
               );
             } else {
-              body = SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    CompletedDuty duty = dutiesForSelectedDay[index];
-                    return ConfirmDutyCard(completedDuty: duty); // Pass the duty to your card
-                  },
-                  childCount: dutiesForSelectedDay.length,
-                ),
+              final reversedList = state.completedDuty.reversed.toList();
+              body = LiveSliverList(
+                controller: scrollController,
+                showItemDuration: const Duration(milliseconds: 300),
+                itemCount: reversedList.length,
+                itemBuilder: (context, index, animation) {
+                  final completedDuty = reversedList[index];
+                  return FadeTransition(
+                    opacity: Tween<double>(
+                      begin: 0,
+                      end: 1,
+                    ).animate(animation),
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, -0.1),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (_) => BlocProvider.value(
+                          //       value: context.read<MessageBloc>(),
+                          //       child: StudentInfoPage(students: students),
+                          //     ),
+                          //   ),
+                          // );
+                        },
+                        child: ConfirmDutyCard(completedDuty: completedDuty),
+                      ),
+                    ),
+                  );
+                },
               );
             }
           } else if (state is CompletedDutyLoadingState) {
-            body = const SliverToBoxAdapter(
-              child: CircularProgressIndicator(),
+            body = const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           } else {
-            body = const SliverToBoxAdapter(child: SizedBox.shrink());
+            body = const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: SizedBox.shrink(),
+              ),
+            );
           }
-
           return Scaffold(
             body: SafeArea(
               child: CustomScrollView(
@@ -170,68 +221,71 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                             ),
                           ),
                         ),
-                        TableCalendar(
-                          firstDay: DateTime.utc(2010, 10, 16),
-                          lastDay: DateTime.utc(2030, 3, 14),
-                          focusedDay: _focusedDay,
-                          selectedDayPredicate: (day) =>
-                              isSameDay(_selectedDay, day),
-                          onDaySelected: (selectedDay, focusedDay) {
-                            setState(() {
-                              _selectedDay = selectedDay;
-                              _focusedDay = focusedDay;
-                            });
-                          },
-                          calendarFormat: _calendarFormat,
-                          onFormatChanged: (format) {
-                            setState(() {
-                              _calendarFormat = format;
-                            });
-                          },
-                          onPageChanged: (focusedDay) {
-                            _focusedDay = focusedDay;
-                          },
-                          headerStyle: HeaderStyle(
-                            formatButtonVisible: false,
-                            titleTextStyle: GoogleFonts.nunito(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0x803B3B3B),
-                            ),
-                            titleTextFormatter: (date, locale) {
-                              return DateFormat('MMMM', locale).format(date);
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: TableCalendar(
+                            firstDay: DateTime.utc(2010, 10, 16),
+                            lastDay: DateTime.utc(2030, 3, 14),
+                            focusedDay: _focusedDay,
+                            selectedDayPredicate: (day) =>
+                                isSameDay(_selectedDay, day),
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _focusedDay = focusedDay;
+                              });
                             },
-                            headerPadding: const EdgeInsets.only(
-                                left: 16, bottom: 16, top: 16),
-                            leftChevronVisible: false,
-                            rightChevronVisible: false,
-                          ),
-                          calendarStyle: CalendarStyle(
-                            defaultTextStyle: GoogleFonts.nunito(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: const Color(0xFF3B3B3B),
+                            calendarFormat: _calendarFormat,
+                            onFormatChanged: (format) {
+                              setState(() {
+                                _calendarFormat = format;
+                              });
+                            },
+                            onPageChanged: (focusedDay) {
+                              _focusedDay = focusedDay;
+                            },
+                            headerStyle: HeaderStyle(
+                              formatButtonVisible: false,
+                              titleTextStyle: GoogleFonts.nunito(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0x803B3B3B),
+                              ),
+                              titleTextFormatter: (date, locale) {
+                                return DateFormat('MMMM', locale).format(date);
+                              },
+                              headerPadding: const EdgeInsets.only(
+                                  left: 16, bottom: 16, top: 16),
+                              leftChevronVisible: false,
+                              rightChevronVisible: false,
                             ),
-                            weekendTextStyle: GoogleFonts.nunito(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
+                            calendarStyle: CalendarStyle(
+                              defaultTextStyle: GoogleFonts.nunito(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: const Color(0xFF3B3B3B),
+                              ),
+                              weekendTextStyle: GoogleFonts.nunito(
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              todayTextStyle: GoogleFonts.nunito(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFFCFCFC),
+                              ),
                             ),
-                            todayTextStyle: GoogleFonts.nunito(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFFFCFCFC),
-                            ),
-                          ),
-                          daysOfWeekStyle: DaysOfWeekStyle(
-                            weekdayStyle: GoogleFonts.nunito(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0x803B3B3B),
-                            ),
-                            weekendStyle: GoogleFonts.nunito(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0x803B3B3B),
+                            daysOfWeekStyle: DaysOfWeekStyle(
+                              weekdayStyle: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0x803B3B3B),
+                              ),
+                              weekendStyle: GoogleFonts.nunito(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0x803B3B3B),
+                              ),
                             ),
                           ),
                         ),
@@ -239,11 +293,6 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                     ),
                   ),
                   body,
-                  const SliverToBoxAdapter(
-                    child: SizedBox(
-                      height: 16,
-                    ),
-                  ),
                 ],
               ),
             ),

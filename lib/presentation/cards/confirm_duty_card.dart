@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/duty/completed_duty.dart';
+import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
 class ConfirmDutyCard extends StatelessWidget {
@@ -13,7 +14,8 @@ class ConfirmDutyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,15 +57,32 @@ class ConfirmDutyCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 30,
-                        backgroundColor: const Color(0xFF6BB577),
-                        child: Container(
-                          margin: const EdgeInsets.all(14),
-                          child: Image.asset(
-                            'assets/images/profile_clicked.png',
-                          ),
-                        ),
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFA3D9A5),
+                            borderRadius: BorderRadius.circular(500)),
+                        child: completedDuty.student!.profile != ''
+                            ? ClipOval(
+                                child: Image.network(
+                                  '$profileUrl${completedDuty.student!.profile}',
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      Container(
+                                    margin: const EdgeInsets.all(14),
+                                    child: Image.asset(
+                                      'assets/images/profile_clicked.png',
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                margin: const EdgeInsets.all(14),
+                                child: Image.asset(
+                                  'assets/images/profile_clicked.png',
+                                ),
+                              ),
                       ),
                       const SizedBox(width: 8),
                       Expanded(
@@ -73,7 +92,7 @@ class ConfirmDutyCard extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  'John Brandon Lambino',
+                                  completedDuty.student!.name ?? '',
                                   style: GoogleFonts.nunito(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -88,7 +107,7 @@ class ConfirmDutyCard extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              'Bachelor of Science Information Technology',
+                              completedDuty.student!.course ?? '',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.nunito(
@@ -97,7 +116,7 @@ class ConfirmDutyCard extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'PTC - 304: 13:00 - 15:00',
+                              completedDuty.building ?? '',
                               style: GoogleFonts.nunito(
                                 fontSize: 12,
                                 color: const Color(0xFF6B6B6B),
