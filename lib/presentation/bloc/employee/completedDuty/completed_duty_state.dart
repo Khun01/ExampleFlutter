@@ -9,7 +9,11 @@ sealed class CompletedDutyState extends Equatable {
 
 final class CompletedDutyInitial extends CompletedDutyState {}
 
-class CompletedDutySuccessState extends CompletedDutyState{}
+class CompletedDutySuccessState extends CompletedDutyState{
+  final List<CompletedDuty> completedDuty;
+
+  const CompletedDutySuccessState({required this.completedDuty});
+}
 
 class CompletedDutyFailedState extends CompletedDutyState {
   final String error;

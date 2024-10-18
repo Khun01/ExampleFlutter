@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
 
 part 'completed_duty_event.dart';
@@ -16,8 +17,8 @@ class CompletedDutyBloc extends Bloc<CompletedDutyEvent, CompletedDutyState> {
   FutureOr<void> dutyCompletedFetch(DutyCompletedFetch event, Emitter<CompletedDutyState> emit) async{
     emit(CompletedDutyLoadingState());
     try{
-      await dutyRepository.fetchCompletedDutyByStudent();
-      emit(CompletedDutySuccessState());
+      final comepletedDuty = await dutyRepository.fetchCompletedDutyByStudent();
+      emit(CompletedDutySuccessState(completedDuty: comepletedDuty));
     }catch(e){
       emit(CompletedDutyFailedState(error: e.toString()));
     }
