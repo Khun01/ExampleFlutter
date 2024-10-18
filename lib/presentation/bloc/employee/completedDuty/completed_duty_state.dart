@@ -30,5 +30,5 @@ class AddDutyHourSuccessState extends CompletedDutyState {}
 class AddDutyHourFailedState extends CompletedDutyState {
   final String errorMessage;
 
-  AddDutyHourFailedState({required this.errorMessage});
+  const AddDutyHourFailedState({required this.errorMessage});
 }

@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/models/duty/prof_duty.dart';
 import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
@@ -150,15 +148,13 @@ class DutyServices implements DutyRepository {
     String? token = userData['employeeToken'];
 
     final response = await http.put(
-        Uri.parse('$baseUrl/employees/duties/$studentId/$dutyId'),
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token'
-        },
-        body: {
-          'hour': hour.toString(),
-          'minute': minute.toString(),
-        });
+      Uri.parse('$baseUrl/employees/duties/$studentId/$dutyId'),
+      headers: {'Accept': 'application/json', 'Authorization': 'Bearer $token'},
+      body: {
+        'hour': hour.toString(),
+        'minute': minute.toString(),
+      },
+    );
 
     log(response.body);
 

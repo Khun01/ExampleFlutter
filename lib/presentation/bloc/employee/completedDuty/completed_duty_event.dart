@@ -15,5 +15,5 @@ class DutyAddHoursStudent extends CompletedDutyEvent {
   final int studentId;
   final int dutyId;
 
-  DutyAddHoursStudent({required this.hour, required this.minute, required this.studentId, required this.dutyId});
+  const DutyAddHoursStudent({required this.hour, required this.minute, required this.studentId, required this.dutyId});
 }

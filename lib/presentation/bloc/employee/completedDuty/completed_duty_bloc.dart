@@ -41,6 +41,8 @@ class CompletedDutyBloc extends Bloc<CompletedDutyEvent, CompletedDutyState> {
       if (res) {
         emit(AddDutyHourSuccessState());
         // add(DutyCompletedFetch());
+      }else{
+        emit(const AddDutyHourFailedState(errorMessage: 'Wrong hours and minutes'));
       }
     } catch (e) {
       emit(AddDutyHourFailedState(errorMessage: '$e'));

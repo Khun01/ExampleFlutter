@@ -45,10 +45,20 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
           }
 
           if (state is AddDutyHourSuccessState) {
-            print('nag emit');
+            context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
+          } else if (state is AddDutyHourFailedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+              ),
+            );
             context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
           }
         },
+        buildWhen: (previous, current) =>
+            (current is CompletedDutyLoadingState &&
+                previous is CompletedDutyInitial) ||
+            current is CompletedDutySuccessState,
         builder: (context, state) {
           Widget body;
           if (state is CompletedDutyFailedState) {

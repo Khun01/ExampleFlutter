@@ -6,6 +6,7 @@ class CompletedDuty {
   String? startTime;
   String? endTime;
   String? date;
+  int? fulfilled;
   Students? student; 
 
   CompletedDuty({
@@ -14,6 +15,7 @@ class CompletedDuty {
     this.startTime,
     this.endTime,
     this.date,
+    this.fulfilled,
     this.student,
   });
 
@@ -30,6 +32,7 @@ class CompletedDuty {
       startTime: json['start_time'] as String? ?? '',
       endTime: json['end_time'] as String? ?? '',
       date: json['date'] as String? ?? '',
+      fulfilled: json['fulfilled'] ?? 0,
       student: student, // Use the parsed single student
     );
   }

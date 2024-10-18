@@ -643,7 +643,7 @@ packages:
   pusher_client:
     dependency: "direct main"
     description:
-      path: "D:\\Downloads\\pusher_client-master\\pusher_client-master"
+      path: "/Applications/BJFolder/Help_Isko_Projects/pusher_client"
       relative: false
     source: path
     version: "2.0.0"
