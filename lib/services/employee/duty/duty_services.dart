@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/models/duty/prof_duty.dart';
@@ -136,6 +137,35 @@ class DutyServices implements DutyRepository {
       log('${response.statusCode}, ${response.body}');
       log('The status code is: ${response.statusCode}');
       throw Exception('Failed to load duties');
+    }
+  }
+
+  @override
+  Future<bool> addHourStudent(
+      {required int hour,
+      required int minute,
+      required int studentId,
+      required int dutyId}) async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+
+    final response = await http.put(
+        Uri.parse('$baseUrl/employees/duties/$studentId/$dutyId'),
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+        body: {
+          'hour': hour.toString(),
+          'minute': minute.toString(),
+        });
+
+    log(response.body);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

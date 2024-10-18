@@ -43,6 +43,11 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
           } else if (state is CompletedDutySuccessState) {
             log('The fetching of completed duty is successful');
           }
+
+          if (state is AddDutyHourSuccessState) {
+            print('nag emit');
+            context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
+          }
         },
         builder: (context, state) {
           Widget body;

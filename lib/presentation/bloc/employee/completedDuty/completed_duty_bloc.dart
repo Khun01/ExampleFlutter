@@ -10,17 +10,40 @@ part 'completed_duty_state.dart';
 
 class CompletedDutyBloc extends Bloc<CompletedDutyEvent, CompletedDutyState> {
   final DutyRepository dutyRepository;
-  CompletedDutyBloc({required this.dutyRepository}) : super(CompletedDutyInitial()) {
+  CompletedDutyBloc({required this.dutyRepository})
+      : super(CompletedDutyInitial()) {
     on<DutyCompletedFetch>(dutyCompletedFetch);
+    on<DutyAddHoursStudent>(dutyAddHoursStudent);
   }
 
-  FutureOr<void> dutyCompletedFetch(DutyCompletedFetch event, Emitter<CompletedDutyState> emit) async{
+  FutureOr<void> dutyCompletedFetch(
+      DutyCompletedFetch event, Emitter<CompletedDutyState> emit) async {
     emit(CompletedDutyLoadingState());
-    try{
+    try {
       final comepletedDuty = await dutyRepository.fetchCompletedDutyByStudent();
       emit(CompletedDutySuccessState(completedDuty: comepletedDuty));
-    }catch(e){
+      print('nag emit na');
+    } catch (e) {
       emit(CompletedDutyFailedState(error: e.toString()));
+    }
+  }
+
+  FutureOr<void> dutyAddHoursStudent(
+      DutyAddHoursStudent event, Emitter<CompletedDutyState> emit) async {
+    emit(CompletedDutyLoadingState());
+    try {
+      final res = await dutyRepository.addHourStudent(
+          hour: event.hour,
+          minute: event.minute,
+          studentId: event.studentId,
+          dutyId: event.dutyId);
+
+      if (res) {
+        emit(AddDutyHourSuccessState());
+        // add(DutyCompletedFetch());
+      }
+    } catch (e) {
+      emit(AddDutyHourFailedState(errorMessage: '$e'));
     }
   }
 }

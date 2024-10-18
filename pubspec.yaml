@@ -47,7 +47,7 @@ dependencies:
   animate_do: ^3.3.4
   uicons: ^1.0.1
   pusher_client:
-    path: /Applications/BJFolder/Help_Isko_Projects/pusher_client
+    path: D:/Downloads/pusher_client-master/pusher_client-master
   intl: ^0.18.0
   auto_animated: ^3.2.0
   percent_indicator: ^4.2.3
@@ -99,7 +99,7 @@ flutter:
     - assets/images/
     - assets/images/duty_dialog_images/
     - assets/images/notif/
-    
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
