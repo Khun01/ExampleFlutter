@@ -129,15 +129,18 @@ class ConfirmDutyCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ...List.generate(
                         2,
                         (index) => Container(
-                          width: 30,
-                          height: 30,
+                          width: 35,
+                          height: 35,
                           margin: const EdgeInsets.only(right: 4),
                           child: TextFormField(
+                            style: GoogleFonts.nunito(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
                             onChanged: (value) {
                               log('The token in the textField is; $value');
                               if (value.length == 1) {
@@ -151,10 +154,10 @@ class ConfirmDutyCard extends StatelessWidget {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: EdgeInsets.zero),
                           ),
                         ),
                       ),
@@ -170,10 +173,15 @@ class ConfirmDutyCard extends StatelessWidget {
                       ...List.generate(
                         2,
                         (index) => Container(
-                          width: 30,
-                          height: 30,
+                          width: 35,
+                          height: 35,
                           margin: const EdgeInsets.only(right: 4),
                           child: TextFormField(
+                            style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF3B3B3B),
+                            ),
                             onChanged: (value) {
                               log('The token in the textField is; $value');
                               if (value.length == 1) {
@@ -187,10 +195,10 @@ class ConfirmDutyCard extends StatelessWidget {
                               FilteringTextInputFormatter.digitsOnly,
                             ],
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: EdgeInsets.zero),
                           ),
                         ),
                       ),
@@ -209,7 +217,7 @@ class ConfirmDutyCard extends StatelessWidget {
                             log('The submit button is clcked');
                           },
                           child: Container(
-                            height: 30,
+                            height: 35,
                             decoration: BoxDecoration(
                                 color: const Color(0xFF6BB577),
                                 borderRadius: BorderRadius.circular(10)),
