@@ -1,8 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/completedDuty/completed_duty_bloc.dart';
 import 'package:help_isko/presentation/cards/confirm_duty_card.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -23,12 +23,6 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
   DateTime _selectedDay = DateTime.now();
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  int currentStep = 0;
-
-  final Map<DateTime, List<String>> _events = {
-    DateTime.now(): ['Event 1', 'Event 2'],
-    DateTime.utc(2024, 10, 17): ['Event 1', 'Event 2', 'Event 3'],
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +38,39 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
       child: BlocConsumer<CompletedDutyBloc, CompletedDutyState>(
         listener: (context, state) {
           if (state is CompletedDutyFailedState) {
-            log('The error in fetching cmpleted duty is: ${state.error}');
+            log('The error in fetching completed duty is: ${state.error}');
           } else if (state is CompletedDutySuccessState) {
-            log('The fetching of cmpleted duty is success');
+            log('The fetching of completed duty is successful');
           }
         },
         builder: (context, state) {
           Widget body;
           if (state is CompletedDutyFailedState) {
-            body = SliverToBoxAdapter(child: Text(state.error.toString()));
+            body = SliverToBoxAdapter(child: Text(state.error));
           } else if (state is CompletedDutySuccessState) {
-            body = const SliverToBoxAdapter(
-              child: Text('Succcess'),
-            );
+            // Filter the completed duties based on the selected day
+            List<CompletedDuty> dutiesForSelectedDay = state.completedDuty
+                .where((duty) =>
+                    isSameDay(
+                        DateFormat('yyyy-MM-dd').parse(duty.date ?? ''),
+                        _selectedDay))
+                .toList();
+
+            if (dutiesForSelectedDay.isEmpty) {
+              body = const SliverToBoxAdapter(
+                child: Text('No completed duties for the selected day'),
+              );
+            } else {
+              body = SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    CompletedDuty duty = dutiesForSelectedDay[index];
+                    return ConfirmDutyCard(completedDuty: duty); // Pass the duty to your card
+                  },
+                  childCount: dutiesForSelectedDay.length,
+                ),
+              );
+            }
           } else if (state is CompletedDutyLoadingState) {
             body = const SliverToBoxAdapter(
               child: CircularProgressIndicator(),
@@ -64,6 +78,7 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
           } else {
             body = const SliverToBoxAdapter(child: SizedBox.shrink());
           }
+
           return Scaffold(
             body: SafeArea(
               child: CustomScrollView(
@@ -163,15 +178,8 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                               isSameDay(_selectedDay, day),
                           onDaySelected: (selectedDay, focusedDay) {
                             setState(() {
-                              setState(() {
-                                _selectedDay = selectedDay;
-                                _focusedDay = focusedDay;
-                                if (isSameDay(selectedDay, DateTime.now())) {
-                                  _calendarFormat = CalendarFormat.month;
-                                } else {
-                                  _calendarFormat = CalendarFormat.week;
-                                }
-                              });
+                              _selectedDay = selectedDay;
+                              _focusedDay = focusedDay;
                             });
                           },
                           calendarFormat: _calendarFormat,
@@ -231,27 +239,6 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                     ),
                   ),
                   body,
-                  _events[_selectedDay] == null ||
-                          _events[_selectedDay]!.isEmpty
-                      ? SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Center(
-                            child: Text(
-                              'No completed duty for today.',
-                              style: GoogleFonts.nunito(
-                                fontSize: 18,
-                                fontWeight: FontWeight.normal,
-                                color: const Color(0x803B3B3B),
-                              ),
-                            ),
-                          ),
-                        )
-                      : SliverList.builder(
-                          itemCount: _events[_selectedDay]!.length,
-                          itemBuilder: (context, index) {
-                            return const ConfirmDutyCard();
-                          },
-                        ),
                   const SliverToBoxAdapter(
                     child: SizedBox(
                       height: 16,

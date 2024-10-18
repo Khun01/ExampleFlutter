@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:ionicons/ionicons.dart';
 
 class ConfirmDutyCard extends StatelessWidget {
-  const ConfirmDutyCard({super.key});
+  final CompletedDuty completedDuty;
+  const ConfirmDutyCard({super.key, required this.completedDuty});
 
   @override
   Widget build(BuildContext context) {
