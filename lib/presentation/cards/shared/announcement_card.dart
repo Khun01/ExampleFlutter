@@ -52,11 +52,11 @@ class AnnouncementCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 170,
-                      child: Text(
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    children: [
+                      Text(
                         heading,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -65,16 +65,16 @@ class AnnouncementCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF3B3B3B)),
                       ),
-                    ),
-                    const Spacer(),
-                    Text(
-                      time,
-                      style: GoogleFonts.nunito(
-                        fontSize: 10,
-                        color: const Color(0xCC3B3B3B),
-                      ),
-                    )
-                  ],
+                      const Spacer(),
+                      Text(
+                        time,
+                        style: GoogleFonts.nunito(
+                          fontSize: 10,
+                          color: const Color(0xCC3B3B3B),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 5),
                 Text(
