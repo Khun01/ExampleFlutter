@@ -2,7 +2,8 @@ import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/presentation/bloc/student/renewal/imagePicker/image_picker_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/renewal/imagePicker/orfProofPic/orf_proof_pic_bloc.dart';
+import 'package:help_isko/presentation/bloc/student/renewal/imagePicker/regisFee/image_picker_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/renewal/renewal_form/renewal_form_bloc.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/preview_renew_form_page.dart';
 import 'package:help_isko/presentation/pages/students/secondPage/renewalForm/requirements_renew_form_page.dart';
@@ -21,9 +22,10 @@ class RenewFormPage extends StatefulWidget {
 }
 
 class _RenewFormPageState extends State<RenewFormPage> {
+  String? orfProofUrl;
   String? studNumber;
   int? attendedEvent;
-  int? sharedPost;
+  String? sharedPost;
   int? dutyHours;
   String? registrationFeePic;
 
@@ -46,6 +48,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
   @override
   Widget build(BuildContext context) {
     final ImagePickerBloc imagePickerBloc = ImagePickerBloc(ImagePicker());
+    final OrfProofPicBloc orfProofPicBloc = OrfProofPicBloc(ImagePicker());
     final RenewalFormBloc renewalFormBloc = RenewalFormBloc(
         renewalFormRepository: RenewalFormRepository(
             renewalFormService: RenewalFormService(baseUrl: baseUrl)));
@@ -53,6 +56,9 @@ class _RenewFormPageState extends State<RenewFormPage> {
       providers: [
         BlocProvider(
           create: (context) => imagePickerBloc,
+        ),
+        BlocProvider(
+          create: (context) => orfProofPicBloc,
         ),
         BlocProvider(
           create: (context) => renewalFormBloc,
@@ -63,6 +69,7 @@ class _RenewFormPageState extends State<RenewFormPage> {
         listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             body: SafeArea(
               child: Column(
                 children: [
@@ -235,11 +242,19 @@ class _RenewFormPageState extends State<RenewFormPage> {
                   ),
                   Expanded(
                     child: activeStep == 0
-                        ? BlocProvider.value(
-                            value: imagePickerBloc,
+                        ? MultiBlocProvider(
+                            providers: [
+                              BlocProvider.value(
+                                value: imagePickerBloc,
+                              ),
+                              BlocProvider.value(
+                                value: orfProofPicBloc,
+                              ),
+                            ],
                             child: RequirementsRenewFormPage(
-                              onNextStep: (string1, string2, string3, string4,
-                                  string5) {
+                              onNextStep: (orfUrl, string1, string2, string3,
+                                  string4, string5) {
+                                orfProofUrl = orfUrl;
                                 studNumber = string1;
                                 attendedEvent = string2;
                                 sharedPost = string3;
@@ -255,9 +270,10 @@ class _RenewFormPageState extends State<RenewFormPage> {
                                 child: SubmitRenewFormPage(
                                   onNextStep: nextStep,
                                   onFirstStep: goToFirstStep,
+                                  orfurl: orfProofUrl ?? '',
                                   studNumber: studNumber ?? '',
                                   attendEvent: attendedEvent ?? 0,
-                                  sharedPost: sharedPost ?? 0,
+                                  sharedPost: sharedPost ?? '',
                                   dutyHours: dutyHours ?? 0,
                                   registrationFeePic: registrationFeePic,
                                 ),
@@ -272,9 +288,10 @@ class _RenewFormPageState extends State<RenewFormPage> {
                                   ),
                                 ],
                                 child: PreviewRenewFormPage(
+                                  orfUrl: orfProofUrl ?? '',
                                   studNumber: studNumber ?? '',
                                   attendEvent: attendedEvent ?? 0,
-                                  sharedPost: sharedPost ?? 0,
+                                  sharedPost: sharedPost ?? '',
                                   dutyHours: dutyHours ?? 0,
                                   registrationFeePic: registrationFeePic,
                                 ),

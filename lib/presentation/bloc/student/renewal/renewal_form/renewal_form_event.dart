@@ -11,7 +11,7 @@ abstract class RenewalFormEvent extends Equatable {
 class SubmitRenewalFormEvent extends RenewalFormEvent {
   final String studentNumber;
   final int attendedEvents;
-  final int sharedPosts;
+  final String sharedPosts;
   final String? registrationFeePicture;
   final File? disbursementMethod;
   final int dutyHours;

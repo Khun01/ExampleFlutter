@@ -11,7 +11,7 @@ class RenewalFormService {
   Future<Map<String, dynamic>> submitRenewalForm({
     required String studentNumber,
     required int attendedEvents,
-    required int sharedPosts,
+    required String sharedPosts,
     required int dutyHours,
     String? registrationFeePic,
   }) async {

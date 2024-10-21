@@ -5,13 +5,15 @@ import 'package:help_isko/presentation/widgets/my_button.dart';
 class SubmitRenewFormPage extends StatelessWidget {
   final VoidCallback onNextStep;
   final VoidCallback onFirstStep;
+  final String orfurl;
   final String studNumber;
   final int attendEvent;
-  final int sharedPost;
+  final String sharedPost;
   final int dutyHours;
   final String? registrationFeePic;
   const SubmitRenewFormPage(
       {super.key,
+      required this.orfurl,
       required this.onNextStep,
       required this.onFirstStep,
       required this.studNumber,
@@ -65,7 +67,7 @@ class SubmitRenewFormPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Shared Posts',
+                        'Attended Event',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
@@ -73,7 +75,7 @@ class SubmitRenewFormPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Attended Event',
+                        'Shared Posts',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
@@ -121,20 +123,25 @@ class SubmitRenewFormPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        sharedPost != 0 ? sharedPost.toString() : 'Shared post',
-                        style: GoogleFonts.nunito(
-                          fontSize: 14,
-                          color: const Color(0xCC3B3B3B),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
                         attendEvent != 0
                             ? attendEvent.toString()
                             : 'Attended Event',
                         style: GoogleFonts.nunito(
                           fontSize: 14,
                           color: const Color(0xCC3B3B3B),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          sharedPost != ''
+                              ? sharedPost.toString()
+                              : 'Shared post',
+                          style: GoogleFonts.nunito(
+                            fontSize: 14,
+                            color: const Color(0xCC3B3B3B),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -170,9 +177,9 @@ class SubmitRenewFormPage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 4),
+            padding: const EdgeInsets.only(left: 4, right: 4),
             child: Text(
-              'Please select your preferred scholarship disbursement method.',
+              'Please confirm if the provided Official Receipt Form link is correct.',
               style: GoogleFonts.nunito(
                 fontSize: 14,
                 color: const Color(0x803B3B3B),
@@ -191,7 +198,7 @@ class SubmitRenewFormPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Disbursement',
+                  'Official Receipt Form Proof',
                   style: GoogleFonts.nunito(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -212,6 +219,20 @@ class SubmitRenewFormPage extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF6BB577)),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Text(
+                          orfurl,
+                          style: GoogleFonts.nunito(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFFD9D9D9),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 )

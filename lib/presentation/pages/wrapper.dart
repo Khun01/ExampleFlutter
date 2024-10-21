@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
@@ -123,8 +124,7 @@ class _WrapperState extends State<Wrapper> {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));
                 } else if (state is AcceptStudentSuccessSate) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Woww!!! Grape!!!')));
+                  log('The request was accepted successfully');
                 }
               }),
           BlocListener<DeclineStudentBloc, DeclineStudentState>(
@@ -134,8 +134,7 @@ class _WrapperState extends State<Wrapper> {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));
                 } else if (state is DeclineStudentSuccessState) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Woww!!! Grape!!!')));
+                  log('The request was decline successfully');
                 }
               }),
           BlocListener<DutiesBloc, DutiesState>(

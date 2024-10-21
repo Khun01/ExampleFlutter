@@ -19,18 +19,6 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
   FutureOr<void> imagePickerRequestedEvent(
       ImagePickerRequestedEvent event, Emitter<ImagePickerState> emit) async {
     emit(ImagePickerLoading());
-    // bool permissionsGranted = await requestPermissions();
-    // if (!permissionsGranted) {
-    //   if (await Permission.camera.isPermanentlyDenied ||
-    //       await Permission.storage.isPermanentlyDenied) {
-    //     emit(const ImagePickerError(
-    //         error: 'Please enable permissions in settings.'));
-    //     return;
-    //   } else {
-    //     emit(const ImagePickerError(error: 'Permissions not granted'));
-    //     return;
-    //   }
-    // }
     try {
       final XFile? pickedFile =
           await imagePicker.pickImage(source: ImageSource.gallery);
@@ -46,20 +34,8 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
     }
   }
 
-  // Future<bool> requestPermissions() async {
-  //   final statusCamera = await Permission.camera.status;
-  //   final statusStorage = await Permission.storage.status;
-  //   if (statusCamera.isDenied) {
-  //     await Permission.camera.request();
-  //   }
-  //   if (statusStorage.isDenied) {
-  //     await Permission.storage.request();
-  //   }
-  //   return await Permission.camera.isGranted &&
-  //       await Permission.storage.isGranted;
-  // }
-
-  FutureOr<void> imagePickerRemovedRequestedEvent(ImagePickerRemovedRequestedEvent event, Emitter<ImagePickerState> emit) {
+  FutureOr<void> imagePickerRemovedRequestedEvent(
+      ImagePickerRemovedRequestedEvent event, Emitter<ImagePickerState> emit) {
     emit(ImagePickerInitial());
   }
 }
