@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/duty/completed_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/completedDuty/completed_duty_bloc.dart';
 import 'package:help_isko/presentation/cards/confirm_duty_card.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:help_isko/services/employee/duty/duty_services.dart';
 import 'package:intl/intl.dart';
@@ -45,14 +46,21 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
           }
 
           if (state is AddDutyHourSuccessState) {
+            Navigator.pop(context);
             context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
           } else if (state is AddDutyHourFailedState) {
+            Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errorMessage),
               ),
             );
             context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
+          } else if (state is AddDutyHourLoadingState) {
+            showDialog(
+              context: context,
+              builder: (context) => const MyCircularProgressIndicator(),
+            );
           }
         },
         buildWhen: (previous, current) =>
@@ -79,6 +87,11 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                     DateFormat('yyyy-MM-dd').parse(completedDuty.date ?? ''),
                     _selectedDay))
                 .toList();
+            if (dutiesForSelectedDay.isEmpty) {
+              _calendarFormat = CalendarFormat.month;
+            } else {
+              _calendarFormat = CalendarFormat.week;
+            }
             if (dutiesForSelectedDay.isEmpty) {
               body = SliverFillRemaining(
                 hasScrollBody: false,
@@ -113,15 +126,7 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                       ).animate(animation),
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (_) => BlocProvider.value(
-                          //       value: context.read<MessageBloc>(),
-                          //       child: StudentInfoPage(students: students),
-                          //     ),
-                          //   ),
-                          // );
+                          // Add your onTap functionality here
                         },
                         child: ConfirmDutyCard(completedDuty: completedDuty),
                       ),

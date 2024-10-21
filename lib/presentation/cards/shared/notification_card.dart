@@ -48,7 +48,7 @@ class NotificationCard extends StatelessWidget {
                             : title == 'Someone commented about you!'
                                 ? Image.asset(
                                     'assets/images/notif/commented_notif.png')
-                                : title == 'Request Rejected'
+                                : title == 'Request Rejected' || title == 'Duty Cancelled!'
                                     ? Image.asset('assets/images/duty_dialog_images/delete.png')
                                     : null,
           ),

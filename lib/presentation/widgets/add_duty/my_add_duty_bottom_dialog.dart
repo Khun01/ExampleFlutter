@@ -10,6 +10,7 @@ import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_field.dart';
 import 'package:help_isko/presentation/widgets/add_duty/my_add_duty_label.dart';
 import 'package:help_isko/presentation/widgets/my_button.dart';
 import 'package:intl/intl.dart';
+import 'package:ionicons/ionicons.dart';
 
 class MyAddDutyBottomDialog extends StatefulWidget {
   const MyAddDutyBottomDialog({super.key});
@@ -57,307 +58,392 @@ class _MyAddDutyBottomDialogState extends State<MyAddDutyBottomDialog> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Duty Details',
-                style: GoogleFonts.nunito(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF6BB577)),
-              ),
-              const Divider(),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const MyAddDutiesLabel(
-                            icon: Icons.apartment_rounded, label: 'Building'),
-                        MyAddDutyField(
-                            formKey: _formKeyBuilding,
-                            controller: building,
-                            hintText: 'PTC - 305',
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter building';
-                              }
-                              return null;
-                            })
-                      ],
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverLayoutBuilder(
+                  builder: (context, constraints) {
+                    final scrolled = constraints.scrollOffset > 0;
+                    return SliverAppBar(
+                      pinned: true,
+                      automaticallyImplyLeading: false,
+                      collapsedHeight: 70,
+                      flexibleSpace: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        padding: const EdgeInsets.only(left: 16, right: 16),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            boxShadow: scrolled
+                                ? [
+                                    BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        offset: const Offset(0.0, 10.0),
+                                        blurRadius: 10.0,
+                                        spreadRadius: -6.0)
+                                  ]
+                                : []),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: const Color(0x1AA3D9A5),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child:
+                                      const Icon(Ionicons.chevron_back_outline),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              child: Center(
+                                child: Text(
+                                  'Add Duty',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF6BB577),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const MyAddDutiesLabel(
-                            icon: Icons.calendar_month_rounded, label: 'Date'),
-                        GestureDetector(
-                          onTap: () async {
-                            DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2101),
-                            );
-                            if (pickedDate != null) {
-                              setState(() {
-                                selectedDate = pickedDate;
-                                date.text =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-                              });
-                            }
-                          },
-                          child: AbsorbPointer(
-                            child: MyAddDutyField(
-                              formKey: _formKeyDate,
-                              controller: date,
-                              hintText: 'YYYY-MM-DD',
-                              keyboardType: TextInputType.datetime,
+                        const Divider(),
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const MyAddDutiesLabel(
+                                      icon: Icons.apartment_rounded,
+                                      label: 'Building'),
+                                  MyAddDutyField(
+                                      formKey: _formKeyBuilding,
+                                      controller: building,
+                                      hintText: 'PTC - 305',
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter building';
+                                        }
+                                        return null;
+                                      })
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const MyAddDutiesLabel(
+                                      icon: Icons.calendar_month_rounded,
+                                      label: 'Date'),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      DateTime? pickedDate =
+                                          await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime.now(),
+                                        lastDate: DateTime(2101),
+                                      );
+                                      if (pickedDate != null) {
+                                        setState(() {
+                                          selectedDate = pickedDate;
+                                          date.text = DateFormat('yyyy-MM-dd')
+                                              .format(pickedDate);
+                                        });
+                                      }
+                                    },
+                                    child: AbsorbPointer(
+                                      child: MyAddDutyField(
+                                        formKey: _formKeyDate,
+                                        controller: date,
+                                        hintText: 'YYYY-MM-DD',
+                                        keyboardType: TextInputType.datetime,
+                                        validator: (value) {
+                                          String pattern =
+                                              r'^\d{4}-\d{2}-\d{2}$';
+                                          RegExp regExp = RegExp(pattern);
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter date';
+                                          } else if (!regExp.hasMatch(value)) {
+                                            return 'Enter a valid date (YYYY-MM-DD)';
+                                          }
+                                          return null;
+                                        },
+                                        readOnly: true,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const MyAddDutiesLabel(
+                                      icon: Icons.alarm_rounded,
+                                      label: 'Start at'),
+                                  MyAddDutyField(
+                                    formKey: _formKeyStartAt,
+                                    controller: startAt,
+                                    hintText: 'Start Time',
+                                    readOnly: true,
+                                    validator: (value) {
+                                      String pattern =
+                                          r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                                      RegExp regExp = RegExp(pattern);
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a time';
+                                      } else if (!regExp.hasMatch(value)) {
+                                        return 'Enter a valid time in 24-hour format (HH:mm)';
+                                      }
+                                      return null;
+                                    },
+                                    onTap: () async {
+                                      TimeOfDay? selectedTime =
+                                          await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (selectedTime != null) {
+                                        if (selectedDate != null &&
+                                            selectedDate!.isAtSameMomentAs(
+                                                DateTime.now())) {
+                                          final now = DateTime.now();
+                                          final currentTime = TimeOfDay(
+                                              hour: now.hour,
+                                              minute: now.minute);
+                                          if (selectedTime.hour <
+                                                  currentTime.hour ||
+                                              (selectedTime.hour ==
+                                                      currentTime.hour &&
+                                                  selectedTime.minute <
+                                                      currentTime.minute)) {
+                                            log('Selected start time has already passed');
+                                            return;
+                                          }
+                                        }
+                                        setState(() {
+                                          selectedStartTime = selectedTime;
+                                          startAt.text =
+                                              formatTimeOfDay(selectedTime);
+                                        });
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const MyAddDutiesLabel(
+                                      icon: Icons.alarm_rounded,
+                                      label: 'End at'),
+                                  MyAddDutyField(
+                                    formKey: _formKeyEndAt,
+                                    controller: endAt,
+                                    hintText: 'End Time',
+                                    readOnly: true,
+                                    validator: (value) {
+                                      String pattern =
+                                          r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
+                                      RegExp regExp = RegExp(pattern);
+                                      if (value == null || value.isEmpty) {
+                                        return 'Please enter a time';
+                                      } else if (!regExp.hasMatch(value)) {
+                                        return 'Enter a valid time in 24-hour format (HH:mm)';
+                                      }
+                                      return null;
+                                    },
+                                    onTap: () async {
+                                      TimeOfDay? selectedTime =
+                                          await showTimePicker(
+                                        context: context,
+                                        initialTime: TimeOfDay.now(),
+                                      );
+                                      if (selectedTime != null) {
+                                        if (selectedStartTime != null) {
+                                          final startDateTime = DateTime(
+                                              selectedDate!.year,
+                                              selectedDate!.month,
+                                              selectedDate!.day,
+                                              selectedStartTime!.hour,
+                                              selectedStartTime!.minute);
+                                          final endDateTime = DateTime(
+                                              selectedDate!.year,
+                                              selectedDate!.month,
+                                              selectedDate!.day,
+                                              selectedTime.hour,
+                                              selectedTime.minute);
+                                          if (endDateTime
+                                              .isBefore(startDateTime)) {
+                                            log('End time cannot be earlier than start time');
+                                            return;
+                                          }
+                                        }
+                                        setState(() {
+                                          endAt.text =
+                                              formatTimeOfDay(selectedTime);
+                                        });
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  const MyAddDutiesLabel(
+                                      icon: Icons.person_outline_rounded,
+                                      label: 'Students'),
+                                  MyAddDutyField(
+                                      formKey: _formKeyStudent,
+                                      controller: students,
+                                      hintText: 'No. of Students',
+                                      keyboardType: TextInputType.number,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter students';
+                                        }
+                                        return null;
+                                      })
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Container(),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const SizedBox(height: 8),
+                        Container(
+                          height: 250,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Form(
+                            key: _formKeyMessage,
+                            child: TextFormField(
+                              controller: message,
+                              decoration: InputDecoration(
+                                  hintText: 'Description',
+                                  hintStyle: GoogleFonts.nunito(
+                                      fontSize: 14,
+                                      color: const Color(0x803B3B3B)),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  border: InputBorder.none),
+                              maxLines: null,
+                              expands: true,
                               validator: (value) {
-                                String pattern = r'^\d{4}-\d{2}-\d{2}$';
-                                RegExp regExp = RegExp(pattern);
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter date';
-                                } else if (!regExp.hasMatch(value)) {
-                                  return 'Enter a valid date (YYYY-MM-DD)';
+                                  return 'Please enter message';
                                 }
                                 return null;
                               },
-                              readOnly: true,
                             ),
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        const Divider(),
                       ],
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const MyAddDutiesLabel(
-                            icon: Icons.alarm_rounded, label: 'Start at'),
-                        MyAddDutyField(
-                          formKey: _formKeyStartAt,
-                          controller: startAt,
-                          hintText: 'Start Time',
-                          readOnly: true,
-                          validator: (value) {
-                            String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                            RegExp regExp = RegExp(pattern);
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a time';
-                            } else if (!regExp.hasMatch(value)) {
-                              return 'Enter a valid time in 24-hour format (HH:mm)';
-                            }
-                            return null;
-                          },
-                          onTap: () async {
-                            TimeOfDay? selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
-                            if (selectedTime != null) {
-                              if (selectedDate != null &&
-                                  selectedDate!
-                                      .isAtSameMomentAs(DateTime.now())) {
-                                final now = DateTime.now();
-                                final currentTime = TimeOfDay(
-                                    hour: now.hour, minute: now.minute);
-                                if (selectedTime.hour < currentTime.hour ||
-                                    (selectedTime.hour == currentTime.hour &&
-                                        selectedTime.minute <
-                                            currentTime.minute)) {
-                                  log('Selected start time has already passed');
-                                  return;
-                                }
-                              }
-                              setState(() {
-                                selectedStartTime = selectedTime;
-                                startAt.text = formatTimeOfDay(selectedTime);
-                              });
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const MyAddDutiesLabel(
-                            icon: Icons.alarm_rounded, label: 'End at'),
-                        MyAddDutyField(
-                          formKey: _formKeyEndAt,
-                          controller: endAt,
-                          hintText: 'End Time',
-                          readOnly: true,
-                          validator: (value) {
-                            String pattern = r'^([01][0-9]|2[0-3]):[0-5][0-9]$';
-                            RegExp regExp = RegExp(pattern);
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a time';
-                            } else if (!regExp.hasMatch(value)) {
-                              return 'Enter a valid time in 24-hour format (HH:mm)';
-                            }
-                            return null;
-                          },
-                          onTap: () async {
-                            TimeOfDay? selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.now(),
-                            );
-                            if (selectedTime != null) {
-                              if (selectedStartTime != null) {
-                                final startDateTime = DateTime(
-                                    selectedDate!.year,
-                                    selectedDate!.month,
-                                    selectedDate!.day,
-                                    selectedStartTime!.hour,
-                                    selectedStartTime!.minute);
-                                final endDateTime = DateTime(
-                                    selectedDate!.year,
-                                    selectedDate!.month,
-                                    selectedDate!.day,
-                                    selectedTime.hour,
-                                    selectedTime.minute);
-                                if (endDateTime.isBefore(startDateTime)) {
-                                  log('End time cannot be earlier than start time');
-                                  return;
-                                }
-                              }
-                              setState(() {
-                                endAt.text = formatTimeOfDay(selectedTime);
-                              });
-                            }
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const MyAddDutiesLabel(
-                            icon: Icons.person_outline_rounded,
-                            label: 'Students'),
-                        MyAddDutyField(
-                            formKey: _formKeyStudent,
-                            controller: students,
-                            hintText: 'No. of Students',
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter students';
-                              }
-                              return null;
-                            })
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Divider(),
-              const SizedBox(height: 8),
-              Container(
-                height: 250,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Form(
-                  key: _formKeyMessage,
-                  child: TextFormField(
-                    controller: message,
-                    decoration: InputDecoration(
-                        hintText: 'Description',
-                        hintStyle: GoogleFonts.nunito(
-                            fontSize: 14, color: const Color(0x803B3B3B)),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 8),
-                        border: InputBorder.none),
-                    maxLines: null,
-                    expands: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter message';
-                      }
-                      return null;
-                    },
                   ),
                 ),
+              ],
+            ),
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: MyButton(
+                onTap: () {
+                  final validatedDate = _formKeyDate.currentState!.validate();
+                  final validatedStartAt =
+                      _formKeyStartAt.currentState!.validate();
+                  final validatedEndAt = _formKeyEndAt.currentState!.validate();
+                  final validatedBuilding =
+                      _formKeyBuilding.currentState!.validate();
+                  final validatedStudents =
+                      _formKeyStudent.currentState!.validate();
+                  final validatedMessage =
+                      _formKeyMessage.currentState!.validate();
+                  if (validatedDate &&
+                      validatedStartAt &&
+                      validatedEndAt &&
+                      validatedBuilding &&
+                      validatedStudents &&
+                      validatedMessage) {
+                    context.read<AddDutyBloc>().add(
+                          AddDutySubmitButtonClicked(
+                            building.text,
+                            date.text,
+                            startAt.text,
+                            endAt.text,
+                            students.text,
+                            message.text,
+                            profDuty: const [],
+                            postedDutiesBloc: context.read<PostedDutiesBloc>(),
+                            recentActivitiesBloc:
+                                context.read<RecentActivitiesBloc>(),
+                          ),
+                        );
+                    Navigator.pop(context);
+                  }
+                },
+                buttonText: 'Submit',
               ),
-              const SizedBox(height: 8),
-              const Divider(),
-              MyButton(
-                  onTap: () {
-                    final validatedDate = _formKeyDate.currentState!.validate();
-                    final validatedStartAt =
-                        _formKeyStartAt.currentState!.validate();
-                    final validatedEndAt =
-                        _formKeyEndAt.currentState!.validate();
-                    final validatedBuilding =
-                        _formKeyBuilding.currentState!.validate();
-                    final validatedStudents =
-                        _formKeyStudent.currentState!.validate();
-                    final validatedMessage =
-                        _formKeyMessage.currentState!.validate();
-                    if (validatedDate &&
-                        validatedStartAt &&
-                        validatedEndAt &&
-                        validatedBuilding &&
-                        validatedStudents &&
-                        validatedMessage) {
-                      context.read<AddDutyBloc>().add(
-                            AddDutySubmitButtonClicked(
-                              building.text,
-                              date.text,
-                              startAt.text,
-                              endAt.text,
-                              students.text,
-                              message.text,
-                              profDuty: const [],
-                              postedDutiesBloc:
-                                  context.read<PostedDutiesBloc>(),
-                              recentActivitiesBloc:
-                                  context.read<RecentActivitiesBloc>(),
-                            ),
-                          );
-                      Navigator.pop(context);
-                    }
-                  },
-                  buttonText: 'Submit')
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

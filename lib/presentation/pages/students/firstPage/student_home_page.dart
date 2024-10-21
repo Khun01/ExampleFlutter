@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:animate_do/animate_do.dart';
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -109,20 +107,17 @@ class StudentHomePage extends StatelessWidget {
                                                   .announcement[actualIndex]);
                                         });
                                   },
-                                  child: FadeInRight(
-                                    duration: const Duration(milliseconds: 700),
-                                    child: AnnouncementCard(
-                                        heading: state
-                                            .announcement[actualIndex].heading,
-                                        description: state
-                                            .announcement[actualIndex]
-                                            .description,
-                                        announcementImg: state
-                                            .announcement[actualIndex]
-                                            .announcementImg,
-                                        time: state.announcement[actualIndex]
-                                            .formattedTime),
-                                  ),
+                                  child: AnnouncementCard(
+                                      heading: state
+                                          .announcement[actualIndex].heading,
+                                      description: state
+                                          .announcement[actualIndex]
+                                          .description,
+                                      announcementImg: state
+                                          .announcement[actualIndex]
+                                          .announcementImg,
+                                      time: state.announcement[actualIndex]
+                                          .formattedTime),
                                 );
                               },
                             ),
@@ -260,35 +255,32 @@ class StudentHomePage extends StatelessWidget {
                               itemCount: state.requestedDuties.length,
                               itemBuilder: (context, index) {
                                 final request = state.requestedDuties[index];
-                                return FadeInRight(
-                                  duration: const Duration(milliseconds: 700),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => BlocProvider.value(
-                                            value: context
-                                                .read<RequestedDutiesBloc>(),
-                                            child: RequestedForDutiesInfoPage(
-                                              title: 'requested',
-                                              requestedDuties: request,
-                                            ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => BlocProvider.value(
+                                          value: context
+                                              .read<RequestedDutiesBloc>(),
+                                          child: RequestedForDutiesInfoPage(
+                                            title: 'requested',
+                                            requestedDuties: request,
                                           ),
                                         ),
-                                      );
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(top: 8),
-                                      child: PostedDutiesHome(
-                                        id: request.id,
-                                        profile: request.employeeProfile ?? '',
-                                        date: request.date,
-                                        building: request.employeeName,
-                                        message: request.message,
-                                        requestStatus: request.requestStatus,
-                                        dutyStatus: request.dutyStatus,
                                       ),
+                                    );
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 8),
+                                    child: PostedDutiesHome(
+                                      id: request.id,
+                                      profile: request.employeeProfile ?? '',
+                                      date: request.date,
+                                      building: request.employeeName,
+                                      message: request.message,
+                                      requestStatus: request.requestStatus,
+                                      dutyStatus: request.dutyStatus,
                                     ),
                                   ),
                                 );
@@ -336,11 +328,8 @@ class StudentHomePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B),
                         ),
-                        child: FadeInLeft(
-                          duration: const Duration(milliseconds: 700),
-                          child: const Text(
-                            'Recent Activities',
-                          ),
+                        child: const Text(
+                          'Recent Activities',
                         ),
                       ),
                     ),

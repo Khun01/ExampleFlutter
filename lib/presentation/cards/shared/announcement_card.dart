@@ -56,16 +56,19 @@ class AnnouncementCard extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     children: [
-                      Text(
-                        heading,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.nunito(
+                      Expanded(
+                        child: Text(
+                          heading,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.nunito(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFF3B3B3B)),
+                            color: const Color(0xFF3B3B3B),
+                          ),
+                        ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 4),
                       Text(
                         time,
                         style: GoogleFonts.nunito(

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -175,71 +176,91 @@ class _WrapperState extends State<Wrapper> {
                               body: SafeArea(
                                 child: Stack(
                                   children: [
-                                    IndexedStack(
-                                      index: selectedIndex,
-                                      children: widget.role == 'Employee'
-                                          ? [
-                                              MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                      value: postedDutiesBloc),
-                                                  BlocProvider.value(
-                                                      value: announcementBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          recentActivitiesBloc)
-                                                ],
-                                                child: const EmployeeHomePage(),
-                                              ),
-                                              MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                      value: acceptStudentBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          declineStudentBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          requestForDutiesBloc),
-                                                ],
-                                                child:
-                                                    const EmployeeDutiesPage(),
-                                              ),
-                                              const MessengerPage(
-                                                  role: 'Employee'),
-                                              const EmployeeProfilePage(),
-                                            ]
-                                          : [
-                                              MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                      value: announcementBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          requestedDutiesBloc),
-                                                  BlocProvider.value(
-                                                      value: dutiesBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          recentActivitiesBloc)
-                                                ],
-                                                child: const StudentHomePage(),
-                                              ),
-                                              MultiBlocProvider(
-                                                providers: [
-                                                  BlocProvider.value(
-                                                      value: dutiesBloc),
-                                                  BlocProvider.value(
-                                                      value:
-                                                          requestedDutiesBloc)
-                                                ],
-                                                child:
-                                                    const StudentDutiesPage(),
-                                              ),
-                                              const MessengerPage(
-                                                  role: 'Student'),
-                                              const StudentProfilePage(),
-                                            ],
+                                    PageTransitionSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 900),
+                                      transitionBuilder: (child, animation,
+                                          secondaryAnimation) {
+                                        return FadeThroughTransition(
+                                          animation: animation,
+                                          secondaryAnimation:
+                                              secondaryAnimation,
+                                          child: child,
+                                        );
+                                      },
+                                      child: IndexedStack(
+                                        key: ValueKey<int>(selectedIndex),
+                                        index: selectedIndex,
+                                        children: widget.role == 'Employee'
+                                            ? [
+                                                MultiBlocProvider(
+                                                  providers: [
+                                                    BlocProvider.value(
+                                                        value:
+                                                            postedDutiesBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            announcementBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            recentActivitiesBloc)
+                                                  ],
+                                                  child:
+                                                      const EmployeeHomePage(),
+                                                ),
+                                                MultiBlocProvider(
+                                                  providers: [
+                                                    BlocProvider.value(
+                                                        value:
+                                                            acceptStudentBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            declineStudentBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            requestForDutiesBloc),
+                                                  ],
+                                                  child:
+                                                      const EmployeeDutiesPage(),
+                                                ),
+                                                const MessengerPage(
+                                                    role: 'Employee'),
+                                                const EmployeeProfilePage(),
+                                              ]
+                                            : [
+                                                MultiBlocProvider(
+                                                  providers: [
+                                                    BlocProvider.value(
+                                                        value:
+                                                            announcementBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            requestedDutiesBloc),
+                                                    BlocProvider.value(
+                                                        value: dutiesBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            recentActivitiesBloc)
+                                                  ],
+                                                  child:
+                                                      const StudentHomePage(),
+                                                ),
+                                                MultiBlocProvider(
+                                                  providers: [
+                                                    BlocProvider.value(
+                                                        value: dutiesBloc),
+                                                    BlocProvider.value(
+                                                        value:
+                                                            requestedDutiesBloc)
+                                                  ],
+                                                  child:
+                                                      const StudentDutiesPage(),
+                                                ),
+                                                const MessengerPage(
+                                                    role: 'Student'),
+                                                const StudentProfilePage(),
+                                              ],
+                                      ),
                                     ),
                                     Positioned(
                                       left: 0,
@@ -303,31 +324,6 @@ class _WrapperState extends State<Wrapper> {
                                                   ),
                                                 ),
                                                 label: 'Message',
-                                                // icon: BlocBuilder<MessageBloc,
-                                                //     MessageState>(
-                                                //   builder: (context, state) {
-                                                //     int unreadMessagesCount = 0;
-                                                //     if (state
-                                                //         is MessageExisitingChatsFetchSuccessState) {
-                                                // unreadMessagesCount =
-                                                //     state.existingChats
-                                                //         .fold(
-                                                //   0,
-                                                //   (sum, chat) =>
-                                                //       sum +
-                                                //       (chat.unreadMessagesCount ??
-                                                //           0),
-                                                // );
-                                                //     }
-                                                //     return MyMesssageIcon(
-                                                //       selectedIndex:
-                                                //           selectedIndex,
-                                                //       unreadCount:
-                                                //           unreadMessagesCount,
-                                                //     );
-                                                //   },
-                                                // ),
-                                                // label: 'Message',
                                               ),
                                               BottomNavigationBarItem(
                                                 label: 'Profile',
@@ -353,72 +349,61 @@ class _WrapperState extends State<Wrapper> {
                                       Positioned(
                                         bottom: 86,
                                         right: 16,
-                                        child: FadeInRight(
-                                          duration:
-                                              const Duration(milliseconds: 700),
-                                          child: Container(
-                                            height: 60,
-                                            width: 60,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              color: const Color(0xFF6BB577),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.1),
-                                                  spreadRadius: 1,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 6),
-                                                ),
+                                        child: OpenContainer(
+                                          transitionType:
+                                              ContainerTransitionType
+                                                  .fadeThrough,
+                                          transitionDuration:
+                                              const Duration(milliseconds: 300),
+                                          openBuilder: (context, action) {
+                                            return MultiBlocProvider(
+                                              providers: [
+                                                BlocProvider.value(
+                                                    value: addDutyBloc),
+                                                BlocProvider.value(
+                                                    value: postedDutiesBloc),
+                                                BlocProvider.value(
+                                                    value: recentActivitiesBloc)
                                               ],
-                                            ),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.vertical(
-                                                            top:
-                                                                Radius.circular(
-                                                                    20)),
-                                                  ),
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return SizedBox(
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.81,
-                                                      child: MultiBlocProvider(
-                                                        providers: [
-                                                          BlocProvider.value(
-                                                              value:
-                                                                  addDutyBloc),
-                                                          BlocProvider.value(
-                                                              value:
-                                                                  postedDutiesBloc),
-                                                          BlocProvider.value(
-                                                              value:
-                                                                  recentActivitiesBloc)
-                                                        ],
-                                                        child:
-                                                            const MyAddDutyBottomDialog(),
-                                                      ),
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.add_rounded,
-                                                size: 40,
-                                                color: Color(0xFFFCFCFC),
-                                              ),
-                                            ),
+                                              child:
+                                                  const MyAddDutyBottomDialog(),
+                                            );
+                                          },
+                                          closedShape:
+                                              const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50)),
                                           ),
+                                          closedColor: const Color(0xFF6BB577),
+                                          closedElevation: 6.0,
+                                          closedBuilder: (context, action) {
+                                            return Container(
+                                              height: 60,
+                                              width: 60,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: const Color(0xFF6BB577),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 5,
+                                                    offset: const Offset(0, 6),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: IconButton(
+                                                onPressed: action,
+                                                icon: const Icon(
+                                                  Icons.add_rounded,
+                                                  size: 40,
+                                                  color: Color(0xFFFCFCFC),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                     if (addDutyState is AddDutyLoadingState ||

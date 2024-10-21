@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -22,7 +23,7 @@ class CompletedDutyBloc extends Bloc<CompletedDutyEvent, CompletedDutyState> {
     try {
       final comepletedDuty = await dutyRepository.fetchCompletedDutyByStudent();
       emit(CompletedDutySuccessState(completedDuty: comepletedDuty));
-      print('nag emit na');
+      log('nag emit na');
     } catch (e) {
       emit(CompletedDutyFailedState(error: e.toString()));
     }
@@ -30,7 +31,7 @@ class CompletedDutyBloc extends Bloc<CompletedDutyEvent, CompletedDutyState> {
 
   FutureOr<void> dutyAddHoursStudent(
       DutyAddHoursStudent event, Emitter<CompletedDutyState> emit) async {
-    emit(CompletedDutyLoadingState());
+    emit(AddDutyHourLoadingState());
     try {
       final res = await dutyRepository.addHourStudent(
           hour: event.hour,

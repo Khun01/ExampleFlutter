@@ -37,6 +37,10 @@ class _HkStudentListPageState extends State<HkStudentListPage> {
           log("the error in fetching students is: ${state.error}");
         }
       },
+      buildWhen: (previous, current) =>
+          (current is ShowHkStudentsLoadingState &&
+              previous is ShowHkStudentsInitial) ||
+          current is ShowHkStudentsSuccessState,
       builder: (context, state) {
         Widget body;
         if (state is ShowHkStudentsLoadingState) {

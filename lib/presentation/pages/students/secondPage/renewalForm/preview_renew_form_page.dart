@@ -223,7 +223,7 @@ class PreviewRenewFormPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Disbursement',
+                      'Official Receipt Form Proof',
                       style: GoogleFonts.nunito(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

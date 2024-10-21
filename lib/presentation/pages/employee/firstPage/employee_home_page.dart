@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:animate_do/animate_do.dart';
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,15 +37,12 @@ class EmployeeHomePage extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, top: 24),
-                child: FadeInLeft(
-                  duration: const Duration(milliseconds: 700),
-                  child: Text(
-                    'Announcement',
-                    style: GoogleFonts.nunito(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF3B3B3B),
-                    ),
+                child: Text(
+                  'Announcement',
+                  style: GoogleFonts.nunito(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF3B3B3B),
                   ),
                 ),
               ),
@@ -102,20 +98,17 @@ class EmployeeHomePage extends StatelessWidget {
                                                   .announcement[actualIndex]);
                                         });
                                   },
-                                  child: FadeInRight(
-                                    duration: const Duration(milliseconds: 700),
-                                    child: AnnouncementCard(
-                                        heading: state
-                                            .announcement[actualIndex].heading,
-                                        description: state
-                                            .announcement[actualIndex]
-                                            .description,
-                                        announcementImg: state
-                                            .announcement[actualIndex]
-                                            .announcementImg,
-                                        time: state.announcement[actualIndex]
-                                            .formattedTime),
-                                  ),
+                                  child: AnnouncementCard(
+                                      heading: state
+                                          .announcement[actualIndex].heading,
+                                      description: state
+                                          .announcement[actualIndex]
+                                          .description,
+                                      announcementImg: state
+                                          .announcement[actualIndex]
+                                          .announcementImg,
+                                      time: state.announcement[actualIndex]
+                                          .formattedTime),
                                 );
                               },
                             ),
@@ -172,15 +165,12 @@ class EmployeeHomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 8),
                 child: Row(
                   children: [
-                    FadeInLeft(
-                      duration: const Duration(milliseconds: 700),
-                      child: Text(
-                        'Posted Duties',
-                        style: GoogleFonts.nunito(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF3B3B3B),
-                        ),
+                    Text(
+                      'Posted Duties',
+                      style: GoogleFonts.nunito(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0xFF3B3B3B),
                       ),
                     ),
                     const Spacer(),
@@ -196,14 +186,11 @@ class EmployeeHomePage extends StatelessWidget {
                           ),
                         );
                       },
-                      child: FadeInRight(
-                        duration: const Duration(milliseconds: 700),
-                        child: Text(
-                          'See all',
-                          style: GoogleFonts.nunito(
-                            fontSize: 14,
-                            color: const Color(0xCC6BB577),
-                          ),
+                      child: Text(
+                        'See all',
+                        style: GoogleFonts.nunito(
+                          fontSize: 14,
+                          color: const Color(0xCC6BB577),
                         ),
                       ),
                     ),
@@ -265,27 +252,24 @@ class EmployeeHomePage extends StatelessWidget {
                         itemCount: reversedList.length,
                         itemBuilder: (context, index) {
                           final duty = reversedList[index];
-                          return FadeInRight(
-                            duration: const Duration(seconds: 1),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider.value(
-                                      value: context.read<MessageBloc>(),
-                                      child: PostedDutyInfoPage(profDuty: duty),
-                                    ),
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                    value: context.read<MessageBloc>(),
+                                    child: PostedDutyInfoPage(profDuty: duty),
                                   ),
-                                );
-                              },
-                              child: PostedDutiesHome(
-                                date: duty.date!,
-                                building: duty.building!,
-                                message: duty.message!,
-                                dutyStatus: duty.dutyStatus!,
-                                profile: duty.profProfile,
-                              ),
+                                ),
+                              );
+                            },
+                            child: PostedDutiesHome(
+                              date: duty.date!,
+                              building: duty.building!,
+                              message: duty.message!,
+                              dutyStatus: duty.dutyStatus!,
+                              profile: duty.profProfile,
                             ),
                           );
                         },
@@ -355,11 +339,8 @@ class EmployeeHomePage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           color: const Color(0xFF3B3B3B),
                         ),
-                        child: FadeInLeft(
-                          duration: const Duration(milliseconds: 700),
-                          child: const Text(
-                            'Recent Activities',
-                          ),
+                        child: const Text(
+                          'Recent Activities',
                         ),
                       ),
                     ),
