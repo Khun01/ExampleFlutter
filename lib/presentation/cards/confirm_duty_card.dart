@@ -28,30 +28,12 @@ class ConfirmDutyCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              const CircleAvatar(
-                radius: 10,
-                backgroundColor: Color(0xFF6BB577),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                height: 120,
-                width: 6,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFF6BB577)),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(width: 16),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: const Color(0xFFFCFCFC),
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
                 border: Border.all(color: const Color(0xFFD9D9D9)),
                 boxShadow: [
                   BoxShadow(
@@ -100,15 +82,19 @@ class ConfirmDutyCard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Text(
-                                  completedDuty.student!.name ?? '',
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: const Color(0xFF3B3B3B),
+                                Expanded(
+                                  child: Text(
+                                    completedDuty.student!.name ?? '',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.nunito(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
                                   ),
                                 ),
-                                const Spacer(),
+                                const SizedBox(width: 8),
                                 const Icon(
                                   Ionicons.chatbubble_ellipses_outline,
                                   size: 20,

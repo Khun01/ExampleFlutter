@@ -89,7 +89,7 @@ class _MyDutyHoursState extends State<MyDutyHours>
                     backgroundColor: const Color(0xFFD9D9D9),
                     barRadius: const Radius.circular(20),
                     center: Text(
-                      '${(animation.value * 100).toStringAsFixed(1)}%',
+                      '${(animation.value * 100).toStringAsFixed(2)}%',
                       style: GoogleFonts.nunito(
                         fontSize: 8,
                         fontWeight: FontWeight.bold,
