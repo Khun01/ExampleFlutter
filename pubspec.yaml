@@ -47,7 +47,7 @@ dependencies:
   animate_do: ^3.3.4
   uicons: ^1.0.1
   pusher_client:
-    path: C:/Users/user/Desktop/FlutterProjects/pusher_client
+    path: /Applications/BJFolder/Help_Isko_Projects/pusher_client
   intl: ^0.18.0
   auto_animated: ^3.2.0
   percent_indicator: ^4.2.3
