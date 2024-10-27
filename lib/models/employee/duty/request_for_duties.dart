@@ -1,4 +1,4 @@
-import 'package:help_isko/models/duty/students.dart';
+import 'package:help_isko/models/employee/duty/students.dart';
 
 class RequestForDuties {
   final int dutyId;

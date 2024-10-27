@@ -90,8 +90,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                             transitionType: ContainerTransitionType.fadeThrough,
                             transitionDuration:
                                 const Duration(milliseconds: 300),
-                            openBuilder: (context, action) {
-                              return const ConfirmDutyPage();
+                            openBuilder: (_, action) {
+                              return BlocProvider.value(
+                                value: context.read<MessageBloc>(),
+                                child: const ConfirmDutyPage(),
+                              );
                             },
                             closedColor:
                                 Theme.of(context).scaffoldBackgroundColor,

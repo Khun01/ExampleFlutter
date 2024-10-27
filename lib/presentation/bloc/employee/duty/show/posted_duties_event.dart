@@ -14,3 +14,5 @@ class RefetchDuty extends PostedDutiesEvent{
 
   const RefetchDuty({required this.profDuty});
 }
+
+class FetchCompletedDuty extends PostedDutiesEvent{}

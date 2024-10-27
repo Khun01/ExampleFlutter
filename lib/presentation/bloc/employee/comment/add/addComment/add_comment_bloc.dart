@@ -4,7 +4,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/data/comment.dart';
+import 'package:help_isko/models/employee/comment.dart';
 import 'package:help_isko/presentation/bloc/employee/comment/fetch/fetchComment/fetch_comment_bloc.dart';
 import 'package:help_isko/repositories/employee/comment_repository.dart';
 

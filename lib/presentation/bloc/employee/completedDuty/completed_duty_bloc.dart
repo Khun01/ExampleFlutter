@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/duty/completed_duty.dart';
+import 'package:help_isko/models/employee/duty/completed_duty.dart';
 import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
 
 part 'completed_duty_event.dart';

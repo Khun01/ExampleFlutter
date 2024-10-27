@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/data/announcement.dart';
+import 'package:help_isko/models/shared/announcement.dart';
 
 class MyAnnouncemetDialog extends StatelessWidget {
   final Announcement announcement;

@@ -104,7 +104,8 @@ class _WrapperState extends State<Wrapper> {
               bloc: addDutyBloc,
               listenWhen: (previous, current) =>
                   current is AddDutySuccessState ||
-                  current is AddDutyLoadingState,
+                  current is AddDutyLoadingState ||
+                  current is AddDutyFailedState,
               listener: (context, state) {
                 if (state is AddDutySuccessState) {
                   showDialog(
@@ -114,6 +115,7 @@ class _WrapperState extends State<Wrapper> {
                   );
                   context.read<PostedDutiesBloc>().add(FetchDuty());
                 } else if (state is AddDutyFailedState) {
+                  Navigator.pop(context);
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(state.error)));
                 }
@@ -151,6 +153,12 @@ class _WrapperState extends State<Wrapper> {
                 );
               } else if (state is RequestedDutiesCancelSuccessState) {
                 Navigator.pop(context);
+                context
+                    .read<RecentActivitiesBloc>()
+                    .add(FetchRecentActivitiesEvent(role: widget.role));
+              } else if (state is RequestedDutiesCancelFailedState) {
+                Navigator.pop(context);
+                log(state.errorMessage);
               }
             },
           )

@@ -1,4 +1,4 @@
-import 'package:help_isko/models/duty/request_for_duties.dart';
+import 'package:help_isko/models/employee/duty/request_for_duties.dart';
 
 abstract class RequestForDutyRepository {
   Future<List<RequestForDuties>> fetchRequestForDuties();

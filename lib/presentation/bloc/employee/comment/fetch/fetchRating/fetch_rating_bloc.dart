@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/data/rating.dart';
+import 'package:help_isko/models/employee/rating.dart';
 import 'package:help_isko/repositories/employee/comment_repository.dart';
 
 part 'fetch_rating_event.dart';

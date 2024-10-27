@@ -1,4 +1,4 @@
-import 'package:help_isko/models/duty/prof_duty.dart';
+import 'package:help_isko/models/employee/duty/prof_duty.dart';
 
 class RecentActivities {
   final String title;

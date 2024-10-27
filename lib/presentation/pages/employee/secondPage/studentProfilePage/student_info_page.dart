@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/duty/students.dart';
+import 'package:help_isko/models/employee/duty/students.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/about_student.dart';
 import 'package:help_isko/presentation/pages/employee/secondPage/studentProfilePage/reviews_student.dart';
 import 'package:ionicons/ionicons.dart';

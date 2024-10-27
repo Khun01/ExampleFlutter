@@ -27,8 +27,8 @@ class RequestedDutiesCancelLoadingState extends RequestedDutiesState {}
 
 class RequestedDutiesCancelSuccessState extends RequestedDutiesState {}
 
-// class RequestedDutiesCancelFailedState extends RequestedDutiesState {
-//   final String errorMessage;
+class RequestedDutiesCancelFailedState extends RequestedDutiesState {
+  final String errorMessage;
 
-//   const RequestedDutiesCancelFailedState({required this.errorMessage});
-// }
+  const RequestedDutiesCancelFailedState({required this.errorMessage});
+}

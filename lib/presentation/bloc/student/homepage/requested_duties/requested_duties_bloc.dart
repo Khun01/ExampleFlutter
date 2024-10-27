@@ -43,7 +43,7 @@ class RequestedDutiesBloc
         add(RequestedDutiesFetch());
       }
     } catch (e) {
-      emit(RequestedDutiesFetchFailedState(errorMessage: '$e'));
+      emit(RequestedDutiesCancelFailedState(errorMessage: '$e'));
     }
   }
 }

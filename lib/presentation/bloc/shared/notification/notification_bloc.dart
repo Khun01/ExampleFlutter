@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/data/notification.dart';
+import 'package:help_isko/models/shared/notification.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 
 part 'notification_event.dart';

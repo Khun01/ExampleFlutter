@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:help_isko/models/data/comment.dart';
-import 'package:help_isko/models/data/rating.dart';
+import 'package:help_isko/models/employee/comment.dart';
+import 'package:help_isko/models/employee/rating.dart';
 import 'package:help_isko/repositories/employee/comment_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:http/http.dart' as http;

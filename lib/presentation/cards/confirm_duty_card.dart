@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/duty/completed_duty.dart';
+import 'package:help_isko/models/employee/duty/completed_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/completedDuty/completed_duty_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/repositories/global.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -95,9 +96,28 @@ class ConfirmDutyCard extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                const Icon(
-                                  Ionicons.chatbubble_ellipses_outline,
-                                  size: 20,
+                                GestureDetector(
+                                  onTap: () {
+                                    context.read<MessageBloc>().add(
+                                          MessageNavigateToChatEvent(
+                                              schoolId: completedDuty
+                                                      .student!.studentNumber ??
+                                                  '',
+                                              role: 'Employee',
+                                              targetUserId: completedDuty
+                                                  .student!.studentId,
+                                              name:
+                                                  completedDuty.student!.name ??
+                                                      '',
+                                              profile: completedDuty
+                                                      .student!.profile ??
+                                                  ''),
+                                        );
+                                  },
+                                  child: const Icon(
+                                    Ionicons.chatbubble_ellipses_outline,
+                                    size: 20,
+                                  ),
                                 ),
                               ],
                             ),
@@ -128,10 +148,9 @@ class ConfirmDutyCard extends StatelessWidget {
                           child: Text(
                             'You already submitted this.',
                             style: GoogleFonts.nunito(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF3B3B3B)
-                            ),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF3B3B3B)),
                           ),
                         )
                       : Form(
@@ -252,7 +271,7 @@ class ConfirmDutyCard extends StatelessWidget {
                                   onChanged: (value) {
                                     log('The token in the textField is; $value');
                                     if (value.length == 1) {
-                                      FocusScope.of(context).nextFocus();
+                                      FocusScope.of(context).unfocus();
                                     }
                                   },
                                   keyboardType: TextInputType.number,

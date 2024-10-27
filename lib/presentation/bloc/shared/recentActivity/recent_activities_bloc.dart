@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:help_isko/models/data/recent_activities.dart';
+import 'package:help_isko/models/shared/recent_activities.dart';
 import 'package:help_isko/repositories/api_repositories.dart';
 
 part 'recent_activities_event.dart';

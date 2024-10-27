@@ -280,14 +280,15 @@ class StudentProfilePage extends StatelessWidget {
                                     Text(
                                       'College',
                                       style: GoogleFonts.nunito(
-                                          fontSize: 14,
+                                          fontSize: 12,
                                           fontWeight: FontWeight.bold,
-                                          color: const Color(0xFF3B3B3B)),
+                                          color: const Color(0x803B3B3B)),
                                     ),
                                     Text(
                                       state.college ?? 'N/A',
                                       style: GoogleFonts.nunito(
-                                          fontSize: 12,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
                                           color: const Color(0xFF3B3B3B)),
                                     ),
                                   ],

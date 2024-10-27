@@ -24,7 +24,7 @@ class RecentActivityCard extends StatelessWidget {
             backgroundColor: const Color(0xFFA3D9A5),
             child: title == 'Created' || title == 'Requested'
                 ? Image.asset('assets/images/duty_dialog_images/checked.png')
-                : title == 'Deleted' || title == 'Rejected'
+                : title == 'Deleted' || title == 'Rejected' || title == 'Cancelled'
                     ? Image.asset('assets/images/duty_dialog_images/delete.png')
                     : title == 'Updated'
                         ? Image.asset(
@@ -37,27 +37,36 @@ class RecentActivityCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      description,
-                      style: GoogleFonts.nunito(
+                    Expanded(
+                      child: Text(
+                        description,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.nunito(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF3B3B3B)),
+                          color: const Color(0xFF3B3B3B),
+                        ),
+                      ),
                     ),
-                    const Spacer(),
+                    const SizedBox(width: 8),
                     Text(
                       date,
+                      maxLines: 1,
                       style: GoogleFonts.nunito(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0x803B3B3B)),
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: const Color(0x803B3B3B),
+                      ),
                     )
                   ],
                 ),
                 Text(
                   message,
                   style: GoogleFonts.nunito(
-                      fontSize: 12, color: const Color(0x803B3B3B)),
+                    fontSize: 12,
+                    color: const Color(0x803B3B3B),
+                  ),
                 )
               ],
             ),

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:help_isko/models/data/announcement.dart';
-import 'package:help_isko/models/data/notification.dart';
-import 'package:help_isko/models/data/recent_activities.dart';
-import 'package:help_isko/models/duty/students.dart';
+import 'package:help_isko/models/shared/announcement.dart';
+import 'package:help_isko/models/shared/notification.dart';
+import 'package:help_isko/models/shared/recent_activities.dart';
+import 'package:help_isko/models/employee/duty/students.dart';
 import 'package:help_isko/repositories/pusher_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:help_isko/repositories/global.dart';

@@ -3,7 +3,7 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:help_isko/models/duty/completed_duty.dart';
+import 'package:help_isko/models/employee/duty/completed_duty.dart';
 import 'package:help_isko/presentation/bloc/employee/completedDuty/completed_duty_bloc.dart';
 import 'package:help_isko/presentation/cards/confirm_duty_card.dart';
 import 'package:help_isko/presentation/widgets/loading_indicator/my_circular_progress_indicator.dart';
@@ -47,6 +47,7 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
 
           if (state is AddDutyHourSuccessState) {
             Navigator.pop(context);
+            FocusScope.of(context).unfocus();
             context.read<CompletedDutyBloc>().add(DutyCompletedFetch());
           } else if (state is AddDutyHourFailedState) {
             Navigator.pop(context);
@@ -124,12 +125,7 @@ class _ConfirmDutyState extends State<ConfirmDutyPage> {
                         begin: const Offset(0, -0.1),
                         end: Offset.zero,
                       ).animate(animation),
-                      child: GestureDetector(
-                        onTap: () {
-                          // Add your onTap functionality here
-                        },
-                        child: ConfirmDutyCard(completedDuty: completedDuty),
-                      ),
+                      child: ConfirmDutyCard(completedDuty: completedDuty),
                     ),
                   );
                 },

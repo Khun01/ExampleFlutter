@@ -345,6 +345,10 @@ class StudentHomePage extends StatelessWidget {
                   log('The error in recent activity is: ${state.error}');
                 }
               },
+              buildWhen: (previous, current) =>
+                  (current is RecentActivitiesLoadingState &&
+                      previous is RecentActivitiesInitial) ||
+                  current is RecentActivitiesSuccessState,
               builder: (context, state) {
                 if (state is RecentActivitiesLoadingState) {
                   return SliverList(

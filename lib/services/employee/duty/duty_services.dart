@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:help_isko/models/duty/completed_duty.dart';
-import 'package:help_isko/models/duty/prof_duty.dart';
+import 'package:help_isko/models/employee/duty/completed_duty.dart';
+import 'package:help_isko/models/employee/duty/prof_duty.dart';
+import 'package:help_isko/models/employee/posted_duty_info.dart';
 import 'package:help_isko/repositories/employee/duty/duty_repository.dart';
 import 'package:help_isko/repositories/storage/employee_storage.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,26 @@ class DutyServices implements DutyRepository {
     String? token = userData['employeeToken'];
     final response = await http.get(
       Uri.parse('$baseUrl/employees/duty'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> dutyList = json.decode(response.body);
+      return dutyList.map((json) => ProfDuty.fromJson(json)).toList();
+    } else {
+      log('The status code is: ${response.statusCode}');
+      throw Exception('Failed to load duties');
+    }
+  }
+
+  @override
+  Future<List<ProfDuty>> fetchCompletedPostedDuties() async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/employees/completed/duty'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token'
@@ -162,6 +183,25 @@ class DutyServices implements DutyRepository {
       return true;
     } else {
       return false;
+    }
+  }
+
+  @override
+  Future<PostedDutyInfo> fetchPostedDutyInfo() async {
+    final userData = await EmployeeStorage.getData();
+    String? token = userData['employeeToken'];
+    final response = await http.get(
+      Uri.parse('$baseUrl/employee/counts'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
+    );
+    if (response.statusCode == 200) {
+       return PostedDutyInfo.fromJson(jsonDecode(response.body));
+    } else {
+      log('The status code is: ${response.statusCode}');
+      throw Exception('Failed to load duties');
     }
   }
 }

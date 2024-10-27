@@ -1,12 +1,20 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/postedDutyInfo/posted_duty_info_bloc.dart';
+import 'package:help_isko/presentation/bloc/employee/duty/show/posted_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/message/message_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_bloc.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_event.dart';
 import 'package:help_isko/presentation/bloc/shared/userdata/user_state.dart';
+import 'package:help_isko/presentation/cards/duty_card/completed_duties_card.dart';
+import 'package:help_isko/presentation/pages/employee/secondPage/dutyInfoPage/posted_duty_info_page.dart';
+import 'package:help_isko/presentation/widgets/loading_indicator/my_recent_activity_loading_indicator.dart';
 import 'package:help_isko/presentation/widgets/my_dialog.dart';
 import 'package:help_isko/presentation/widgets/my_profile_page_text.dart';
 import 'package:help_isko/repositories/global.dart';
+import 'package:help_isko/services/employee/duty/duty_services.dart';
 import 'package:ionicons/ionicons.dart';
 
 class EmployeeProfilePage extends StatelessWidget {
@@ -14,6 +22,13 @@ class EmployeeProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController();
+    final PostedDutiesBloc postedDutiesBloc =
+        PostedDutiesBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
+          ..add(FetchCompletedDuty());
+    final PostedDutyInfoBloc postedDutyInfoBloc =
+        PostedDutyInfoBloc(dutyRepository: DutyServices(baseUrl: baseUrl))
+          ..add(PostedDutyInfoLoadedEvent());
     return BlocProvider(
       create: (context) => UserDataBloc()..add(LoadUserData(role: 'Employee')),
       child: BlocConsumer<UserDataBloc, UserDataState>(
@@ -28,7 +43,7 @@ class EmployeeProfilePage extends StatelessWidget {
                   slivers: [
                     SliverLayoutBuilder(
                       builder: (BuildContext context, constraints) {
-                        final scrolled = constraints.scrollOffset > 50;
+                        final scrolled = constraints.scrollOffset > 100;
                         return SliverAppBar(
                           pinned: true,
                           automaticallyImplyLeading: false,
@@ -82,9 +97,11 @@ class EmployeeProfilePage extends StatelessWidget {
                                                     margin:
                                                         const EdgeInsets.all(
                                                             10),
-                                                    child: scrolled ? Image.asset(
-                                                      'assets/images/profile_clicked.png',
-                                                    ) : null,
+                                                    child: scrolled
+                                                        ? Image.asset(
+                                                            'assets/images/profile_clicked.png',
+                                                          )
+                                                        : null,
                                                   ),
                                                 ),
                                               )
@@ -217,9 +234,171 @@ class EmployeeProfilePage extends StatelessWidget {
                       },
                     ),
                     SliverToBoxAdapter(
+                      child:
+                          BlocConsumer<PostedDutyInfoBloc, PostedDutyInfoState>(
+                        bloc: postedDutyInfoBloc,
+                        listener: (context, state) {},
+                        builder: (context, state) {
+                          String activeDuty = '0';
+                          String confirmedDuty = '0';
+                          String postedDuty = '0';
+                          if (state is FetchPostedDutyInfoSuccessState) {
+                            activeDuty = state.dutyInfo.activeDuty.toString();
+                            confirmedDuty =
+                                state.dutyInfo.confirmedDuty.toString();
+                            postedDuty = state.dutyInfo.postedDuty.toString();
+                          } else if (state is FetchPostedDutyInfoFailedState) {
+                            activeDuty = 'Error';
+                            confirmedDuty = 'Error';
+                            postedDuty = 'Error';
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 16, left: 16, right: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Posted Duty Information',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF6BB577),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0x1A6BB577),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: const Color(0x1A3B3B3B),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/duty_dialog_images/checked.png',
+                                              height: 50,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Confirmed Duty',
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0x803B3B3B),
+                                              ),
+                                            ),
+                                            Text(
+                                              confirmedDuty.toString(),
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF3B3B3B),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0x1A6BB577),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: const Color(0x1A3B3B3B),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/active_duty_employee_profile.png',
+                                              height: 50,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Active Duty',
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0x803B3B3B),
+                                              ),
+                                            ),
+                                            Text(
+                                              activeDuty.toString(),
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF3B3B3B),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: const Color(0x1A6BB577),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color: const Color(0x1A3B3B3B),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/posted_duty_employee_profile.png',
+                                              height: 50,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              'Posted Duty',
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0x803B3B3B),
+                                              ),
+                                            ),
+                                            Text(
+                                              postedDuty.toString(),
+                                              style: GoogleFonts.nunito(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: const Color(0xFF3B3B3B),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                const Divider(),
+                                const SizedBox(height: 8),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SliverToBoxAdapter(
                       child: Container(
-                        padding:
-                            const EdgeInsets.only(top: 16, left: 16, right: 16),
+                        padding: const EdgeInsets.only(left: 16, right: 16),
                         color: Theme.of(context).scaffoldBackgroundColor,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,9 +406,10 @@ class EmployeeProfilePage extends StatelessWidget {
                             Text(
                               'Person Details',
                               style: GoogleFonts.nunito(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: const Color(0xFF6BB577)),
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFF6BB577),
+                              ),
                             ),
                             const SizedBox(height: 8),
                             MyProfilePageText(
@@ -245,9 +425,101 @@ class EmployeeProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(height: 1125),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 16, right: 16, bottom: 8),
+                        child: Text(
+                          'Completed Duties',
+                          style: GoogleFonts.nunito(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF6BB577),
+                          ),
+                        ),
+                      ),
                     ),
+                    BlocConsumer<PostedDutiesBloc, PostedDutiesState>(
+                      bloc: postedDutiesBloc,
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        if (state is PostedDutiesLoadingState) {
+                          return SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (context, index) {
+                                return const MyRecentActivityLoadingIndicator();
+                              },
+                              childCount: 15,
+                            ),
+                          );
+                        } else if (state is PostedDutiestFailedState) {
+                          return SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: Center(
+                              child: Text(
+                                'No completed duty yet',
+                                style: GoogleFonts.nunito(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: const Color(0xFF3B3B3B)),
+                              ),
+                            ),
+                          );
+                        } else if (state is PostedDutiesSuccessState) {
+                          return LiveSliverList(
+                            controller: scrollController,
+                            showItemDuration: const Duration(milliseconds: 300),
+                            itemCount: state.duty.length,
+                            itemBuilder: (context, index, animation) {
+                              final completedDuties = state.duty[index];
+                              return FadeTransition(
+                                opacity: Tween<double>(
+                                  begin: 0,
+                                  end: 1,
+                                ).animate(animation),
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0, -0.1),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                            value: context.read<MessageBloc>(),
+                                            child: PostedDutyInfoPage(
+                                              profDuty: completedDuties,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: CompletedDutiesCard(
+                                      building: completedDuties.building ?? '',
+                                      message: completedDuties.message ?? '',
+                                      dutyStatus:
+                                          completedDuties.dutyStatus ?? '',
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return const SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: SizedBox(),
+                          );
+                        }
+                      },
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 78,
+                      ),
+                    )
                   ],
                 ),
               ),
