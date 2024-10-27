@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/presentation/bloc/employee/requestForDuties/showRequestForDuties/request_for_duties_bloc.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/repositories/global.dart';
 
@@ -92,7 +93,7 @@ class PostedDutiesHome extends StatelessWidget {
                               log('The request status is: $requestStatus, $dutyStatus');
                               context
                                   .read<RequestedDutiesBloc>()
-                                  .add(RequestedDutyCancelEvent(id: id!));
+                                  .add(RequestedDutyCancelEvent(id: id!, recentActivitiesBloc: context.read<RecentActivitiesBloc>()));
                             }
                           },
                           child: Container(

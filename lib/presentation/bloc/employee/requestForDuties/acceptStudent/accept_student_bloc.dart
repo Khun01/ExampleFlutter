@@ -20,7 +20,7 @@ class AcceptStudentBloc extends Bloc<AcceptStudentEvent, AcceptStudentState> {
       Emitter<AcceptStudentState> emit) async {
     emit(AcceptStudentLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
       final response = await requestForDutyRepository.acceptStudent(
           event.dutyId, event.studentId);
       if (response['statusCode'] == 200) {

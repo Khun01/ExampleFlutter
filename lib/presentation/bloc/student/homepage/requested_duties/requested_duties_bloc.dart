@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:help_isko/models/student/requested_duties.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/repositories/student/homepage/requested_duties_repository.dart';
 
 part 'requested_duties_event.dart';
@@ -41,6 +42,7 @@ class RequestedDutiesBloc
       if (status) {
         emit(RequestedDutiesCancelSuccessState());
         add(RequestedDutiesFetch());
+        event.recentActivitiesBloc.add(const FetchRecentActivitiesEvent(role: 'Student'));
       }
     } catch (e) {
       emit(RequestedDutiesCancelFailedState(errorMessage: '$e'));

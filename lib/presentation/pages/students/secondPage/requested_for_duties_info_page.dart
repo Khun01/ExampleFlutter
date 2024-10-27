@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/student/requested_duties.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/presentation/pages/wrapper.dart';
 import 'package:help_isko/repositories/global.dart';
@@ -290,7 +291,7 @@ class RequestedForDutiesInfoPage extends StatelessWidget {
                     onTap: () {
                       if (requestedDuties.requestStatus == 'undecided') {
                         context.read<RequestedDutiesBloc>().add(
-                            RequestedDutyCancelEvent(id: requestedDuties.id));
+                            RequestedDutyCancelEvent(id: requestedDuties.id, recentActivitiesBloc: context.read<RecentActivitiesBloc>()));
                       }
                     },
                     child: requestedDuties.dutyStatus == 'active'

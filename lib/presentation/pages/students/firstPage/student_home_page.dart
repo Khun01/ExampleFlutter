@@ -338,13 +338,7 @@ class StudentHomePage extends StatelessWidget {
               },
             ),
             BlocConsumer<RecentActivitiesBloc, RecentActivitiesState>(
-              listener: (context, state) {
-                if (state is RecentActivitiesFailedState) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(state.error)));
-                  log('The error in recent activity is: ${state.error}');
-                }
-              },
+              listener: (context, state) {},
               buildWhen: (previous, current) =>
                   (current is RecentActivitiesLoadingState &&
                       previous is RecentActivitiesInitial) ||

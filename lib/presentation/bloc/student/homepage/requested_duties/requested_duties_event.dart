@@ -11,6 +11,7 @@ class RequestedDutiesFetch extends RequestedDutiesEvent {}
 
 class RequestedDutyCancelEvent extends RequestedDutiesEvent {
   final int id;
+  final RecentActivitiesBloc recentActivitiesBloc;
 
-  const RequestedDutyCancelEvent({required this.id});
+  const RequestedDutyCancelEvent({required this.id, required this.recentActivitiesBloc});
 }

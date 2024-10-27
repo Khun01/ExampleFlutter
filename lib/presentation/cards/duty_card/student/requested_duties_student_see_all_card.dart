@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:help_isko/presentation/bloc/shared/recentActivity/recent_activities_bloc.dart';
 import 'package:help_isko/presentation/bloc/student/homepage/requested_duties/requested_duties_bloc.dart';
 import 'package:help_isko/repositories/global.dart';
 
@@ -138,9 +139,11 @@ class RequestedDutiesStudentSeeAllCard extends StatelessWidget {
               onTap: () {
                 if (requestStatus == 'undecided' && dutyStatus == 'pending') {
                   log('The request status is: $requestStatus, $dutyStatus');
-                  context
-                      .read<RequestedDutiesBloc>()
-                      .add(RequestedDutyCancelEvent(id: id!));
+                  context.read<RequestedDutiesBloc>().add(
+                      RequestedDutyCancelEvent(
+                          id: id!,
+                          recentActivitiesBloc:
+                              context.read<RecentActivitiesBloc>()));
                 }
               },
               child: Container(

@@ -18,7 +18,7 @@ class DeclineStudentBloc extends Bloc<DeclineStudentEvent, DeclineStudentState> 
   FutureOr<void> declineStudentButtonClickedEvent(DeclineStudentButtonClickedEvent event, Emitter<DeclineStudentState> emit) async {
     emit(DeclineStudentLoadingState());
     try {
-      await Future.delayed(const Duration(seconds: 3));
+      // await Future.delayed(const Duration(seconds: 3));
       final response = await requestForDutyRepository.declineStudent(
           event.dutyId, event.studentId);
       if (response['statusCode'] == 200) {
