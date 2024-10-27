@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/repositories/global.dart';
 
-class ConversationListCard extends StatelessWidget {
+class ConversationListCard extends StatefulWidget {
   final String name;
   final String? profile;
   final String message;
@@ -17,19 +17,33 @@ class ConversationListCard extends StatelessWidget {
       required this.profile});
 
   @override
+  State<ConversationListCard> createState() => _ConversationListCardState();
+}
+
+class _ConversationListCardState extends State<ConversationListCard> {
+  bool _showTimestamp = false;
+
+  void toggleTimestamp() {
+    setState(() {
+      _showTimestamp = !_showTimestamp;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 16, right: 8),
+      padding: const EdgeInsets.only(right: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment:
-            isCurrentUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: widget.isCurrentUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(left: 16),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              boxShadow: isCurrentUser
+              boxShadow: widget.isCurrentUser
                   ? null
                   : [
                       BoxShadow(
@@ -41,17 +55,19 @@ class ConversationListCard extends StatelessWidget {
                     ],
             ),
             child: Container(
-              height: isCurrentUser ? 0 : 40,
-              width: isCurrentUser ? 0 : 40,
+              height: widget.isCurrentUser ? 0 : 40,
+              width: widget.isCurrentUser ? 0 : 40,
               decoration: BoxDecoration(
-                  color: const Color(0xFFD1D1D1),
-                  borderRadius: BorderRadius.circular(500)),
+                color: const Color(0xFFD1D1D1),
+                borderRadius: BorderRadius.circular(500),
+              ),
               child: ClipOval(
-                child: isCurrentUser
+                child: widget.isCurrentUser
                     ? null
-                    : profile != null
+                    : widget.profile != null
                         ? Image.network(
-                            '$profileUrl$profile',
+                            '$profileUrl${widget.profile}',
+                            fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
                               margin: const EdgeInsets.all(12),
@@ -70,81 +86,107 @@ class ConversationListCard extends StatelessWidget {
             ),
           ),
           Column(
-            crossAxisAlignment: isCurrentUser
+            crossAxisAlignment: widget.isCurrentUser
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 12, right: 16, top: 16),
+                margin: EdgeInsets.only(
+                    left: 12, right: 16, top: widget.isCurrentUser ? 2 : 16),
                 child: Text(
-                  isCurrentUser ? '' : name,
+                  widget.isCurrentUser ? '' : widget.name,
                   style: GoogleFonts.nunito(
-                      fontSize: 12, color: const Color(0xFF3B3B3B)),
+                    fontSize: widget.isCurrentUser ? 0 : 12,
+                    color: const Color(0xFF3B3B3B),
+                  ),
                 ),
               ),
-              Row(
-                children: [
-                  // Text(
-                  //   isCurrentUser ? createdAt : '',
-                  //   style: GoogleFonts.nunito(
-                  //     fontSize: 10,
-                  //     fontWeight: FontWeight.bold,
-                  //     color: const Color(0x803B3B3B),
-                  //   ),
-                  // ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                      left: 8,
-                      right: 8,
-                    ),
-                    padding: const EdgeInsets.all(12),
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.60,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isCurrentUser
-                          ? const Color(0xFF6BB577)
-                          : const Color(0xFFD1D1D1),
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(20),
-                        topRight: const Radius.circular(20),
-                        bottomLeft: isCurrentUser
-                            ? const Radius.circular(20)
-                            : Radius.zero,
-                        bottomRight: isCurrentUser
-                            ? Radius.zero
-                            : const Radius.circular(20),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.10),
-                          offset: const Offset(0.0, 10.0),
-                          blurRadius: 10.0,
-                          spreadRadius: -6.0,
-                        )
-                      ],
-                    ),
-                    child: Text(
-                      message,
-                      maxLines: null,
-                      style: GoogleFonts.nunito(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: isCurrentUser
-                            ? const Color(0xFFFCFCFC)
-                            : const Color(0xFF3B3B3B),
+              SizedBox(height: widget.isCurrentUser ? 0 : 2),
+              GestureDetector(
+                onTap: () {
+                  toggleTimestamp();
+                },
+                child: Row(
+                  children: [
+                    AnimatedOpacity(
+                      opacity: _showTimestamp ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: AnimatedSlide(
+                        offset: _showTimestamp
+                            ? Offset.zero
+                            : const Offset(-0.5, 0),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: Text(
+                          widget.isCurrentUser ? widget.createdAt : '' ,
+                          style: GoogleFonts.nunito(
+                            fontSize: widget.isCurrentUser ? 10 : 0,
+                            color: const Color(0xFF757575),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    isCurrentUser ? '' : createdAt,
-                    style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0x803B3B3B),
+                    Container(
+                      margin: const EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                      ),
+                      padding: const EdgeInsets.all(12),
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.60,
+                      ),
+                      decoration: BoxDecoration(
+                        color: widget.isCurrentUser
+                            ? const Color(0xFF6BB577)
+                            : const Color(0xFFD1D1D1),
+                        borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(20),
+                            topRight: const Radius.circular(20),
+                            bottomLeft: widget.isCurrentUser
+                                ? const Radius.circular(20)
+                                : Radius.zero,
+                            bottomRight: const Radius.circular(20)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.10),
+                            offset: const Offset(0.0, 10.0),
+                            blurRadius: 10.0,
+                            spreadRadius: -6.0,
+                          )
+                        ],
+                      ),
+                      child: Text(
+                        widget.message,
+                        maxLines: null,
+                        style: GoogleFonts.nunito(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: widget.isCurrentUser
+                              ? const Color(0xFFFCFCFC)
+                              : const Color(0xFF3B3B3B),
+                        ),
+                      ),
                     ),
-                  )
-                ],
+                    AnimatedOpacity(
+                      opacity: _showTimestamp ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: AnimatedSlide(
+                        offset: _showTimestamp
+                            ? Offset.zero
+                            : const Offset(0.5, 0),
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        child: Text(
+                          widget.isCurrentUser ? '' : widget.createdAt,
+                          style: GoogleFonts.nunito(
+                            fontSize: widget.isCurrentUser ? 0 : 10,
+                            color: const Color(0xFF757575),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

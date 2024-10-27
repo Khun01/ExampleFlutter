@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -138,22 +139,50 @@ class _ChatPageState extends State<ConversationPage> {
                 ),
               );
             } else {
-              body = SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final convo = successState.chats[index];
-                    return ConversationListCard(
-                      name: widget.name,
-                      profile: widget.profile,
-                      message: convo.message,
-                      createdAt: convo.created_at,
-                      isCurrentUser:
-                          convo.sender_id == successState.currentUserId,
-                    );
-                  },
-                  childCount: successState.chats.length,
-                ),
+              body = LiveSliverList(
+                controller: _scrollController,
+                showItemDuration: const Duration(milliseconds: 300),
+                itemCount: state.chats.length,
+                itemBuilder: (context, index, animation) {
+                  final convo = successState.chats[index];
+                  return FadeTransition(
+                    opacity: Tween<double>(
+                      begin: 0,
+                      end: 1,
+                    ).animate(animation),
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, -0.1),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: ConversationListCard(
+                        name: widget.name,
+                        profile: widget.profile,
+                        message: convo.message,
+                        createdAt: convo.created_at,
+                        isCurrentUser:
+                            convo.sender_id == successState.currentUserId,
+                      ),
+                    ),
+                  );
+                },
               );
+              // body = SliverList(
+              //   delegate: SliverChildBuilderDelegate(
+              //     (context, index) {
+              //       final convo = successState.chats[index];
+              //       return ConversationListCard(
+              //         name: widget.name,
+              //         profile: widget.profile,
+              //         message: convo.message,
+              //         createdAt: convo.created_at,
+              //         isCurrentUser:
+              //             convo.sender_id == successState.currentUserId,
+              //       );
+              //     },
+              //     childCount: successState.chats.length,
+              //   ),
+              // );
             }
             break;
           case MessageFetchFailedChatState:
@@ -217,7 +246,8 @@ class _ChatPageState extends State<ConversationPage> {
                                   boxShadow: scrolled
                                       ? [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.2),
+                                            color:
+                                                Colors.black.withOpacity(0.2),
                                             offset: const Offset(0.0, 10.0),
                                             blurRadius: 10.0,
                                             spreadRadius: -6.0,
@@ -265,7 +295,8 @@ class _ChatPageState extends State<ConversationPage> {
                                                 ),
                                               )
                                             : Container(
-                                                margin: const EdgeInsets.all(12),
+                                                margin:
+                                                    const EdgeInsets.all(12),
                                                 child: Image.asset(
                                                   'assets/images/profile_clicked.png',
                                                 ),
@@ -276,7 +307,8 @@ class _ChatPageState extends State<ConversationPage> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           widget.name,

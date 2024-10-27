@@ -236,6 +236,47 @@ class _ChatListCardState extends State<ChatListCard> {
                                 ],
                               ),
                             ),
+                            SizedBox(
+                              height: state.existingChats[index].message
+                                              .readStatus ==
+                                          1 &&
+                                      state.currentUserId !=
+                                          state.existingChats[index].message
+                                              .receiver_id
+                                  ? 16
+                                  : 0,
+                              width: state.existingChats[index].message
+                                              .readStatus ==
+                                          1 &&
+                                      state.currentUserId !=
+                                          state.existingChats[index].message
+                                              .receiver_id
+                                  ? 16
+                                  : 0,
+                              child: ClipOval(
+                                child: state.existingChats[index].user
+                                            .profileImage !=
+                                        ''
+                                    ? Image.network(
+                                        '$profileUrl${state.existingChats[index].user.profileImage}',
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Container(
+                                          margin: const EdgeInsets.all(12),
+                                          child: Image.asset(
+                                            'assets/images/profile_clicked.png',
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: const EdgeInsets.all(12),
+                                        child: Image.asset(
+                                          'assets/images/profile_clicked.png',
+                                        ),
+                                      ),
+                              ),
+                            )
                           ],
                         ),
                         const SizedBox(height: 12),
