@@ -466,47 +466,66 @@ class EmployeeProfilePage extends StatelessWidget {
                             ),
                           );
                         } else if (state is PostedDutiesSuccessState) {
-                          return LiveSliverList(
-                            controller: scrollController,
-                            showItemDuration: const Duration(milliseconds: 300),
-                            itemCount: state.duty.length,
-                            itemBuilder: (context, index, animation) {
-                              final completedDuties = state.duty[index];
-                              return FadeTransition(
-                                opacity: Tween<double>(
-                                  begin: 0,
-                                  end: 1,
-                                ).animate(animation),
-                                child: SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(0, -0.1),
-                                    end: Offset.zero,
-                                  ).animate(animation),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => BlocProvider.value(
-                                            value: context.read<MessageBloc>(),
-                                            child: PostedDutyInfoPage(
-                                              profDuty: completedDuties,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: CompletedDutiesCard(
-                                      building: completedDuties.building ?? '',
-                                      message: completedDuties.message ?? '',
-                                      dutyStatus:
-                                          completedDuties.dutyStatus ?? '',
-                                    ),
+                          if (state.duty.isEmpty) {
+                            return SliverFillRemaining(
+                              hasScrollBody: false,
+                              child: Center(
+                                child: Text(
+                                  'Currently, there is no completed duty yet',
+                                  style: GoogleFonts.nunito(
+                                     fontSize: 14,
+                                     fontWeight: FontWeight.bold,
+                                     color: const Color(0xFF3B3B3B),
                                   ),
                                 ),
-                              );
-                            },
-                          );
+                              ),
+                            );
+                          } else {
+                            return LiveSliverList(
+                              controller: scrollController,
+                              showItemDuration:
+                                  const Duration(milliseconds: 300),
+                              itemCount: state.duty.length,
+                              itemBuilder: (context, index, animation) {
+                                final completedDuties = state.duty[index];
+                                return FadeTransition(
+                                  opacity: Tween<double>(
+                                    begin: 0,
+                                    end: 1,
+                                  ).animate(animation),
+                                  child: SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: const Offset(0, -0.1),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                              value:
+                                                  context.read<MessageBloc>(),
+                                              child: PostedDutyInfoPage(
+                                                profDuty: completedDuties,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: CompletedDutiesCard(
+                                        building:
+                                            completedDuties.building ?? '',
+                                        message: completedDuties.message ?? '',
+                                        dutyStatus:
+                                            completedDuties.dutyStatus ?? '',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
                         } else {
                           return const SliverFillRemaining(
                             hasScrollBody: false,
