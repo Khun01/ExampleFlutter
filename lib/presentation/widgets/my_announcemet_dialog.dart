@@ -12,8 +12,9 @@ class MyAnnouncemetDialog extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: const Color(0xFFAED8B5),
-            borderRadius: BorderRadius.circular(20)),
+          color: const Color(0xFFFCFCFC),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -35,10 +36,12 @@ class MyAnnouncemetDialog extends StatelessWidget {
                       child: Text(
                         announcement.heading,
                         maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.nunito(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF3B3B3B)),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF3B3B3B),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -48,7 +51,9 @@ class MyAnnouncemetDialog extends StatelessWidget {
                         overflow: TextOverflow.clip,
                         maxLines: 1,
                         style: GoogleFonts.nunito(
-                            fontSize: 12, color: const Color(0xFF3B3B3B)),
+                          fontSize: 12,
+                          color: const Color(0xFF3B3B3B),
+                        ),
                       ),
                     )
                   ],
@@ -59,7 +64,9 @@ class MyAnnouncemetDialog extends StatelessWidget {
             Text(
               announcement.description,
               style: GoogleFonts.nunito(
-                  fontSize: 12, color: const Color(0xFF3B3B3B)),
+                fontSize: 12,
+                color: const Color(0xFF3B3B3B),
+              ),
             ),
             const SizedBox(height: 16),
             Align(
@@ -67,7 +74,9 @@ class MyAnnouncemetDialog extends StatelessWidget {
               child: Text(
                 'Posted by: PHINMA University of Pangasinan',
                 style: GoogleFonts.nunito(
-                    fontSize: 12, color: const Color(0xFF3B3B3B)),
+                  fontSize: 12,
+                  color: const Color(0xFF3B3B3B),
+                ),
               ),
             )
           ],
