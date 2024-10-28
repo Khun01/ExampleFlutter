@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:help_isko/models/shared/announcement.dart';
@@ -32,7 +34,7 @@ class MyAnnouncemetDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: 208,
+                      width: Platform.isAndroid ? 176 : 208,
                       child: Text(
                         announcement.heading,
                         maxLines: 4,
