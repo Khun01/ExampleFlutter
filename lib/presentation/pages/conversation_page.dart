@@ -36,7 +36,7 @@ class _ChatPageState extends State<ConversationPage> {
   final TextEditingController textEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isEmojiVisible = false;
+  // bool isEmojiVisible = false;
 
   @override
   void initState() {
@@ -70,14 +70,14 @@ class _ChatPageState extends State<ConversationPage> {
     log("Back button pressed. Focus node has focus: ${focusNode.hasFocus}");
     if (focusNode.hasFocus) {
       focusNode.unfocus();
-      setState(() {
-        isEmojiVisible = false;
-      });
+      // setState(() {
+      //   isEmojiVisible = false;
+      // });
       return false;
     }
-    setState(() {
-      isEmojiVisible = false;
-    });
+    // setState(() {
+    //   isEmojiVisible = false;
+    // });
     return true;
   }
 
@@ -380,9 +380,7 @@ class _ChatPageState extends State<ConversationPage> {
                                         ),
                                         prefixIcon: IconButton(
                                           onPressed: () {
-                                            setState(() {
-                                              isEmojiVisible = !isEmojiVisible;
-                                            });
+                                            FocusScope.of(context).requestFocus(focusNode);
                                           },
                                           icon: const Icon(
                                               Icons.emoji_emotions_outlined),
@@ -425,39 +423,39 @@ class _ChatPageState extends State<ConversationPage> {
                               ],
                             ),
                           ),
-                          Offstage(
-                            offstage: !isEmojiVisible,
-                            child: EmojiPicker(
-                              onEmojiSelected: (category, emoji) {
-                                textEditingController.text += emoji.emoji;
-                              },
-                              config: Config(
-                                emojiViewConfig: EmojiViewConfig(
-                                  backgroundColor: const Color(0xFFFCFCFC),
-                                  recentsLimit: 10,
-                                  emojiSizeMax: 28 *
-                                      (defaultTargetPlatform ==
-                                              TargetPlatform.iOS
-                                          ? 1.30
-                                          : 1.0),
-                                ),
-                                bottomActionBarConfig: const BottomActionBarConfig(
-                                  backgroundColor: Color(0x1A3B3B3B),
-                                  buttonIconColor: Color(0xFF3B3B3B),
-                                  showSearchViewButton: false,
-                                  showBackspaceButton: false
-                                ),
-                                categoryViewConfig: const CategoryViewConfig(
-                                  backgroundColor: Color(0x1A3B3B3B)
-                                ),
-                                // viewOrderConfig: const ViewOrderConfig(
-                                //   top: EmojiPickerItem.categoryBar,
-                                //   middle: EmojiPickerItem.emojiView,
-                                //   bottom: EmojiPickerItem.searchBar,
-                                // ),
-                              ),
-                            ),
-                          ),
+                          // Offstage(
+                          //   offstage: !isEmojiVisible,
+                          //   child: EmojiPicker(
+                          //     onEmojiSelected: (category, emoji) {
+                          //       textEditingController.text += emoji.emoji;
+                          //     },
+                          //     config: Config(
+                          //       emojiViewConfig: EmojiViewConfig(
+                          //         backgroundColor: const Color(0xFFFCFCFC),
+                          //         recentsLimit: 10,
+                          //         emojiSizeMax: 28 *
+                          //             (defaultTargetPlatform ==
+                          //                     TargetPlatform.iOS
+                          //                 ? 1.30
+                          //                 : 1.0),
+                          //       ),
+                          //       bottomActionBarConfig: const BottomActionBarConfig(
+                          //         backgroundColor: Color(0x1A3B3B3B),
+                          //         buttonIconColor: Color(0xFF3B3B3B),
+                          //         showSearchViewButton: false,
+                          //         showBackspaceButton: false
+                          //       ),
+                          //       categoryViewConfig: const CategoryViewConfig(
+                          //         backgroundColor: Color(0x1A3B3B3B)
+                          //       ),
+                          //       viewOrderConfig: const ViewOrderConfig(
+                          //         top: EmojiPickerItem.categoryBar,
+                          //         middle: EmojiPickerItem.emojiView,
+                          //         bottom: EmojiPickerItem.searchBar,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
