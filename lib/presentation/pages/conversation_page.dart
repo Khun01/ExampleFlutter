@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:auto_animated/auto_animated.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +36,7 @@ class _ChatPageState extends State<ConversationPage> {
   final TextEditingController textEditingController = TextEditingController();
   FocusNode focusNode = FocusNode();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isEmojiVisible = false;
 
   @override
   void initState() {
@@ -67,8 +70,14 @@ class _ChatPageState extends State<ConversationPage> {
     log("Back button pressed. Focus node has focus: ${focusNode.hasFocus}");
     if (focusNode.hasFocus) {
       focusNode.unfocus();
+      setState(() {
+        isEmojiVisible = false;
+      });
       return false;
     }
+    setState(() {
+      isEmojiVisible = false;
+    });
     return true;
   }
 
@@ -167,22 +176,6 @@ class _ChatPageState extends State<ConversationPage> {
                   );
                 },
               );
-              // body = SliverList(
-              //   delegate: SliverChildBuilderDelegate(
-              //     (context, index) {
-              //       final convo = successState.chats[index];
-              //       return ConversationListCard(
-              //         name: widget.name,
-              //         profile: widget.profile,
-              //         message: convo.message,
-              //         createdAt: convo.created_at,
-              //         isCurrentUser:
-              //             convo.sender_id == successState.currentUserId,
-              //       );
-              //     },
-              //     childCount: successState.chats.length,
-              //   ),
-              // );
             }
             break;
           case MessageFetchFailedChatState:
@@ -353,75 +346,119 @@ class _ChatPageState extends State<ConversationPage> {
                           ),
                         ],
                       ),
-                      child: Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Form(
-                                key: _formKey,
-                                child: TextFormField(
-                                  focusNode: focusNode,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Please enter your message';
-                                    }
-                                    return null;
-                                  },
-                                  controller: textEditingController,
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderSide: BorderSide.none,
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    fillColor: const Color(0x1A3B3B3B),
-                                    filled: true,
-                                    hintText: 'Send Message',
-                                    hintStyle: GoogleFonts.nunito(
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0x803B3B3B),
-                                    ),
-                                    prefixIcon: IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                          Icons.emoji_emotions_outlined),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Form(
+                                    key: _formKey,
+                                    child: TextFormField(
+                                      focusNode: focusNode,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter your message';
+                                        }
+                                        return null;
+                                      },
+                                      controller: textEditingController,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        fillColor: const Color(0x1A3B3B3B),
+                                        filled: true,
+                                        hintText: 'Send Message',
+                                        hintStyle: GoogleFonts.nunito(
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0x803B3B3B),
+                                        ),
+                                        prefixIcon: IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              isEmojiVisible = !isEmojiVisible;
+                                            });
+                                          },
+                                          icon: const Icon(
+                                              Icons.emoji_emotions_outlined),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: const Color(0x1A3B3B3B),
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  final validated =
-                                      _formKey.currentState!.validate();
-                                  if (validated) {
-                                    context.read<MessageBloc>().add(
-                                          MessageSendEvent(
-                                            role: widget.role,
-                                            message: textEditingController.text,
-                                            targetUserId: widget.targetUserId,
-                                          ),
-                                        );
+                                const SizedBox(width: 12),
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0x1A3B3B3B),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      final validated =
+                                          _formKey.currentState!.validate();
+                                      if (validated) {
+                                        context.read<MessageBloc>().add(
+                                              MessageSendEvent(
+                                                role: widget.role,
+                                                message:
+                                                    textEditingController.text,
+                                                targetUserId:
+                                                    widget.targetUserId,
+                                              ),
+                                            );
 
-                                    textEditingController.clear();
-                                  }
-                                },
-                                child: Icon(
-                                  UIcons.solidRounded.paper_plane,
-                                  color: const Color(0xFF3B3B3B),
+                                        textEditingController.clear();
+                                      }
+                                    },
+                                    child: Icon(
+                                      UIcons.solidRounded.paper_plane,
+                                      color: const Color(0xFF3B3B3B),
+                                    ),
+                                  ),
                                 ),
+                              ],
+                            ),
+                          ),
+                          Offstage(
+                            offstage: !isEmojiVisible,
+                            child: EmojiPicker(
+                              onEmojiSelected: (category, emoji) {
+                                textEditingController.text += emoji.emoji;
+                              },
+                              config: Config(
+                                emojiViewConfig: EmojiViewConfig(
+                                  backgroundColor: const Color(0xFFFCFCFC),
+                                  recentsLimit: 10,
+                                  emojiSizeMax: 28 *
+                                      (defaultTargetPlatform ==
+                                              TargetPlatform.iOS
+                                          ? 1.30
+                                          : 1.0),
+                                ),
+                                bottomActionBarConfig: const BottomActionBarConfig(
+                                  backgroundColor: Color(0x1A3B3B3B),
+                                  buttonIconColor: Color(0xFF3B3B3B),
+                                  showSearchViewButton: false,
+                                  showBackspaceButton: false
+                                ),
+                                categoryViewConfig: const CategoryViewConfig(
+                                  backgroundColor: Color(0x1A3B3B3B)
+                                ),
+                                // viewOrderConfig: const ViewOrderConfig(
+                                //   top: EmojiPickerItem.categoryBar,
+                                //   middle: EmojiPickerItem.emojiView,
+                                //   bottom: EmojiPickerItem.searchBar,
+                                // ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
