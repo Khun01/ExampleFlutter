@@ -27,7 +27,7 @@ class RenewalFormBloc extends Bloc<RenewalFormEvent, RenewalFormState> {
         sharedPosts: event.sharedPosts, 
         // disbursementMethod: event.disbursementMethod,          // Nullable File
         dutyHours: event.dutyHours,
-        registrationFeePic: event.registrationFeePicture, 
+        // registrationFeePic: event.registrationFeePicture, 
       );
       // emit(RenewalFormSuccess(renewalForm));
       final statusCode = response['statusCode'];

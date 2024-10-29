@@ -273,8 +273,8 @@ class PreviewRenewFormPage extends StatelessWidget {
                             attendedEvents: attendEvent,
                             sharedPosts: sharedPost,
                             dutyHours: dutyHours,
-                            registrationFeePicture: registrationFeePic),
-                      );
+                            // registrationFeePicture: registrationFeePic),
+                      ));
                 },
                 buttonText: 'Submit',
               )
